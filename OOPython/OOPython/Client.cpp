@@ -11,6 +11,7 @@ bool Client::getLine(string &s)
 
 void Client::work()
 {
+	
 	bool flagExit = false;
     while (!flagExit)
     {
