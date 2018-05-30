@@ -1,5 +1,6 @@
 #ifndef ANALYZER_H
 #define ANALYZER_H
+
 #include "Data.h"
 #include <vector>
 #include <regex>
