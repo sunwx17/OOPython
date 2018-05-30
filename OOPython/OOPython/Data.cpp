@@ -28,9 +28,7 @@ pyObject* pyObjectInt::operator*(const pyObject *other) const {
 pyObject* pyObjectInt::operator/(const pyObject *other) const {
 
 }
-pyObject* pyObjectInt::operator=(const pyObject *other) {
-
-}
+//Mark:0
 pyObject* pyObjectInt::operator==(const pyObject *other) const {
 
 }
