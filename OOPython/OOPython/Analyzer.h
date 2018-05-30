@@ -2,43 +2,70 @@
 #define ANALYZER_H
 #include "Data.h"
 #include <vector>
+#include <regex>
+using namespace std;
 
-/* "^for\\s+([a-zA-Z_][0-9a-zA-Z_]*?)\\s+in\\s+([^:]+?)\\s*:\\s*$"
- * "^if\\s+([^:]+?)\\s*:\\s*$"
- * "^else\\s*:\\s*$"
- * "^while\\s+([^:]+?)\\s*:\\s*$"
- * "^print\\s+(.+?)\\s*(?:%\\s*(.+?)\\s*)?$"
- * "^def\\s+([a-zA-Z_][0-9a-zA-Z_]*?)\\s*(\\(.*\\))\\s*:\\s*$"
- * "^return\\s+.+? *$"
- * "^continue\\s*$"
- * "^break\\s*$"
- * "^([a-zA-Z_][0-9a-zA-Z_\\s,]*?\\s*=\\s*(.*)? *)"
- */
+int regexBreak(const string&, vector<string>&);
+
+void multiVary(const string&, vector<string>&);
 
 class pyBlock {
 protected:
 	vector<pyBlock*> process;
 public:
 	pyBlock() {};
-	virtual void appendProcess(const string&, int) = 0;
-	virtual void work() = 0;
-	virtual ~pyBlock() = 0;
+	static pyBlock* factory(int, vector<string>&);
+	int appendProcess(const string&, int);
+	virtual int work(int) = 0;
 };
 
 class pyRootBlock : public pyBlock{
 public:
 	pyRootBlock() {};
-	void appendProcess(const string&, int);
-	void work();
+	int work(int);
+};
+
+class pyForBlock : public pyBlock {
+
+};
+
+class pyIfBlock : public pyBlock {
+	pyObject* condition;
+public:
+	pyIfBlock(pyObject* con) : condition(con) {}
+	int work(int);
+};
+
+class pyElseBlock : public pyBlock {
+public:
+	pyElseBlock() {};
+	int work(int);
 };
 
 class pyWhileBlock : public pyBlock{
 	pyObject* condition;
 public:
-	pyWhileBlock() {};
-	void appendProcess(const string&, int);
-	void work();
+	pyWhileBlock(pyObject* con) : condition(con) {}
+	int work(int);
 };
 
+class pyDefBlock : public pyBlock {
+//	string name;
+//	vector<pyObject*> parameter;
+};
+
+class pyPrintBlock : public pyBlock {
+
+};
+
+class pyReturnBlock : public pyBlock{
+
+};
+
+class pyContinueBlock : public pyBlock {
+public:
+	pyContinueBlock() {}
+	int work(int);
+};
 
 #endif // !ANALYZER_H

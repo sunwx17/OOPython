@@ -11,7 +11,7 @@ bool Client::getLine(string &s)
 
 void Client::work()
 {
-	
+	pyBlock* rootBlock = new pyRootBlock;
 	bool flagExit = false;
     while (!flagExit)
     {
@@ -27,7 +27,8 @@ void Client::work()
 			continue;
 		}
 		//do something with "numOfTab" and "line"（前者为缩进数，后者为不带缩进的行）
-
+		int type = rootBlock->appendProcess(line, numOfTab);
+		//这里返回创建的块类型(见Analyzer.cpp中正则表达式的顺序)，配合numOdTab,判断用 >>> 还是 ...
     }
     return;
 }
