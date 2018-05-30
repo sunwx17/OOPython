@@ -4,15 +4,13 @@
 #include <map>
 #include <vector>
 #include <string>
+#include <string.h>
 #include <iostream>
 using namespace std;
 
-map<string, pyObject*> dataGlobal;
-
 class pyObject{
-	string name;
 public:
-	pyObject(string _name = "");
+	pyObject();
 	virtual ~pyObject() = 0;
 	virtual string getType() const = 0;
 	virtual pyObject* operator+(const pyObject *other) const = 0;
@@ -26,18 +24,45 @@ public:
 	virtual pyObject* work() = 0;
 };
 
-class pyObjectFunc : public pyObject {
-	map<string, pyObject*> dataFunc;
-	pyBlock * place;
-public:
-	pyObjectFunc(pyBlock *);
-	pyObject* work();
-};
+map<string, pyObject*> dataGlobal;
+
+//class pyObjectFunc : public pyObject {
+//	map<string, pyObject*> dataFunc;
+//	pyBlock * place;
+//public:
+//	pyObjectFunc(pyBlock *);
+//	pyObject* work();
+//};
 
 class pyObjectInt : public pyObject {
 	int data;
+	int operateInt(int other, const char* ope) const;
+	bool operateBool(int other, const char* ope) const;
+	pyObject* operatorFather(const pyObject *other, const char* ope) const;
+	pyObject* operatorFatherBool(const pyObject *other, const char* ope) const;
 public:
-	pyObjectInt(int _data, string _name = "");
+	pyObjectInt(int _data);
+	string getType() const;
+	pyObject* operator+(const pyObject *other) const;
+	pyObject* operator-(const pyObject *other) const;
+	pyObject* operator-() const;
+	pyObject* operator*(const pyObject *other) const;
+	pyObject* operator/(const pyObject *other) const;
+	pyObject* operator==(const pyObject *other) const;
+	pyObject* operator<<(const pyObject *other) const;
+	pyObject* operator>>(const pyObject *other) const;
+	pyObject* work();
+};
+
+class pyObjectBool : public pyObject {
+	bool data;
+	pyObjectBool(bool _data = true);
+	pyObjectBool(const pyObjectBool &) = delete;
+	void operator=(const pyObjectBool &) = delete;
+	~pyObjectBool() {}
+public:
+	static pyObjectBool trueBool;
+	static pyObjectBool falseBool;
 	string getType() const;
 	pyObject* operator+(const pyObject *other) const;
 	pyObject* operator-(const pyObject *other) const;
