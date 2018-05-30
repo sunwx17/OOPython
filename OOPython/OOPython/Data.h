@@ -19,6 +19,8 @@ public:
 	virtual pyObject* operator*(const pyObject *other) const = 0;
 	virtual pyObject* operator/(const pyObject *other) const = 0;
 	virtual pyObject* operator==(const pyObject *other) const = 0;
+	virtual pyObject* operator<(const pyObject *other) const = 0;
+	virtual pyObject* operator>(const pyObject *other) const = 0;
 	virtual pyObject* operator<<(const pyObject *other) const = 0;
 	virtual pyObject* operator>>(const pyObject *other) const = 0;
 	virtual pyObject* work() = 0;
@@ -33,33 +35,13 @@ map<string, pyObject*> dataGlobal;
 //	pyObjectFunc(pyBlock *);
 //	pyObject* work();
 //};
-
-class pyObjectInt : public pyObject {
-	int data;
-	int operateInt(int other, const char* ope) const;
-	bool operateBool(int other, const char* ope) const;
-	pyObject* operatorFather(const pyObject *other, const char* ope) const;
-	pyObject* operatorFatherBool(const pyObject *other, const char* ope) const;
-public:
-	pyObjectInt(int _data);
-	string getType() const;
-	pyObject* operator+(const pyObject *other) const;
-	pyObject* operator-(const pyObject *other) const;
-	pyObject* operator-() const;
-	pyObject* operator*(const pyObject *other) const;
-	pyObject* operator/(const pyObject *other) const;
-	pyObject* operator==(const pyObject *other) const;
-	pyObject* operator<<(const pyObject *other) const;
-	pyObject* operator>>(const pyObject *other) const;
-	pyObject* work();
-};
-
 class pyObjectBool : public pyObject {
 	bool data;
-	pyObjectBool(bool _data = true);
+	pyObjectBool(bool _data);
 	pyObjectBool(const pyObjectBool &) = delete;
 	void operator=(const pyObjectBool &) = delete;
 	~pyObjectBool() {}
+	pyObject* operatorFather(const pyObject *other, const char* ope) const;
 public:
 	static pyObjectBool trueBool;
 	static pyObjectBool falseBool;
@@ -70,8 +52,33 @@ public:
 	pyObject* operator*(const pyObject *other) const;
 	pyObject* operator/(const pyObject *other) const;
 	pyObject* operator==(const pyObject *other) const;
+	pyObject* operator<(const pyObject *other) const;
+	pyObject* operator>(const pyObject *other) const;
 	pyObject* operator<<(const pyObject *other) const;
 	pyObject* operator>>(const pyObject *other) const;
 	pyObject* work();
 };
+
+class pyObjectInt : public pyObject {
+	int data;
+	int operateInt(int other, const char* ope) const;
+	pyObject* operatorFather(const pyObject *other, const char* ope) const;
+	pyObject* operatorFatherBool(const pyObject *other, const char* ope) const;
+public:
+	friend pyObject* pyObjectBool::operatorFather(const pyObject *other, const char* ope) const;
+	pyObjectInt(int _data);
+	string getType() const;
+	pyObject* operator+(const pyObject *other) const;
+	pyObject* operator-(const pyObject *other) const;
+	pyObject* operator-() const;
+	pyObject* operator*(const pyObject *other) const;
+	pyObject* operator/(const pyObject *other) const;
+	pyObject* operator==(const pyObject *other) const;
+	pyObject* operator<(const pyObject *other) const;
+	pyObject* operator>(const pyObject *other) const;
+	pyObject* operator<<(const pyObject *other) const;
+	pyObject* operator>>(const pyObject *other) const;
+	pyObject* work();
+};
+
 #endif
