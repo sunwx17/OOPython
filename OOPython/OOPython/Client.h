@@ -2,6 +2,7 @@
 #define CLIENT_H
 
 #include "Data.h"
+#include "Varmap.h"
 #include "Analyzer.h"
 #include <string>
 #include <iostream>

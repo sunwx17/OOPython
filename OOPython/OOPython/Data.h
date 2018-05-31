@@ -8,13 +8,14 @@
 #include <memory>
 using namespace std;
 
+
 class pyObject;
 class pyObjectData;
 class pyObjectBool;
 class pyObjectInt;
 class pyObjectFloat;
-typedef shared_ptr<const pyObjectData> pyObjectPtr;
-
+typedef shared_ptr<const pyObject> pyObjectPtr;
+typedef shared_ptr<const pyObjectData> pyObjectDataPtr;
 //以下基础函数：operateInt、operateBool、operateFloat 
 bool operateBool(const float& one, const float& other, const char* ope);
 int operateInt(const int& one, const int& other, const char* ope);

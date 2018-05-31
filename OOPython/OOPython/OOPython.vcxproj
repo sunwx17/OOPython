@@ -150,14 +150,14 @@
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="Data.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Operator.cpp" />
+    <ClCompile Include="Expression.cpp" />
     <ClCompile Include="Varmap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h" />
     <ClInclude Include="Analyzer.h" />
     <ClInclude Include="Data.h" />
-    <ClInclude Include="Operator.h" />
+    <ClInclude Include="Expression.h" />
     <ClInclude Include="Varmap.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

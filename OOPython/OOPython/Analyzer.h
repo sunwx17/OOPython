@@ -2,6 +2,7 @@
 #define ANALYZER_H
 
 #include "Data.h"
+#include "Varmap.h"
 #include <vector>
 #include <regex>
 using namespace std;
@@ -14,6 +15,7 @@ void multiVary(const string&, vector<string>&);
 
 class pyBlock {
 protected:
+	static Varmap varmap;
 	vector<pyBlock*> process;
 public:
 	pyBlock() {};
