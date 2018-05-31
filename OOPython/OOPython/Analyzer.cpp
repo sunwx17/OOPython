@@ -114,7 +114,7 @@ int pyRootBlock::work(int) {
 
 int pyIfBlock::work(int) {
 	int workStatus;
-	pyObject* cond = condition->work();
+	pyObjectPtr cond = condition->work();
 	if (cond == &(pyObjectBool::trueBool)) {//´ý²¹³ä
 		for (auto i : process) {
 			workStatus = i->work(workStatus);
@@ -142,7 +142,7 @@ int pyElseBlock::work(int ifCond) {
 
 int pyWhileBlock::work(int) {
 	int workStatus;
-	pyObject* cond = condition->work();
+	pyObjectPtr cond = condition->work();
 	while (cond == &(pyObjectBool::trueBool)) {//´ý²¹³ä
 		for (auto i : process) {
 			workStatus = i->work(workStatus);
@@ -157,8 +157,9 @@ int pyWhileBlock::work(int) {
 	return 1;
 }
 
-//int pyDefBlock::work(int) {
-//}
+int pyDefBlock::work(int) {
+	pyBlock::varmap.assign(name, )
+}
 
 int pyPrintBlock::work(int) {
 	bePrinted->print();
