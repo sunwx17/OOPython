@@ -63,9 +63,10 @@ int pyObjectInt::operateInt(int other, const char* ope) const{
 }
 
 pyObject* pyObjectInt::operatorFatherBool(const pyObject *other, const char* ope) const {
-	//pyObjectFloat tmp((float)data);
-	//return tmp.oepratorFatherBool(other, ope);
-	//Mark:ToDo
+	//pyObject* tmp = new pyObjectFloat((float)data);
+	//pyObject* returnPtr = tmp->oepratorFatherBool(other, ope);
+	//delete tmp;
+	//return returnPtr;
 	return nullptr;
 }
 
@@ -149,7 +150,7 @@ string pyObjectBool::getType() const {
 
 
 pyObject* pyObjectBool::operatorFather(const pyObject *other, const char* ope) const {
-	pyObjectInt * tmp;
+	pyObject * tmp;
 	if (this == &pyObjectBool::trueBool) {
 		tmp = new pyObjectInt(1);
 	}
@@ -160,6 +161,20 @@ pyObject* pyObjectBool::operatorFather(const pyObject *other, const char* ope) c
 	delete tmp;
 	return returnPtr;
 }
+
+pyObject* pyObjectBool::operatorFatherBool(const pyObject *other, const char* ope) const {
+	pyObject * tmp;
+	if (this == &pyObjectBool::trueBool) {
+		tmp = new pyObjectInt(1);
+	}
+	else {
+		tmp = new pyObjectInt(0);
+	}
+	pyObject* returnPtr = tmp->operatorFatherBool(other, ope);
+	delete tmp;
+	return returnPtr;
+}
+
 pyObject* pyObjectBool::operator+(const pyObject *other) const {
 	return operatorFather(other, "+");
 }
@@ -175,23 +190,23 @@ pyObject* pyObjectBool::operator-() const {
 	return returnPtr;
 }
 pyObject* pyObjectBool::operator*(const pyObject *other) const {
-	return operatorFather(other, "+");
+	return operatorFather(other, "*");
 }
 pyObject* pyObjectBool::operator/(const pyObject *other) const {
-	return operatorFather(other, "+");
+	return operatorFather(other, "/");
 }
 pyObject* pyObjectBool::operator==(const pyObject *other) const {
-	return operatorFather(other, "+");
+	return operatorFatherBool(other, "==");
 }
 pyObject* pyObjectBool::operator<(const pyObject *other) const {
-	return operatorFather(other, "+");
+	return operatorFatherBool(other, "<");
 }
 pyObject* pyObjectBool::operator>(const pyObject *other) const {
-	return operatorFather(other, "+");
+	return operatorFatherBool(other, ">");
 }
 pyObject* pyObjectBool::operator<<(const pyObject *other) const {
-	return operatorFather(other, "+");
+	return operatorFather(other, "<<");
 }
 pyObject* pyObjectBool::operator>>(const pyObject *other) const {
-	return operatorFather(other, "+");
+	return operatorFather(other, ">>");
 }

@@ -7,9 +7,12 @@
 #include <string.h>
 #include <iostream>
 using namespace std;
-
+class pyObjectBool;
 class pyObject{
+	virtual pyObject* operatorFather(const pyObject *other, const char* ope) const = 0;
+	virtual pyObject* operatorFatherBool(const pyObject *other, const char* ope) const = 0;
 public:
+	friend class pyObjectBool;
 	pyObject();
 	virtual ~pyObject() = 0;
 	virtual string getType() const = 0;
@@ -42,6 +45,7 @@ class pyObjectBool : public pyObject {
 	void operator=(const pyObjectBool &) = delete;
 	~pyObjectBool() {}
 	pyObject* operatorFather(const pyObject *other, const char* ope) const;
+	pyObject* operatorFatherBool(const pyObject *other, const char* ope) const;
 public:
 	static pyObjectBool trueBool;
 	static pyObjectBool falseBool;
@@ -65,7 +69,6 @@ class pyObjectInt : public pyObject {
 	pyObject* operatorFather(const pyObject *other, const char* ope) const;
 	pyObject* operatorFatherBool(const pyObject *other, const char* ope) const;
 public:
-	friend pyObject* pyObjectBool::operatorFather(const pyObject *other, const char* ope) const;
 	pyObjectInt(int _data);
 	string getType() const;
 	pyObject* operator+(const pyObject *other) const;
