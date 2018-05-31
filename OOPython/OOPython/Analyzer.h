@@ -6,6 +6,8 @@
 #include <regex>
 using namespace std;
 
+void removeSpace(string&);
+
 int regexBreak(const string&, vector<string>&);
 
 void multiVary(const string&, vector<string>&);
@@ -51,21 +53,40 @@ public:
 };
 
 class pyDefBlock : public pyBlock {
-//	string name;
-//	vector<pyObject*> parameter;
+
 };
 
 class pyPrintBlock : public pyBlock {
-
+	pyObject* bePrinted;
+public:
+	pyPrintBlock(pyObject* tobePrinted) : bePrinted(tobePrinted) {}
+	int work(int);
 };
 
 class pyReturnBlock : public pyBlock{
-
+	pyObject* beReturned;
+public:
+	pyReturnBlock(pyObject* tobeReturned) : beReturned(tobeReturned) {}
+	int work(int);
 };
 
 class pyContinueBlock : public pyBlock {
 public:
 	pyContinueBlock() {}
+	int work(int);
+};
+
+class pyBreakBlock : public pyBlock {
+public:
+	pyBreakBlock() {}
+	int work(int);
+};
+
+class pyAssignBlock : public pyBlock {
+	pyObject* beAssigned;
+	pyObject* assigner;
+public:
+	pyAssignBlock(pyObject* front, pyObject* back) : beAssigned(front),assigner(back) {}
 	int work(int);
 };
 

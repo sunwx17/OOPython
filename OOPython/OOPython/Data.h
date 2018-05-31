@@ -1,12 +1,16 @@
 #ifndef DATA_H
 #define DATA_H
 
-#include <map>
 #include <vector>
 #include <string>
 #include <string.h>
 #include <iostream>
+#include <memory>
 using namespace std;
+
+class pyObject;
+typedef shared_ptr<const pyObject> pyObjectPtr;
+
 class pyObjectBool;
 class pyObject{
 	virtual pyObject* operatorFather(const pyObject *other, const char* ope) const = 0;
@@ -27,9 +31,8 @@ public:
 	virtual pyObject* operator<<(const pyObject *other) const = 0;
 	virtual pyObject* operator>>(const pyObject *other) const = 0;
 	virtual pyObject* work() = 0;
+	virtual void print() = 0;
 };
-
-map<string, pyObject*> dataGlobal;
 
 //class pyObjectFunc : public pyObject {
 //	map<string, pyObject*> dataFunc;
