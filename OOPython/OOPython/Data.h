@@ -1,12 +1,16 @@
 #ifndef DATA_H
 #define DATA_H
 
-#include <map>
 #include <vector>
 #include <string>
 #include <string.h>
 #include <iostream>
+#include <memory>
 using namespace std;
+
+class pyObject;
+typedef shared_ptr<const pyObject> pyObjectPtr;
+
 class pyObjectBool;
 class pyObjectInt;
 class pyObject;

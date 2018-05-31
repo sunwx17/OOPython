@@ -6,19 +6,26 @@ regex blockRegex[] = {
 	 (regex)"^else\\s*:\\s*$",
 	 (regex)"^while\\s+([^:]+?)\\s*:\\s*$",
 	 (regex)"^def\\s+([a-zA-Z_][0-9a-zA-Z_]*?)\\s*(\\(.*\\))\\s*:\\s*$",
-	 (regex)"^print\\s+(.+?)\\s*(?:%\\s*(.+?)\\s*)?$",
+	 (regex)"^print\\s+(.+?)\\s*(?:%\\s*\\(?\\s*(.+?)\\s*\\)?\\s*)?$",
 	 (regex)"^return\\s+(.+?)\\s*$",
 	 (regex)"^continue\\s*$",
 	 (regex)"^break\\s*$",
-	 (regex)"^([a-zA-Z_][0-9a-zA-Z_\\s,]*?)\\s*=\\s*(.*)? *"
+	 (regex)"^([a-zA-Z_][0-9a-zA-Z_\\s,]*?)\\s*=\\s*(.*)? *$"
 };
+
+void removeSpace(string& s) {
+	int index = 0;
+	if (!s.empty())
+		while ((index = s.find(' ', index)) != string::npos)
+			s.erase(index, 1);
+}
 
 int regexBreak(const string& s, vector<string>& contain) {
 	for (int i = 0; i < 10; i++) {
 		smatch sm;
 		if (regex_match(s, sm, blockRegex[i])) {
-			for (int k = 1; k < sm.size(); k++) {
-				contain.push_back(sm.str(i));
+			for (unsigned k = 1; k < sm.size(); k++) {
+				contain.push_back(sm.str(k));
 			}
 			return i;
 		}
@@ -28,7 +35,9 @@ int regexBreak(const string& s, vector<string>& contain) {
 
 void multiVary(const string& s, vector<string>& contain) {
 	string ss = s;
-	regex e("[\\s\\(,]*([^,\\(\\)\\s]+)[\\s\\),]*");
+	removeSpace(ss);
+	ss.push_back(',');
+	regex e("[,]*(.+?)[,]+");
 	smatch sm;
 	while (regex_search(ss, sm, e)) {
 		contain.push_back(sm.str(1));
@@ -100,14 +109,13 @@ int pyRootBlock::work(int) {
 	return 1;
 }
 
-//int pyForBlock::work() {
-//
+//int pyForBlock::work(int) {
 //}
 
 int pyIfBlock::work(int) {
 	int workStatus;
 	pyObject* cond = condition->work();
-	if (cond == cond) {//´ý²¹³ä
+	if (cond == &(pyObjectBool::trueBool)) {//´ý²¹³ä
 		for (auto i : process) {
 			workStatus = i->work(workStatus);
 			if (workStatus >= 2 && workStatus <= 5)
@@ -135,7 +143,7 @@ int pyElseBlock::work(int ifCond) {
 int pyWhileBlock::work(int) {
 	int workStatus;
 	pyObject* cond = condition->work();
-	while (cond == cond) {//´ý²¹³ä
+	while (cond == &(pyObjectBool::trueBool)) {//´ý²¹³ä
 		for (auto i : process) {
 			workStatus = i->work(workStatus);
 			if (workStatus == 2) 
@@ -147,4 +155,27 @@ int pyWhileBlock::work(int) {
 		}
 	}
 	return 1;
+}
+
+//int pyDefBlock::work(int) {
+//}
+
+int pyPrintBlock::work(int) {
+	bePrinted->print();
+	return 1;
+}
+
+//int pyReturnBlock::work(int) {
+//}
+
+int pyContinueBlock::work(int) {
+	return 2;
+}
+
+int pyBreakBlock::work(int) {
+	return 3;
+}
+
+int pyAssignBlock::work(int) {
+	
 }
