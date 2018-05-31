@@ -116,14 +116,14 @@ pyObjectBool pyObjectBool::trueBool = new pyObjectBool(true);
 pyObjectBool pyObjectBool::falseBool = new pyObjectBool(false);
 
 //以下pyObjectData类的函数
+pyObjectData* pyObjectInt::operatorFatherBool(const pyObjectData *other, const char* ope) const {
 
-
+}
 pyObjectData* pyObjectInt::operatorFatherBool(const pyObjectData *other, const char* ope) const {
 	pyObjectData* tmp = new pyObjectFloat((float)data);
 	pyObjectData* returnPtr = tmp->operatorFatherBool(other, ope);
 	delete tmp;
 	return returnPtr;
-	return nullptr;
 }
 pyObjectData* pyObjectData::operator+(const pyObjectData *other) const {
 	return operatorFather(other, "+");
