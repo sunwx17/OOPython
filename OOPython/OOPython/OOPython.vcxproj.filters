@@ -27,10 +27,10 @@
     <ClCompile Include="Analyzer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Operator.cpp">
+    <ClCompile Include="Varmap.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Varmap.cpp">
+    <ClCompile Include="Expression.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -44,10 +44,10 @@
     <ClInclude Include="Data.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Operator.h">
+    <ClInclude Include="Varmap.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Varmap.h">
+    <ClInclude Include="Expression.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
