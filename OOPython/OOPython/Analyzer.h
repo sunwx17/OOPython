@@ -3,6 +3,7 @@
 
 #include "Data.h"
 #include "Varmap.h"
+#include "Expression.h"
 #include <vector>
 #include <regex>
 using namespace std;
@@ -35,9 +36,9 @@ class pyForBlock : public pyBlock {
 };
 
 class pyIfBlock : public pyBlock {
-	pyObject* condition;
+	pyExpression* condition;
 public:
-	pyIfBlock(pyObject* con) : condition(con) {}
+	pyIfBlock(pyExpression* con) : condition(con) {}
 	int work(int);
 };
 
@@ -48,27 +49,35 @@ public:
 };
 
 class pyWhileBlock : public pyBlock{
-	pyObject* condition;
+	pyExpression* condition;
 public:
-	pyWhileBlock(pyObject* con) : condition(con) {}
+	pyWhileBlock(pyExpression* con) : condition(con) {}
 	int work(int);
 };
 
 class pyDefBlock : public pyBlock {
-
+	string name;
+	Varmap funcVarmap;
+public:
+	pyDefBlock(const string s, vector<string> v) :name(s) {
+		for (auto i : v) {
+			funcVarmap.assign(i, nullptr);
+		}
+	}
+	int work(int);
 };
 
 class pyPrintBlock : public pyBlock {
-	pyObject* bePrinted;
+	pyExpression* bePrinted;
 public:
-	pyPrintBlock(pyObject* tobePrinted) : bePrinted(tobePrinted) {}
+	pyPrintBlock(pyExpression* tobePrinted) : bePrinted(tobePrinted) {}
 	int work(int);
 };
 
 class pyReturnBlock : public pyBlock{
-	pyObject* beReturned;
+	pyExpression* beReturned;
 public:
-	pyReturnBlock(pyObject* tobeReturned) : beReturned(tobeReturned) {}
+	pyReturnBlock(pyExpression* tobeReturned) : beReturned(tobeReturned) {}
 	int work(int);
 };
 
@@ -85,10 +94,10 @@ public:
 };
 
 class pyAssignBlock : public pyBlock {
-	pyObject* beAssigned;
-	pyObject* assigner;
+	pyExpression* beAssigned;
+	pyExpression* assigner;
 public:
-	pyAssignBlock(pyObject* front, pyObject* back) : beAssigned(front),assigner(back) {}
+	pyAssignBlock(pyExpression* front, pyExpression* back) : beAssigned(front),assigner(back) {}
 	int work(int);
 };
 
