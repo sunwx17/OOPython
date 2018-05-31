@@ -16,7 +16,7 @@ regex blockRegex[] = {
 void removeSpace(string& s) {
 	int index = 0;
 	if (!s.empty())
-		while ((index = s.find(' ', index)) != string::npos)
+		while ((index = (int)s.find(' ', index)) != string::npos)
 			s.erase(index, 1);
 }
 

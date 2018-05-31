@@ -6,6 +6,7 @@
 #include <string.h>
 #include <iostream>
 #include <memory>
+#include <assert.h>
 using namespace std;
 //Mark:To Do完成list、scan 
 
@@ -21,7 +22,7 @@ bool operateBool(const float& one, const float& other, const char* ope, bool& an
 bool operateInt(const int& one, const int& other, const char* ope, int& answer);
 bool operateFloat(const float& one, const float& other, const char* ope, float& answer);
 
-//以下pyObject类
+//以下pyObject类及其子类
 class pyObject{
 public:
 	pyObject();
@@ -30,35 +31,34 @@ public:
 	virtual void print() = 0;
 };
 
-//以下pyObjectData类
 class pyObjectData :public pyObject {
-	virtual pyObjectDataPtr operatorFather(const pyObjectData &other, const char* ope) const;
+	pyObjectDataPtr operatorFather(const pyObjectData &other, const char* ope) const;//string单独处理
 	pyObjectDataPtr operatorFatherBool(const pyObjectData &other, const char* ope) const;
 	virtual float getDataFloat() const = 0;
 	virtual int getDataInt() const = 0;
-public://Mark:To Do增加&&、||、!、string 
+public: 
 	pyObjectData();
 	virtual ~pyObjectData() = 0;
 	virtual string getType() const = 0;
-	pyObjectDataPtr operator+(const pyObjectData &other) const;
-	pyObjectDataPtr operator-(const pyObjectData &other) const;
+	virtual pyObjectDataPtr operator+(const pyObjectData &other) const;
+	virtual pyObjectDataPtr operator-(const pyObjectData &other) const;
 	virtual pyObjectDataPtr operator-() const = 0;
-	pyObjectDataPtr operator*(const pyObjectData &other) const;
-	pyObjectDataPtr operator/(const pyObjectData &other) const;
-	pyObjectDataPtr operator==(const pyObjectData &other) const;
-	pyObjectDataPtr operator<(const pyObjectData &other) const;
-	pyObjectDataPtr operator>(const pyObjectData &other) const;
-	pyObjectDataPtr operator<<(const pyObjectData &other) const;
-	pyObjectDataPtr operator>>(const pyObjectData &other) const;
+	virtual pyObjectDataPtr operator*(const pyObjectData &other) const;
+	virtual pyObjectDataPtr operator/(const pyObjectData &other) const;
+	virtual pyObjectDataPtr operator==(const pyObjectData &other) const;
+	virtual pyObjectDataPtr operator<(const pyObjectData &other) const;
+	virtual pyObjectDataPtr operator>(const pyObjectData &other) const;
+	virtual pyObjectDataPtr operator<=(const pyObjectData &other) const;
+	virtual pyObjectDataPtr operator>=(const pyObjectData &other) const;
+	virtual pyObjectDataPtr operator<<(const pyObjectData &other) const;
+	virtual pyObjectDataPtr operator>>(const pyObjectData &other) const;
+	pyObjectDataPtr operator&&(const pyObjectData &other) const;
+	pyObjectDataPtr operator||(const pyObjectData &other) const;
+	pyObjectDataPtr operator!() const;
+	virtual pyObjectDataPtr operator&(const pyObjectData &other) const;
+	virtual pyObjectDataPtr operator|(const pyObjectData &other) const;
 	virtual operator bool() const = 0; 
 };
-//class pyObjectFunc : public pyObject {
-//	map<string, pyObjectDataPtr> dataFunc;
-//	pyBlock * place;
-//public:
-//	pyObjectFunc(pyBlock *);
-//	pyObjectDataPtr work();
-//};
 
 class pyObjectInt : public pyObjectData {
 	int data;
@@ -96,4 +96,22 @@ public:
 	void print();
 };
 
+class pyObjectString : public pyObjectData {
+	string data;
+	float getDataFloat() const;
+	int getDataInt() const;
+	pyObjectDataPtr operatorFatherString(const pyObjectData &other, const char* ope) const;
+public:
+	pyObjectString(string _data);
+	string getType() const;
+	pyObjectDataPtr operator+(const pyObjectData &other) const;
+	pyObjectDataPtr operator-() const;
+	pyObjectDataPtr operator==(const pyObjectData &other) const;
+	pyObjectDataPtr operator<(const pyObjectData &other) const;
+	pyObjectDataPtr operator>(const pyObjectData &other) const;
+	pyObjectDataPtr operator<=(const pyObjectData &other) const;
+	pyObjectDataPtr operator>=(const pyObjectData &other) const;
+	operator bool() const;
+	void print();
+};
 #endif
