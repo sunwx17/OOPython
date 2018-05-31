@@ -116,45 +116,45 @@ pyObjectBool pyObjectBool::trueBool = new pyObjectBool(true);
 pyObjectBool pyObjectBool::falseBool = new pyObjectBool(false);
 
 //以下pyObjectData类的函数
-pyObjectData* pyObjectInt::operatorFatherBool(const pyObjectData *other, const char* ope) const {
-
+pyObjectData* pyObjectInt::operatorFatherBool(const pyObjectData &other, const char* ope) const {
+	pyObjectData* a = other + other;
 }
-pyObjectData* pyObjectInt::operatorFatherBool(const pyObjectData *other, const char* ope) const {
+pyObjectData* pyObjectInt::operatorFatherBool(const pyObjectData &other, const char* ope) const {
 	pyObjectData* tmp = new pyObjectFloat((float)data);
 	pyObjectData* returnPtr = tmp->operatorFatherBool(other, ope);
 	delete tmp;
 	return returnPtr;
 }
-pyObjectData* pyObjectData::operator+(const pyObjectData *other) const {
+pyObjectData* pyObjectData::operator+(const pyObjectData &other) const {
 	return operatorFather(other, "+");
 }
-pyObjectData* pyObjectData::operator-(const pyObjectData *other) const {
+pyObjectData* pyObjectData::operator-(const pyObjectData &other) const {
 	return operatorFather(other, "-");
 }
-pyObjectData* pyObjectData::operator*(const pyObjectData *other) const {
+pyObjectData* pyObjectData::operator*(const pyObjectData &other) const {
 	return operatorFather(other, "*");
 }
-pyObjectData* pyObjectData::operator/(const pyObjectData *other) const {
-	if (*other == &pyObjectBool::falseBool) {
+pyObjectData* pyObjectData::operator/(const pyObjectData &other) const {
+	if (&other == &pyObjectBool::falseBool) {
 		return nullptr;
 	}
 	else {
 		return operatorFather(other, "/");
 	}
 }
-pyObjectData* pyObjectData::operator==(const pyObjectData *other) const {
+pyObjectData* pyObjectData::operator==(const pyObjectData &other) const {
 	return operatorFatherBool(other, "==");
 }
-pyObjectData* pyObjectData::operator<(const pyObjectData *other) const {
+pyObjectData* pyObjectData::operator<(const pyObjectData &other) const {
 	return operatorFatherBool(other, "<");
 }
-pyObjectData* pyObjectData::operator>(const pyObjectData *other) const {
+pyObjectData* pyObjectData::operator>(const pyObjectData &other) const {
 	return operatorFatherBool(other, ">");
 }
-pyObjectData* pyObjectData::operator<<(const pyObjectData *other) const {
+pyObjectData* pyObjectData::operator<<(const pyObjectData &other) const {
 	return operatorFather(other, "<<");
 }
-pyObjectData* pyObjectData::operator>>(const pyObjectData *other) const {
+pyObjectData* pyObjectData::operator>>(const pyObjectData &other) const {
 	return operatorFather(other, ">>");
 }
 
@@ -174,7 +174,7 @@ void pyObjectInt::print() {
 float pyObjectInt::getDataFloat() {
 	return (float)data;
 }
-pyObjectData* pyObjectInt::operatorFather(const pyObjectData *other, const char* ope) const{
+pyObjectData* pyObjectInt::operatorFather(const pyObjectData &other, const char* ope) const{
 	pyObjectData * returnPtr = nullptr;
 	string otherType = other->getType();
 	int num = this->data;
@@ -205,7 +205,7 @@ string pyObjectBool::getType() const {
 }
 
 
-pyObjectData* pyObjectBool::operatorFather(const pyObjectData *other, const char* ope) const {
+pyObjectData* pyObjectBool::operatorFather(const pyObjectData &other, const char* ope) const {
 	pyObjectData * tmp;
 	if (this == &pyObjectBool::trueBool) {
 		tmp = new pyObjectInt(1);
@@ -218,7 +218,7 @@ pyObjectData* pyObjectBool::operatorFather(const pyObjectData *other, const char
 	return returnPtr;
 }
 
-pyObjectData* pyObjectBool::operatorFatherBool(const pyObjectData *other, const char* ope) const {
+pyObjectData* pyObjectBool::operatorFatherBool(const pyObjectData &other, const char* ope) const {
 	pyObjectData * tmp;
 	if (this == &pyObjectBool::trueBool) {
 		tmp = new pyObjectInt(1);
@@ -231,20 +231,6 @@ pyObjectData* pyObjectBool::operatorFatherBool(const pyObjectData *other, const 
 	return returnPtr;
 }
 
-pyObjectData* pyObjectBool::operator+(const pyObjectData *other) const {
-	return operatorFather(other, "+");
-}
-pyObjectData* pyObjectBool::operator-(const pyObjectData *other) const {
-	return operatorFather(other, "+");
-}
-pyObjectData* pyObjectBool::operator-() const {
-	pyObjectData * returnPtr;
-	if (this->data)
-		returnPtr = new pyObjectInt(-1);
-	else
-		returnPtr = new pyObjectInt(0);
-	return returnPtr;
-}
 void pyObjectBool::print() {
 	cout << data << endl;
 }
@@ -255,19 +241,19 @@ float pyObjectBool::getDataFloat() {
 pyObjectFloat::pyObjectFloat(float _data) : data(_data) {}
 
 
-pyObjectData* pyObjectFloat::operatorFatherBool(const pyObjectData *other, const char* ope) const {
-	string otherType = other->getType();
+pyObjectData* pyObjectFloat::operatorFatherBool(const pyObjectData &other, const char* ope) const {
+	string otherType = other.getType();
 	if (otherType == "bool") {
-
+		//Mark:To Do
 	}
 }
 //Mark
-pyObjectData* pyObjectFloat::operatorFather(const pyObjectData *other, const char* ope) const {
+pyObjectData* pyObjectFloat::operatorFather(const pyObjectData &other, const char* ope) const {
 	pyObjectData * returnPtr = nullptr;
-	string otherType = other->getType();
+	string otherType = other.getType();
 	int num = this->data;
-	if (otherType == "int") {
-		const pyObjectFloat * otherInt = dynamic_cast<const pyObjectFloat*>(other);
+	if (otherType == "int") {//Mark:To Do
+		const pyObjectFloat * otherInt = dynamic_cast<const pyObjectInt*>(other);
 		num = operateInt(otherInt->data, ope);
 		returnPtr = new pyObjectFloat(num);
 	}

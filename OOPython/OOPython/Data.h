@@ -32,8 +32,8 @@ public:
 
 //“‘œ¬pyObjectData¿‡
 class pyObjectData :public pyObject {
-	virtual pyObjectData* operatorFather(const pyObjectData *other, const char* ope) const = 0;
-	pyObjectData* operatorFatherBool(const pyObjectData *other, const char* ope) const;
+	virtual pyObjectData* operatorFather(const pyObjectData &other, const char* ope) const = 0;
+	pyObjectData* operatorFatherBool(const pyObjectData &other, const char* ope) const;
 	virtual float getDataFloat() = 0;
 public:
 	friend class pyObjectBool;
@@ -41,16 +41,16 @@ public:
 	pyObjectData();
 	virtual ~pyObjectData() = 0;
 	virtual string getType() const = 0;
-	pyObjectData* operator+(const pyObjectData *other) const;
-	pyObjectData* operator-(const pyObjectData *other) const;
+	pyObjectData* operator+(const pyObjectData &other) const;
+	pyObjectData* operator-(const pyObjectData &other) const;
 	virtual pyObjectData* operator-() const = 0;
-	pyObjectData* operator*(const pyObjectData *other) const;
-	pyObjectData* operator/(const pyObjectData *other) const;
-	pyObjectData* operator==(const pyObjectData *other) const;
-	pyObjectData* operator<(const pyObjectData *other) const;
-	pyObjectData* operator>(const pyObjectData *other) const;
-	pyObjectData* operator<<(const pyObjectData *other) const;
-	pyObjectData* operator>>(const pyObjectData *other) const;
+	pyObjectData* operator*(const pyObjectData &other) const;
+	pyObjectData* operator/(const pyObjectData &other) const;
+	pyObjectData* operator==(const pyObjectData &other) const;
+	pyObjectData* operator<(const pyObjectData &other) const;
+	pyObjectData* operator>(const pyObjectData &other) const;
+	pyObjectData* operator<<(const pyObjectData &other) const;
+	pyObjectData* operator>>(const pyObjectData &other) const;
 };
 //class pyObjectFunc : public pyObject {
 //	map<string, pyObjectData*> dataFunc;
@@ -65,8 +65,8 @@ class pyObjectBool : public pyObjectData {
 	pyObjectBool(const pyObjectBool &) = delete;
 	void operator=(const pyObjectBool &) = delete;
 	~pyObjectBool() {}
-	pyObjectData* operatorFather(const pyObjectData *other, const char* ope) const;
-	pyObjectData* operatorFatherBool(const pyObjectData *other, const char* ope) const;
+	pyObjectData* operatorFather(const pyObjectData &other, const char* ope) const;
+	pyObjectData* operatorFatherBool(const pyObjectData &other, const char* ope) const;
 	float getDataFloat();
 public:
 	static pyObjectBool trueBool;
@@ -78,8 +78,8 @@ public:
 
 class pyObjectInt : public pyObjectData {
 	int data;
-	pyObjectData* operatorFather(const pyObjectData *other, const char* ope) const;
-	pyObjectData* operatorFatherBool(const pyObjectData *other, const char* ope) const;
+	pyObjectData* operatorFather(const pyObjectData &other, const char* ope) const;
+	pyObjectData* operatorFatherBool(const pyObjectData &other, const char* ope) const;
 	float getDataFloat();
 public:
 	pyObjectInt(int _data);
@@ -90,8 +90,8 @@ public:
 
 class pyObjectFloat : public pyObjectData {
 	float data;
-	pyObjectData* operatorFather(const pyObjectData *other, const char* ope) const;
-	pyObjectData* operatorFatherBool(const pyObjectData *other, const char* ope) const;
+	pyObjectData* operatorFather(const pyObjectData &other, const char* ope) const;
+	pyObjectData* operatorFatherBool(const pyObjectData &other, const char* ope) const;
 	float getDataFloat();
 public:
 	pyObjectFloat(float _data);
