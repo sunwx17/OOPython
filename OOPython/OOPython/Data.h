@@ -15,7 +15,6 @@ class pyObjectBool;
 class pyObjectInt;
 class pyObject;
 class pyObjectData;
-map<string, pyObjectData*> dataGlobal;
 //以下基础函数：operateInt、operateBool、operateFloat 
 bool operateBool(const float& one, const float& other, const char* ope);
 int operateInt(const int& one, const int& other, const char* ope);
@@ -28,6 +27,7 @@ public:
 	virtual ~pyObject() = 0;
 	virtual string getType() const = 0;
 	virtual pyObjectData* work() = 0;
+	virtual void print() = 0;
 };
 
 class pyObjectData :public pyObject {
