@@ -1,6 +1,7 @@
 #ifndef EXPREESION_H
 #define EXPREESION_H
 #include "Data.h"
+#include "Function.h"
 
 class pyExpression {
 public:

@@ -20,6 +20,7 @@ protected:
 	vector<pyBlock*> process;
 public:
 	pyBlock() {};
+	static const pyObjectPtr findVar(const string&);
 	static pyBlock* factory(int, vector<string>&);
 	int appendProcess(const string&, int);
 	virtual int work(int) = 0;
@@ -65,6 +66,7 @@ public:
 		}
 	}
 	int work(int);
+	int call();
 };
 
 class pyPrintBlock : public pyBlock {

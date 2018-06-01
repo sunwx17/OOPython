@@ -1,5 +1,6 @@
 #include "Analyzer.h"
 
+
 regex blockRegex[] = {
 	 (regex)"^for\\s+([a-zA-Z_][0-9a-zA-Z_]*?)\\s+in\\s+([^:]+?)\\s*:\\s*$",
 	 (regex)"^if\\s+([^:]+?)\\s*:\\s*$",
@@ -43,6 +44,10 @@ void multiVary(const string& s, vector<string>& contain) {
 		contain.push_back(sm.str(1));
 		ss = sm.suffix().str();
 	}
+}
+
+const pyObjectPtr pyBlock::findVar(const string &s){
+	return varmap.getValue(s);
 }
 
 pyBlock* pyBlock::factory(int type, vector<string>& contain) {
@@ -159,6 +164,11 @@ int pyWhileBlock::work(int) {
 
 int pyDefBlock::work(int) {
 	pyBlock::varmap.assign(name, )
+}
+
+int pyDefBlock::call()
+{
+	return 0;
 }
 
 int pyPrintBlock::work(int) {
