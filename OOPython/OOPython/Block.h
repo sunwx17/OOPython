@@ -26,7 +26,11 @@ public:
 };
 
 class pyForBlock : public pyBlock {
-
+	pyExpression* cycleVariable;
+	pyExpression* cycleContain;
+public:
+	pyForBlock(pyExpression* cv, pyExpression* cc) : cycleVariable(cv), cycleContain(cv) {}
+	int work(int, Varmap&);
 };
 
 class pyIfBlock : public pyBlock {

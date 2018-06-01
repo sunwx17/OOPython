@@ -67,8 +67,10 @@ int pyRootBlock::work(int workStatus, Varmap& varmap) {
 	return 1;
 }
 
-//int pyForBlock::work(int workStatus, Varmap& varmap) {
-//}
+int pyForBlock::work(int workStatus, Varmap &){
+
+}
+
 
 int pyIfBlock::work(int workStatus, Varmap& varmap) {
 	pyObjectPtr cond = condition->work(varmap);

@@ -118,10 +118,10 @@ public:
 	void print() const;
 };
 
-class pyObjectStruct : public pyObject {
+class pyObjectContainer : public pyObject {
 public:
-	pyObjectStruct();
-	virtual ~pyObjectStruct() = 0;
+	pyObjectContainer();
+	virtual ~pyObjectContainer() = 0;
 	virtual string getType() const = 0;
 	virtual void print() const = 0;
 	virtual pyObjectIterator& begin() = 0;
