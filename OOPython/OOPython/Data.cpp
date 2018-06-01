@@ -221,15 +221,15 @@ pyObjectDataPtr pyObjectData::operator>>(const pyObjectData &other) const {
 	return operatorFather(other, ">>");
 }
 pyObjectDataPtr pyObjectData::operator&&(const pyObjectData &other) const {
-	bool returnBool = ((bool)this) && ((bool)other);
+	bool returnBool = (this->operator bool() && other.operator bool());
 	return (pyObjectDataPtr)new pyObjectBool(returnBool);
 }
 pyObjectDataPtr pyObjectData::operator||(const pyObjectData &other) const {
-	bool returnBool = ((bool)this) || ((bool)other);
+	bool returnBool = (this->operator bool() || other.operator bool());
 	return (pyObjectDataPtr)new pyObjectBool(returnBool);
 }
 pyObjectDataPtr pyObjectData::operator!() const {
-	bool answer = !((bool)this);
+	bool answer = !(this->operator bool());
 	return (pyObjectDataPtr)new pyObjectBool(answer);
 }
 pyObjectDataPtr pyObjectData::operator&(const pyObjectData &other) const {
