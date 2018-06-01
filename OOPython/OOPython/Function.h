@@ -2,10 +2,14 @@
 #define FUNCTION_H
 #include "Data.h"
 
+class pyDefBlock;
+
 class pyFuncObject : public pyObject {
+	pyDefBlock* define;
 public:
-	pyFuncObject();
+	pyFuncObject(pyDefBlock* def) : define(def) {}
 	string getType() const;
+	pyObjectPtr call(vector<pyObjectPtr>&);
 	void print();
 };
 
