@@ -28,7 +28,7 @@ public:
 	pyObject();
 	virtual ~pyObject() = 0;
 	virtual string getType() const = 0;
-	virtual void print() = 0;
+	virtual void print() const = 0;
 };
 
 class pyObjectData :public pyObject {

@@ -46,9 +46,9 @@ void multiVary(const string& s, vector<string>& contain) {
 	}
 }
 
-const pyObjectPtr pyBlock::findVar(const string &s){
+/*const pyObjectPtr pyBlock::findVar(const string &s){
 	return varmap.getValue(s);
-}
+}*/
 
 pyBlock* pyBlock::factory(int type, vector<string>& contain) {
 	switch (type)
@@ -102,28 +102,25 @@ int pyBlock::appendProcess(const string& s, int numOfTab) {
  * 4 : return
  * 5 : exit
  * 6 : if为真，接下来else不执行
- * 7 : 正在进行函数调用，不在全局定义变量
  */
 
-int pyRootBlock::work(int) {
-	int workStatus = 1;
+int pyRootBlock::work(int workStatus, Varmap& varmap) {
 	for (auto i : process) {
-		workStatus = i->work(workStatus);
+		workStatus = i->work(workStatus, varmap);
 		if (workStatus == 6)
 			return 6;
 	}
 	return 1;
 }
 
-//int pyForBlock::work(int) {
+//int pyForBlock::work(int workStatus, Varmap& varmap) {
 //}
 
-int pyIfBlock::work(int) {
-	int workStatus;
-	pyObjectPtr cond = condition->work();
-	if (cond == &(pyObjectBool::trueBool)) {//待补充
+int pyIfBlock::work(int workStatus, Varmap& varmap) {
+	pyObjectPtr cond = condition->work(varmap);
+	if ((bool)cond) {
 		for (auto i : process) {
-			workStatus = i->work(workStatus);
+			workStatus = i->work(workStatus, varmap);
 			if (workStatus >= 2 && workStatus <= 5)
 				return workStatus;
 		}
@@ -132,13 +129,12 @@ int pyIfBlock::work(int) {
 	return 1;
 }
 
-int pyElseBlock::work(int ifCond) {
-	if (ifCond == 6)
+int pyElseBlock::work(int workStatus, Varmap& varmap) {
+	if (workStatus == 6)
 		return 1;
 	else {
-		int workStatus;
 		for (auto i : process) {
-			workStatus = i->work(workStatus);
+			workStatus = i->work(workStatus, varmap);
 			if (workStatus >= 2 && workStatus <= 5)
 				return workStatus;
 		}
@@ -146,12 +142,12 @@ int pyElseBlock::work(int ifCond) {
 	}		
 }
 
-int pyWhileBlock::work(int) {
+int pyWhileBlock::work(int workStatus, Varmap& varmap) {
 	int workStatus;
-	pyObjectPtr cond = condition->work();
-	while (cond == &(pyObjectBool::trueBool)) {//待补充
+	pyObjectPtr cond = condition->work(varmap);
+	while ((bool)cond) {
 		for (auto i : process) {
-			workStatus = i->work(workStatus);
+			workStatus = i->work(workStatus, varmap);
 			if (workStatus == 2) 
 				break;
 			else if (workStatus == 3) 
@@ -163,40 +159,50 @@ int pyWhileBlock::work(int) {
 	return 1;
 }
 
-int pyDefBlock::work(int) {
+int pyDefBlock::work(int workStatus, Varmap& varmap) {
 	pyFuncObjectPtr fop(new pyFuncObject(this));
-	pyBlock::varmap.assign(name, fop);
-	return;
+	varmap.assign(name, fop);
+	return 1;
 }
 
 pyObjectPtr pyDefBlock::call(vector<pyObjectPtr>& elems_in){
 	for (int i = 0; i < numOfElem; i++) {
 		funcVarmap.assign(elems[i], elems_in[i]);
 	}
-	int workStatus = 7;
+	int workStatus = 1;
 	for (auto i : process) {
-		workStatus = i->work(7);
+		workStatus = i->work(workStatus, funcVarmap);
+		if (workStatus == 4) 
+			return funcVarmap.getValue("__return__");
+		//else if (workStatus == 5)
 	}
+	return nullptr;
 }
 
 
 
-int pyPrintBlock::work(int) {
-	bePrinted->print();
+int pyPrintBlock::work(int workStatus, Varmap& varmap) {
+	bePrinted->work(varmap)->print();
 	return 1;
 }
 
-//int pyReturnBlock::work(int) {
-//}
+int pyReturnBlock::work(int workStatus, Varmap& varmap) {
+	pyObjectPtr retop = beReturned->work(varmap);
+	varmap.assign("__return__", retop);
+	return 1;
+}
 
-int pyContinueBlock::work(int) {
+int pyContinueBlock::work(int workStatus, Varmap& varmap) {
 	return 2;
 }
 
-int pyBreakBlock::work(int) {
+int pyBreakBlock::work(int workStatus, Varmap& varmap) {
 	return 3;
 }
 
-int pyAssignBlock::work(int) {
-	
+int pyAssignBlock::work(int workStatus, Varmap& varmap) {
+	const string& s = (dynamic_cast<pyVariable*> (beAssigned))->getName();
+	pyObjectPtr back = assigner->work(varmap);
+	varmap.assign(s, back);
+	return 1;
 }

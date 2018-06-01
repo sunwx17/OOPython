@@ -10,7 +10,7 @@ public:
 	pyFuncObject(pyDefBlock* def) : define(def) {}
 	string getType() const;
 	pyObjectPtr call(vector<pyObjectPtr>&);
-	void print();
+	void print() const;
 };
 
 typedef shared_ptr<pyFuncObject> pyFuncObjectPtr;
