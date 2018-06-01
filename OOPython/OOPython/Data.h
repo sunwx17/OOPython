@@ -15,10 +15,12 @@ class pyObjectData;
 class pyObjectBool;
 class pyObjectInt;
 class pyObjectFloat;
-class pyObjectStruct;
+class pyObjectContainer;
 class pyObjectIterator;
-typedef shared_ptr<const pyObject> pyObjectPtr;
+typedef shared_ptr<pyObject> pyObjectPtr;
 typedef shared_ptr<const pyObjectData> pyObjectDataPtr;
+typedef shared_ptr<pyObjectContainer> pyObjectContainerPtr;
+typedef shared_ptr<pyObjectIterator> pyObjectIteratorPtr;
 //以下基础函数：operateInt、operateBool、operateFloat 
 bool operateBool(const float& one, const float& other, const char* ope, bool& answer);
 bool operateInt(const int& one, const int& other, const char* ope, int& answer);
@@ -124,8 +126,8 @@ public:
 	virtual ~pyObjectContainer() = 0;
 	virtual string getType() const = 0;
 	virtual void print() const = 0;
-	virtual pyObjectIterator& begin() = 0;
-	virtual pyObjectIterator& end() = 0;
+	virtual pyObjectIteratorPtr begin() = 0;
+	virtual pyObjectIteratorPtr end() = 0;
 	virtual int size() = 0;
 };
 
@@ -135,6 +137,12 @@ public:
 	virtual ~pyObjectIterator() = 0;
 	virtual string getType() const = 0;
 	virtual void print() = 0;
-	
+	virtual pyObjectIteratorPtr operator+(int num) = 0;
+	virtual pyObjectIteratorPtr operator-(int num) = 0;
+	virtual pyObjectIteratorPtr operator++(int) = 0;
+	virtual pyObjectIteratorPtr operator++() = 0;
+	virtual pyObjectIteratorPtr operator--(int) = 0;
+	virtual pyObjectIteratorPtr operator--() = 0;
+
 };
 #endif
