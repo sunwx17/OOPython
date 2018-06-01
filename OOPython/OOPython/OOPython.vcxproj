@@ -22,7 +22,7 @@
     <ProjectGuid>{3E06EBF7-95D3-426E-8601-A00B8831AEBF}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>OOPython</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -147,6 +147,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Analyzer.cpp" />
+    <ClCompile Include="Block.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="Data.cpp" />
     <ClCompile Include="Function.cpp" />
@@ -155,6 +156,7 @@
     <ClCompile Include="Varmap.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Block.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Analyzer.h" />
     <ClInclude Include="Data.h" />

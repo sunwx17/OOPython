@@ -9,3 +9,7 @@ pyObjectPtr Varmap::getValue(const string& s) {
 		return table[s];
 	return nullptr;
 }
+
+void Varmap::clear(){
+	table.clear();
+}

@@ -3,7 +3,7 @@
 
 #include "Data.h"
 #include "Varmap.h"
-#include "Analyzer.h"
+#include "Block.h"
 #include <string>
 #include <iostream>
 using namespace std;

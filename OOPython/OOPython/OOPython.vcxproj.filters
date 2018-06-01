@@ -36,6 +36,9 @@
     <ClCompile Include="Function.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Block.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -54,6 +57,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Function.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Block.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

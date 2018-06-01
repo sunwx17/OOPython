@@ -8,6 +8,7 @@ class Varmap {
 public:
 	void assign(const string&, pyObjectPtr);
 	pyObjectPtr getValue(const string&);
+	void clear();
 	~Varmap() {}
 };
 
