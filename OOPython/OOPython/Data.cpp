@@ -146,7 +146,8 @@ pyObjectInt::pyObjectInt(int _data) : data(_data) {}
 pyObjectBool::pyObjectBool(bool _data) : data(_data) {}
 pyObjectFloat::pyObjectFloat(float _data) : data(_data) {}
 pyObjectString::pyObjectString(string _data) : data(_data) {}
-
+pyObjectStruct::pyObjectStruct() {}
+pyObjectIterator::pyObjectIterator() {}
 //以下pyObjectData类的函数
 pyObjectDataPtr pyObjectData::operatorFather(const pyObjectData &other, const char* ope) const{
 	pyObjectDataPtr returnPtr = nullptr;
@@ -255,7 +256,7 @@ pyObjectDataPtr pyObjectInt::operator-() const {
 pyObjectInt::operator bool() const {
 	return (this->data != 0);
 }
-void pyObjectInt::print() {
+void pyObjectInt::print() const {
 	cout << data << endl;
 }
 
@@ -279,7 +280,7 @@ pyObjectDataPtr pyObjectBool::operator-() const {
 pyObjectBool::operator bool() const {
 	return this->data;
 }
-void pyObjectBool::print() {
+void pyObjectBool::print() const {
 	cout << data << endl;
 }
 
@@ -300,7 +301,7 @@ pyObjectDataPtr pyObjectFloat::operator-() const {
 pyObjectFloat::operator bool() const {
 	return (this->data != 0);
 }
-void pyObjectFloat::print() {
+void pyObjectFloat::print() const {
 	cout << data << endl;
 }
 
@@ -381,6 +382,6 @@ pyObjectDataPtr pyObjectString::operator>=(const pyObjectData &other) const {
 pyObjectString::operator bool() const {
 	return (this->data == "");
 }
-void pyObjectString::print() {
+void pyObjectString::print() const {
 	cout << this->data << endl;
 }
