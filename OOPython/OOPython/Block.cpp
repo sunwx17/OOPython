@@ -67,8 +67,23 @@ int pyRootBlock::work(int workStatus, Varmap& varmap) {
 	return 1;
 }
 
-int pyForBlock::work(int workStatus, Varmap &){
-
+int pyForBlock::work(int workStatus, Varmap & varmap){
+	const string& cvn = (dynamic_cast<pyVariable*>(cycleVariable))->getName();
+	pyObjectContainerPtr ocp = (pyObjectContainerPtr)dynamic_cast<pyObjectContainer*>(&(*(cycleContain->work(varmap))));
+	pyObjectIteratorPtr i;
+	for (*i = *(ocp->begin()); *i != *(ocp->end()); (*i)++) {
+		varmap.assign(cvn, **i);
+		for (auto i : process) {
+			workStatus = i->work(workStatus, varmap);
+			if (workStatus == 2)
+				break;
+			else if (workStatus == 3)
+				return 1;
+			else if (workStatus == 4 || workStatus == 5)
+				return workStatus;
+		}
+	}
+	return 1;
 }
 
 
