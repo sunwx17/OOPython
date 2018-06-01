@@ -146,7 +146,7 @@ pyObjectInt::pyObjectInt(int _data) : data(_data) {}
 pyObjectBool::pyObjectBool(bool _data) : data(_data) {}
 pyObjectFloat::pyObjectFloat(float _data) : data(_data) {}
 pyObjectString::pyObjectString(string _data) : data(_data) {}
-pyObjectContainer::pyObjectContainer() {}
+pyObjectStruct::pyObjectStruct() {}
 pyObjectIterator::pyObjectIterator() {}
 //以下pyObjectData类的函数
 pyObjectDataPtr pyObjectData::operatorFather(const pyObjectData &other, const char* ope) const{
