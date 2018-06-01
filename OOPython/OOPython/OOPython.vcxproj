@@ -149,6 +149,7 @@
     <ClCompile Include="Analyzer.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="Data.cpp" />
+    <ClCompile Include="Function.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Expression.cpp" />
     <ClCompile Include="Varmap.cpp" />

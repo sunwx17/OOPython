@@ -102,10 +102,11 @@ int pyBlock::appendProcess(const string& s, int numOfTab) {
  * 4 : return
  * 5 : exit
  * 6 : if为真，接下来else不执行
+ * 7 : 正在进行函数调用，不在全局定义变量
  */
 
 int pyRootBlock::work(int) {
-	int workStatus;
+	int workStatus = 1;
 	for (auto i : process) {
 		workStatus = i->work(workStatus);
 		if (workStatus == 6)
@@ -163,13 +164,22 @@ int pyWhileBlock::work(int) {
 }
 
 int pyDefBlock::work(int) {
-	pyBlock::varmap.assign(name, )
+	pyFuncObjectPtr fop(new pyFuncObject(this));
+	pyBlock::varmap.assign(name, fop);
+	return;
 }
 
-int pyDefBlock::call()
-{
-	return 0;
+pyObjectPtr pyDefBlock::call(vector<pyObjectPtr>& elems_in){
+	for (int i = 0; i < numOfElem; i++) {
+		funcVarmap.assign(elems[i], elems_in[i]);
+	}
+	int workStatus = 7;
+	for (auto i : process) {
+		workStatus = i->work(7);
+	}
 }
+
+
 
 int pyPrintBlock::work(int) {
 	bePrinted->print();

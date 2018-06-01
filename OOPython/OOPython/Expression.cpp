@@ -1,23 +1,30 @@
 #include "Analyzer.h"
 #include "Expression.h"
 
-inline const pyObjectDataPtr pyUnaryOperator::work() const {
+
+const pyObjectPtr pySingleVariable::work() const {
+	return pyBlock::findVar(name);
+}
+
+const pyObjectPtr pyFuncVariable::work() const {
+	pyFuncObjectPtr fop = (pyFuncObjectPtr)dynamic_cast<const pyFuncObject*> (&(*(pyBlock::findVar(name))));
+	vector<pyObjectPtr> elem_o;
+	for (auto i : elems) {
+		elem_o.push_back(i->work());
+	}
+	return fop->call(elem_o);
+}
+
+
+inline const pyObjectPtr pyUnaryOperator::work() const {
 	return elem->work();
 }
 
-const pyObjectDataPtr pyNotOperator::work() const {
+const pyObjectPtr pyNotOperator::work() const {
 
 }
 
-const pyObjectDataPtr pyNegativeOperator::work() const {
-	const pyObjectDataPtr p = pyUnaryOperator::work();
-	return -(*p);
-}
-
-const pyObjectDataPtr pySingleVariable::work() const{
-	return (pyObjectDataPtr)dynamic_cast<const pyObjectData*> (&(*(pyBlock::findVar(name))));
-}
-
-const pyObjectDataPtr pyFuncVariable::work() const{
-	pyFuncObjectPtr fop = (pyFuncObjectPtr)dynamic_cast<const pyObjectData*> (&(*(pyBlock::findVar(name))));
+const pyObjectPtr pyNegativeOperator::work() const {
+	const pyObjectPtr p = pyUnaryOperator::work();
+	return (pyObjectPtr)(&(*((dynamic_cast<const pyObjectData*> (&(*p)))->operator-())));
 }
