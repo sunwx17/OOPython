@@ -15,6 +15,8 @@ class pyObjectData;
 class pyObjectBool;
 class pyObjectInt;
 class pyObjectFloat;
+class pyObjectStruct;
+class pyObjectIterator;
 typedef shared_ptr<const pyObject> pyObjectPtr;
 typedef shared_ptr<const pyObjectData> pyObjectDataPtr;
 //以下基础函数：operateInt、operateBool、operateFloat 
@@ -28,7 +30,7 @@ public:
 	pyObject();
 	virtual ~pyObject() = 0;
 	virtual string getType() const = 0;
-	virtual void print() = 0;
+	virtual void print() const = 0;
 };
 
 class pyObjectData :public pyObject {
@@ -57,11 +59,12 @@ public:
 	pyObjectDataPtr operator!() const;
 	virtual pyObjectDataPtr operator&(const pyObjectData &other) const;
 	virtual pyObjectDataPtr operator|(const pyObjectData &other) const;
-	virtual operator bool() const = 0; 
+	virtual operator bool() const = 0;
+	virtual void print() const = 0;
 };
 
 class pyObjectInt : public pyObjectData {
-	int data;
+	const int data;
 	float getDataFloat() const;
 	int getDataInt() const;
 public:
@@ -69,11 +72,11 @@ public:
 	string getType() const;
 	pyObjectDataPtr operator-() const;
 	operator bool() const;
-	void print();
+	void print() const;
 };
 
 class pyObjectBool : public pyObjectData {
-	bool data;
+	const bool data;
 	float getDataFloat() const;
 	int getDataInt() const;
 public:
@@ -81,11 +84,11 @@ public:
 	string getType() const;
 	pyObjectDataPtr operator-() const;
 	operator bool() const;
-	void print();
+	void print() const;
 };
 
 class pyObjectFloat : public pyObjectData {
-	float data;
+	const float data;
 	float getDataFloat() const;
 	int getDataInt() const;
 public:
@@ -93,11 +96,11 @@ public:
 	string getType() const;
 	pyObjectDataPtr operator-() const;
 	operator bool() const;
-	void print();
+	void print() const;
 };
 
 class pyObjectString : public pyObjectData {
-	string data;
+	const string data;
 	float getDataFloat() const;
 	int getDataInt() const;
 	pyObjectDataPtr operatorFatherString(const pyObjectData &other, const char* ope) const;
@@ -112,6 +115,26 @@ public:
 	pyObjectDataPtr operator<=(const pyObjectData &other) const;
 	pyObjectDataPtr operator>=(const pyObjectData &other) const;
 	operator bool() const;
-	void print();
+	void print() const;
+};
+
+class pyObjectStruct : public pyObject {
+public:
+	pyObjectStruct();
+	virtual ~pyObjectStruct() = 0;
+	virtual string getType() const = 0;
+	virtual void print() const = 0;
+	virtual pyObjectIterator& begin() = 0;
+	virtual pyObjectIterator& end() = 0;
+	virtual int size() = 0;
+};
+
+class pyObjectIterator : public pyObject {
+public:
+	pyObjectIterator();
+	virtual ~pyObjectIterator() = 0;
+	virtual string getType() const = 0;
+	virtual void print() = 0;
+	
 };
 #endif
