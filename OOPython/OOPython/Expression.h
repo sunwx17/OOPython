@@ -2,24 +2,29 @@
 #define EXPREESION_H
 #include "Data.h"
 #include "Function.h"
+#include "Varmap.h"
 
 class pyExpression {
 public:
 	virtual pyObjectPtr work(Varmap&) const = 0;
+	static pyExpression* factory(const string&);
 };
 //±‰¡ø
 class pyVariable : public pyExpression{
 //protected:
 	const string name;
 public:
+	pyVariable(){};
 	pyVariable(const string s) :name(s) {};
 	virtual pyObjectPtr work(Varmap&) const = 0;
 	const string& getName() const;
 };
 
 class pyDataVariable : public pyVariable{
+	pyObjectPtr tmpOp;
 public:
-	pyDataVariable(const string s) :pyVariable(s) {};
+	pyDataVariable(const string s): pyVariable(s) {};
+	pyDataVariable(pyObjectPtr op) : tmpOp(op) {};
 	pyObjectPtr work(Varmap&) const;
 };
 
