@@ -11,7 +11,8 @@ bool Client::getLine(string &s)
 
 void Client::work()
 {
-	pyBlock* rootBlock = new pyRootBlock;
+	pyRootBlock* rootBlock = new pyRootBlock;
+	Varmap varmap;
 	bool flagExit = false;
 	bool outState = true;//Êä³ö×´Ì¬£¬1Êä³ö">>> "£¬0Êä³ö"... "
     while (!flagExit)
@@ -44,8 +45,11 @@ void Client::work()
 		if ((type >= 0) && (type <= 4)) {
 			outState = false;
 		}
-		if (type == 5) {
-			flagExit = true;
+		if (outState) {
+			int workStatus = rootBlock->lastWork(1, varmap);
+			if (workStatus == 5) {
+				flagExit = true;
+			}
 		}
     }
 	delete rootBlock;
@@ -78,7 +82,7 @@ bool Client::scan(unsigned int &num, string &line) {
 			break;
 		}
 	}
-	cout << line << endl << num << endl;
+	//cout << line << endl << num << endl;
 	return tabCorrect;
 }
 

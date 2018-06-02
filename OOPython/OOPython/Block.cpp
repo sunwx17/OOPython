@@ -5,26 +5,31 @@ return varmap.getValue(s);
 }*/
 
 pyBlock* pyBlock::factory(int type, vector<string>& contain) {
+	pyExpression* pe;
 	switch (type)
 	{
 	case(0)://for
 
 	case(1)://if
-
+		pe = str2exp(contain[0]);
+		return new pyIfBlock(pe);
 	case(2)://else
-
+		return new pyElseBlock();
 	case(3)://while
-
+		pe = str2exp(contain[0]);
+		return new pyWhileBlock(pe);
 	case(4)://def
 
 	case(5)://print
-
+		pe = str2exp(contain[0]);
+		return new pyPrintBlock(pe);
 	case(6)://return
-
+		pe = str2exp(contain[0]);
+		return new pyReturnBlock(pe);
 	case(7)://continue
-
+		return new pyContinueBlock();
 	case(8)://break
-
+		return new pyBreakBlock();
 	case(9)://=
 
 	case(-1)://expression
@@ -32,6 +37,7 @@ pyBlock* pyBlock::factory(int type, vector<string>& contain) {
 	default:
 		break;
 	}
+	return nullptr;
 }
 
 int pyBlock::appendProcess(const string& s, int numOfTab) {
@@ -67,10 +73,14 @@ int pyRootBlock::work(int workStatus, Varmap& varmap) {
 	return 1;
 }
 
+int pyRootBlock::lastWork(int workStatus, Varmap& varmap) {
+	return process.back()->work(workStatus, varmap);
+}
+
 int pyForBlock::work(int workStatus, Varmap & varmap){
 	const string& cvn = (dynamic_cast<pyVariable*>(cycleVariable))->getName();
-	pyObjectContainerPtr ocp = (pyObjectContainerPtr)dynamic_cast<pyObjectContainer*>(cycleContain->work(varmap).get());
-	pyObjectIteratorPtr i;
+	pyObjectContainerPtr ocp = (pyObjectContainerPtr)dynamic_cast<pyObjectContainer*>(cycleContain->work(varmap)/*.get*/);
+	/*pyObjectIteratorPtr i;
 	for (*i = *(ocp->begin()); *i != *(ocp->end()); (*i)++) {
 		varmap.assign(cvn, **i);
 		for (auto i : process) {
@@ -82,7 +92,7 @@ int pyForBlock::work(int workStatus, Varmap & varmap){
 			else if (workStatus == 4 || workStatus == 5)
 				return workStatus;
 		}
-	}
+	}*/
 	return 1;
 }
 
@@ -155,7 +165,8 @@ pyObjectPtr pyDefBlock::call(vector<pyObjectPtr>& elems_in) {
 
 
 int pyPrintBlock::work(int workStatus, Varmap& varmap) {
-	bePrinted->work(varmap)->print();
+	pyObject* pod = ((bePrinted->work(varmap))/*.get*/);
+	pod->print();
 	return 1;
 }
 

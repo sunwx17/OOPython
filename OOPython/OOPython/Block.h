@@ -18,11 +18,11 @@ public:
 };
 
 class pyRootBlock : public pyBlock {
-	Varmap varmap;
 public:
 	//static const pyObjectPtr findVar(const string&);
 	pyRootBlock() {};
 	int work(int, Varmap&);
+	int lastWork(int, Varmap&);
 };
 
 class pyForBlock : public pyBlock {

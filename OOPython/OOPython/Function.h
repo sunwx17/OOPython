@@ -13,6 +13,6 @@ public:
 	void print() const;
 };
 
-typedef shared_ptr<pyFuncObject> pyFuncObjectPtr;
+//typedef shared_ptr<pyFuncObject> pyFuncObjectPtr;
 
 #endif // !FUNCTION_H

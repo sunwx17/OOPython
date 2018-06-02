@@ -2,8 +2,13 @@
 #include "Expression.h"
 #include "Analyzer.h"
 
-pyExpression * pyExpression::factory(const string& name) {
-	if (name == "+") return new pyPlusOperator();
+pyExpression * pyExpression::factory(const string& name, vector<pyExpression*> pe) {
+	if (name == "+") return new pyPlusOperator(pe[1], pe[0]);
+	else if (name == "-") return new pyMinusOperator(pe[1], pe[0]);
+	else if (name == "*") return new pyTimesOperator(pe[1], pe[0]);
+	else if (name == "/") return new pyDivideOperator(pe[1], pe[0]);
+	//other
+	else return pyVariable::factory(name);
 }
 
 pyVariable * pyVariable::factory(const string &name){
@@ -45,7 +50,7 @@ pyVariable * pyVariable::factory(const string &name){
 			vector<string> elem_s = commaCut(elems);
 			vector<pyExpression*> elem_v;
 			for (auto i : elem_s) {
-				elem_v.push_back(pyExpression::factory(i));
+				elem_v.push_back(pyVariable::factory(i));
 			}
 			pfv = new pyFuncVariable(pfv, elem_v);
 			right = name.find('(', left + 1);
@@ -67,7 +72,7 @@ pyObjectPtr pyDataVariable::work(Varmap& varmap) const {
 }
 
 pyObjectPtr pyFuncVariable::work(Varmap& varmap) const {
-	const pyFuncObjectPtr fop = (pyFuncObjectPtr)dynamic_cast<pyFuncObject*> ((pyDataVariable::work(varmap)).get());
+	pyFuncObjectPtr fop = (pyFuncObjectPtr)dynamic_cast<pyFuncObject*> ((pyDataVariable::work(varmap))/*.get*/);
 	vector<pyObjectPtr> elem_o;
 	for (auto i : elems) {
 		elem_o.push_back(i->work(varmap));
@@ -80,20 +85,22 @@ inline pyObjectPtr pyUnaryOperator::work(Varmap& varmap) const {
 }
 
 pyObjectPtr pyNotOperator::work(Varmap& varmap) const {
-	return (pyObjectPtr)(pyObject*)(((dynamic_cast<pyObjectData*> (pyUnaryOperator::work(varmap).get()))->operator!()).get());
+	return (pyObjectPtr)(pyObject*)(((dynamic_cast<pyObjectData*> (pyUnaryOperator::work(varmap)/*.get*/))->operator!())/*.get*/);
 }
 
 pyObjectPtr pyNegativeOperator::work(Varmap& varmap) const {
-	return (pyObjectPtr)(pyObject*)(((dynamic_cast<pyObjectData*> (pyUnaryOperator::work(varmap).get()))->operator-()).get());
+	return (pyObjectPtr)(pyObject*)(((dynamic_cast<pyObjectData*> (pyUnaryOperator::work(varmap)/*.get*/))->operator-())/*.get*/);
 }
 
 pyObjectPtr pyBinaryOperator::delegateWork(Varmap & varmap, const string & s) const{
-	pyObjectDataPtr odpf = (pyObjectDataPtr)dynamic_cast<pyObjectData*>(elemFront->work(varmap).get());
-	pyObjectDataPtr odpb = (pyObjectDataPtr)dynamic_cast<pyObjectData*>(elemBack->work(varmap).get());
-	if(s.compare("+") == 0) return (pyObjectPtr)(pyObject*)(*odpf + *odpb).get();
-	else if (s.compare("-") == 0) return (pyObjectPtr)(pyObject*)(*odpf + *odpb).get();
-	else if (s.compare("*") == 0) return (pyObjectPtr)(pyObject*)(*odpf * *odpb).get();
-	else if (s.compare("/") == 0) return (pyObjectPtr)(pyObject*)(*odpf / *odpb).get();
+	pyObjectDataPtr odpf = (pyObjectDataPtr)dynamic_cast<pyObjectData*>(elemFront->work(varmap)/*.get*/);
+	pyObjectDataPtr odpb = (pyObjectDataPtr)dynamic_cast<pyObjectData*>(elemBack->work(varmap)/*.get*/);
+	if(s.compare("+") == 0) return (pyObjectPtr)(pyObject*)((*odpf + *odpb)/*.get*/);
+	else if (s.compare("-") == 0) return (pyObjectPtr)(pyObject*)(*odpf + *odpb)/*.get*/;
+	else if (s.compare("*") == 0) return (pyObjectPtr)(pyObject*)(*odpf * *odpb)/*.get*/;
+	else if (s.compare("/") == 0) return (pyObjectPtr)(pyObject*)(*odpf / *odpb)/*.get*/;
+	//other;
+	else return nullptr;
 }
 
 pyObjectPtr pyPlusOperator::work(Varmap & varmap) const{

@@ -79,8 +79,8 @@ int isOper(const string& s, int pos) {
 }
 
 int isOper(const string& s) {
-	int l = s.size();
-	for (int i = 0; i < operators.size(); i++) {
+	size_t l = operators.size();
+	for (size_t i = 0; i < l; i++) {
 		auto ii = operators[i];
 		for (auto j : ii) {
 			if (s.compare(j) == 0) {
@@ -106,6 +106,48 @@ void spaceHeadTail(string & s) {
 			break;
 		}
 	}
+}
+
+string xiaochudanmufuhao(const string& ss) {
+	string s = ss;
+	size_t k = s.find('-');
+	while (k != string::npos) {
+		if (k == 0) {
+			s.insert(0, 1, '0');
+			k = s.find('-', 2);
+			continue;
+		}
+		for (size_t i = k - 1; i >= 0; i--) {
+			if (s[i] == ' ')
+				continue;
+			else if (!((s[i] >= 'a' && s[i] <= 'z') || (s[i] >= 'A' && s[i] <= 'Z') || (s[i] >= '0' && s[i] <= '9') || s[i] == '_' || s[i] == ')')) {
+				s.insert(i - 1, 1, '0');
+				k = s.find('-', k + 2);
+				break;
+			}
+			else {
+				k = s.find('-', k + 1);
+				break;
+			}
+		}
+	}
+	return s;
+}
+
+int getNumOfElem(const string& s) {
+	const string bin[] = { "+", "-", "*", "/", "and", "or", "&", "|", "^", ">", "<", ">=", "<=", "==", "!=", "<<", ">>" };
+	const string una[] = { "not" };
+	for (auto i : bin) {
+		if (i == s) {
+			return 2;
+		}
+	}
+	for (auto i : una) {
+		if (i == s) {
+			return 1;
+		}
+	}
+	return 0;
 }
 
 void string2stack(const string& s, stack<string>& res) {
@@ -182,7 +224,7 @@ void string2stack(const string& s, stack<string>& res) {
 }
 
 //把中缀表达式转换为后缀表达式
-void postfix(stack<string>& exp, stack<string>& OPND)
+void mid2back(stack<string>& exp, stack<string>& OPND)
 {
 	int i = 0;
 	stack<string> OPTR;   //运算符栈
@@ -278,3 +320,22 @@ vector<string> commaCut(const string & s){
 	return res;
 }
 
+pyExpression * back2exp(stack<string>& back) {
+	string name = back.top();
+	back.pop();
+	int numOfElem = getNumOfElem(name);
+	vector<pyExpression *> pe((size_t)numOfElem);
+	for (int i = 0; i < numOfElem; i++) {
+		pe[i] = back2exp(back);
+	}
+	return pyExpression::factory(name, pe);
+}
+
+pyExpression * str2exp(const string & s){
+	const string ss = xiaochudanmufuhao(s);
+	stack<string> middle;
+	string2stack(ss, middle);
+	stack<string> back;
+	mid2back(middle, back);
+	return back2exp(back);
+}

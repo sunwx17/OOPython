@@ -7,7 +7,7 @@
 class pyExpression {
 public:
 	virtual pyObjectPtr work(Varmap&) const = 0;
-	static pyExpression* factory(const string&);
+	static pyExpression* factory(const string&, vector<pyExpression*>);
 };
 //变量
 class pyVariable : public pyExpression {
@@ -43,55 +43,55 @@ public:
 
 //单目操作符
 class pyUnaryOperator : public pyExpression {
-	const pyVariable* const elem;
+	const pyExpression* const elem;
 public:
-	pyUnaryOperator(const pyVariable* const ele) : elem(ele) {}
+	pyUnaryOperator(const pyExpression* const ele) : elem(ele) {}
 	virtual pyObjectPtr work(Varmap&) const = 0;
 };
 
 class pyNotOperator : public pyUnaryOperator {
 public:
-	pyNotOperator(const pyVariable* const ele) : pyUnaryOperator(ele) {}
+	pyNotOperator(const pyExpression* const ele) : pyUnaryOperator(ele) {}
 	pyObjectPtr work(Varmap&) const;
 };
 
 class pyNegativeOperator : public pyUnaryOperator {
 public:
-	pyNegativeOperator(const pyVariable* const ele) : pyUnaryOperator(ele) {}
+	pyNegativeOperator(const pyExpression* const ele) : pyUnaryOperator(ele) {}
 	pyObjectPtr work(Varmap&) const;
 };
 //双目操作符
 class pyBinaryOperator : public pyExpression {
 protected:
-	const pyVariable* const elemFront;
-	const pyVariable* const elemBack;
+	const pyExpression* const elemFront;
+	const pyExpression* const elemBack;
 	pyObjectPtr delegateWork(Varmap&, const string&) const;
 public:
-	pyBinaryOperator(const pyVariable* const front, const pyVariable* const back) : elemFront(front), elemBack(back) {}
+	pyBinaryOperator(const pyExpression* const front, const pyExpression* const back) : elemFront(front), elemBack(back) {}
 	virtual pyObjectPtr work(Varmap&) const = 0;
 };
 
 class pyPlusOperator : public pyBinaryOperator {
 public:
-	pyPlusOperator(const pyVariable* const front, const pyVariable* const back) : pyBinaryOperator(front, back) {}
+	pyPlusOperator(const pyExpression* const front, const pyExpression* const back) : pyBinaryOperator(front, back) {}
 	pyObjectPtr work(Varmap&) const;
 };
 
 class pyMinusOperator : public pyBinaryOperator {
 public:
-	pyMinusOperator(const pyVariable* const front, const pyVariable* const back) : pyBinaryOperator(front, back) {}
+	pyMinusOperator(const pyExpression* const front, const pyExpression* const back) : pyBinaryOperator(front, back) {}
 	pyObjectPtr work(Varmap&) const;
 };
 
 class pyTimesOperator : public pyBinaryOperator {
 public:
-	pyTimesOperator(const pyVariable* const front, const pyVariable* const back) : pyBinaryOperator(front, back) {}
+	pyTimesOperator(const pyExpression* const front, const pyExpression* const back) : pyBinaryOperator(front, back) {}
 	pyObjectPtr work(Varmap&) const;
 };
 
 class pyDivideOperator : public pyBinaryOperator {
 public:
-	pyDivideOperator(const pyVariable* const front, const pyVariable* const back) : pyBinaryOperator(front, back) {}
+	pyDivideOperator(const pyExpression* const front, const pyExpression* const back) : pyBinaryOperator(front, back) {}
 	pyObjectPtr work(Varmap&) const;
 };
 
