@@ -7,10 +7,12 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
+	bool isCMD = true;
 	if (argc > 1) {
 		freopen(argv[1], "r", stdin);
+		isCMD = false;
 	}
-	Client client(cin);
+	Client client(cin, isCMD);
 	client.work();
 	return 0;
 }

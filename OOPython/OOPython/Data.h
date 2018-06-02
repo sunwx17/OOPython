@@ -128,21 +128,31 @@ public:
 	virtual void print() const = 0;
 	virtual pyObjectIteratorPtr begin() = 0;
 	virtual pyObjectIteratorPtr end() = 0;
+	virtual void pushBack(pyObjectDataPtr data) = 0;
+	virtual void insert(pyObjectDataPtr num, pyObjectDataPtr data) = 0;
+	virtual pyObjectDataPtr pop() = 0;
+	virtual pyObjectDataPtr pop(pyObjectDataPtr num) = 0;
 	virtual int size() = 0;
+	virtual pyObjectDataPtr operator[](pyObjectDataPtr pos) = 0;
 };
 
+class pyObjectList : public pyObjectContainer {
+
+};
 class pyObjectIterator : public pyObject {
 public:
 	pyObjectIterator();
 	virtual ~pyObjectIterator() = 0;
 	virtual string getType() const = 0;
 	virtual void print() = 0;
-	virtual pyObjectIteratorPtr operator+(int num) = 0;
-	virtual pyObjectIteratorPtr operator-(int num) = 0;
+	virtual pyObjectIteratorPtr operator+(int num) const = 0;
+	virtual pyObjectIteratorPtr operator-(int num) const = 0;
 	virtual pyObjectIteratorPtr operator++(int) = 0;
 	virtual pyObjectIteratorPtr operator++() = 0;
 	virtual pyObjectIteratorPtr operator--(int) = 0;
 	virtual pyObjectIteratorPtr operator--() = 0;
-
+	virtual pyObjectIteratorPtr operator*() const= 0;
+	virtual bool operator==(const pyObjectIterator &other) const = 0;
+	virtual bool operator!=(const pyObjectIterator &other) const = 0;
 };
 #endif
