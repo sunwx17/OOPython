@@ -147,7 +147,10 @@ pyObjectBool::pyObjectBool(bool _data) : data(_data) {}
 pyObjectFloat::pyObjectFloat(float _data) : data(_data) {}
 pyObjectString::pyObjectString(string _data) : data(_data) {}
 pyObjectContainer::pyObjectContainer() {}
+pyObjectList::pyObjectList() {}
 pyObjectIterator::pyObjectIterator() {}
+pyIteratorList::pyIteratorList() {}
+pyIteratorList::pyIteratorList(vector<pyObjectPtr>::iterator _it) : it(_it) {}
 //以下pyObjectData类的函数
 pyObjectDataPtr pyObjectData::operatorFather(const pyObjectData &other, const char* ope) const{
 	pyObjectDataPtr returnPtr = nullptr;
@@ -384,4 +387,53 @@ pyObjectString::operator bool() const {
 }
 void pyObjectString::print() const {
 	cout << this->data << endl;
+}
+
+//以下pyIteratorList类的函数
+string pyIteratorList::getType() const {
+	return "iteratorList";
+}
+void pyIteratorList::print() const {
+	(*it)->print();
+}
+pyObjectIteratorPtr pyIteratorList::operator+(int num) const {
+	return (pyObjectIteratorPtr)new pyIteratorList(it + num);
+}
+pyObjectIteratorPtr pyIteratorList::operator-(int num) const {
+	return (pyObjectIteratorPtr)new pyIteratorList(it - num);
+}
+pyObjectIteratorPtr pyIteratorList::operator++(int) {
+	pyObjectIteratorPtr tmp = (pyObjectIteratorPtr)new pyIteratorList(it);
+	it++;
+	return tmp;
+}
+pyObjectIteratorPtr pyIteratorList::operator++() {
+	it++;
+	return (pyObjectIteratorPtr)this;
+}
+pyObjectIteratorPtr pyIteratorList::operator--(int) {
+	pyObjectIteratorPtr tmp = (pyObjectIteratorPtr)new pyIteratorList(it);
+	it--;
+	return tmp;
+}
+pyObjectIteratorPtr pyIteratorList::operator--() {
+	it--;
+	return (pyObjectIteratorPtr)this;
+}
+pyObjectPtr pyIteratorList::operator*() const {
+	return *it;
+}
+bool pyIteratorList::operator==(const pyObjectIterator &other) const {
+	const pyIteratorList* tmp = dynamic_cast<const pyIteratorList*>(&(other));
+	if (tmp != nullptr) {
+		return (tmp->it == this->it);
+	}
+	return false;
+}
+bool pyIteratorList::operator!=(const pyObjectIterator &other) const {
+	const pyIteratorList* tmp = dynamic_cast<const pyIteratorList*>(&(other));
+	if (tmp != nullptr) {
+		return (tmp->it != this->it);
+	}
+	return false;
 }
