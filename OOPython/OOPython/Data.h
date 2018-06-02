@@ -128,17 +128,29 @@ public:
 	virtual void print() const = 0;
 	virtual pyObjectIteratorPtr begin() = 0;
 	virtual pyObjectIteratorPtr end() = 0;
-	virtual void pushBack(pyObjectDataPtr data) = 0;
-	virtual void insert(pyObjectDataPtr num, pyObjectDataPtr data) = 0;
-	virtual pyObjectDataPtr pop() = 0;
-	virtual pyObjectDataPtr pop(pyObjectDataPtr num) = 0;
+	virtual void pushBack(pyObjectPtr data) = 0;
+	//virtual void insert(pyObjectPtr num, pyObjectPtr data) = 0;
+	//virtual pyObjectDataPtr pop() = 0;
+	//virtual pyObjectDataPtr pop(pyObjectPtr num) = 0;
 	virtual int size() = 0;
-	virtual pyObjectDataPtr operator[](pyObjectDataPtr pos) = 0;
+	virtual pyObjectDataPtr operator[](pyObjectPtr pos) = 0;
 };
 
 class pyObjectList : public pyObjectContainer {
-
+	vector<pyObjectPtr> dataList;
+public:
+	virtual string getType() const;
+	virtual void print() const;
+	virtual pyObjectIteratorPtr begin();
+	virtual pyObjectIteratorPtr end();
+	virtual void pushBack(pyObjectPtr data);
+	//virtual void insert(pyObjectPtr num, pyObjectPtr data);
+	//virtual pyObjectDataPtr pop();
+	//virtual pyObjectDataPtr pop(pyObjectPtr num);
+	virtual int size();
+	virtual pyObjectDataPtr operator[](pyObjectPtr pos);
 };
+
 class pyObjectIterator : public pyObject {
 public:
 	pyObjectIterator();
