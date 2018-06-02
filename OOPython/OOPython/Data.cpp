@@ -259,8 +259,11 @@ pyObjectDataPtr pyObjectInt::operator-() const {
 pyObjectInt::operator bool() const {
 	return (this->data != 0);
 }
+pyObjectInt::operator int() const {
+	return (this->data);
+}
 void pyObjectInt::print() const {
-	cout << data << endl;
+	cout << data;
 }
 
 //以下pyObjectBool类的函数
@@ -283,8 +286,16 @@ pyObjectDataPtr pyObjectBool::operator-() const {
 pyObjectBool::operator bool() const {
 	return this->data;
 }
+pyObjectBool::operator int() const {
+	if (this->data) {
+		return 1;
+	}
+	else {
+		return 0;
+	}
+}
 void pyObjectBool::print() const {
-	cout << data << endl;
+	cout << data;
 }
 
 //以下pyObjectFloat类的函数
@@ -305,7 +316,7 @@ pyObjectFloat::operator bool() const {
 	return (this->data != 0);
 }
 void pyObjectFloat::print() const {
-	cout << data << endl;
+	cout << data;
 }
 
 //以下pyObjectString类的函数
@@ -386,9 +397,54 @@ pyObjectString::operator bool() const {
 	return (this->data == "");
 }
 void pyObjectString::print() const {
-	cout << this->data << endl;
+	cout << this->data;
 }
 
+
+string pyObjectList::getType() const {
+	return "list";
+}
+void pyObjectList::print() const {
+	int num = size();
+	cout << "[";
+	for (int i = 1; i <= num; i++) {
+		dataList[i]->print();//Mark:To Do
+		if (i == num) {
+			cout << "]";
+		}
+		else {
+			cout << ", ";
+		}
+	}
+}
+pyObjectIteratorPtr pyObjectList::begin() {
+	vector<pyObjectPtr>::iterator tmpIt = dataList.begin();
+	return (pyObjectIteratorPtr)new pyIteratorList(tmpIt);
+}
+pyObjectIteratorPtr pyObjectList::end() {
+	vector<pyObjectPtr>::iterator tmpIt = dataList.end();
+	return (pyObjectIteratorPtr)new pyIteratorList(tmpIt);
+}
+void pyObjectList::pushBack(pyObjectPtr data) {
+	dataList.push_back(data);
+}
+//void pyObjectList::insert(pyObjectPtr num, pyObjectPtr data);
+//pyObjectDataPtr pyObjectList::pop();
+//pyObjectDataPtr pyObjectList::pop(pyObjectPtr num);
+int pyObjectList::size() const {
+	return (int)dataList.size();
+}
+pyObjectPtr pyObjectList::operator[](const pyObjectPtr pos) const {
+	const pyObjectInt* tmp1 = dynamic_cast<const pyObjectInt*>(&(*pos));
+	const pyObjectBool* tmp2 = dynamic_cast<const pyObjectBool*>(&(*pos));
+	if (tmp1 != nullptr) {
+		return dataList[tmp1->operator int()];
+	}
+	if (tmp2 != nullptr) {
+		return dataList[tmp2->operator int()];
+	}
+	return nullptr;
+}
 //以下pyIteratorList类的函数
 string pyIteratorList::getType() const {
 	return "iteratorList";

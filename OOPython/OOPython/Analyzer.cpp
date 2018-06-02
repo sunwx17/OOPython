@@ -61,7 +61,7 @@ const vector<vector<string>> operators = {
 };
 
 int isOper(const string& s, int pos) {
-	int l = s.size();
+	int l = (int)s.size();
 	for (int k = 5; k > 0; k--) {
 		if (k + pos > l) {
 			continue;
@@ -79,7 +79,7 @@ int isOper(const string& s, int pos) {
 }
 
 int isOper(const string& s) {
-	int l = s.size();
+	int l = (int)s.size();
 	for (int i = 0; i < operators.size(); i++) {
 		auto ii = operators[i];
 		for (auto j : ii) {
@@ -92,14 +92,14 @@ int isOper(const string& s) {
 }
 
 void spaceHeadTail(string & s) {
-	int l = s.size();
+	int l = (int)s.size();
 	for (int i = 0; i < l; i++) {
 		if (s[i] != ' ') {
 			s = s.substr(i, l - i);
 			break;
 		}
 	}
-	int ll = s.size();
+	int ll = (int)s.size();
 	for (int i = ll - 1; i >= 0; i--) {
 		if (s[i] != ' ') {
 			s = s.substr(0, i + 1);
@@ -110,7 +110,7 @@ void spaceHeadTail(string & s) {
 
 void string2stack(const string& s, stack<string>& res) {
 	stack<string> container;
-	int l = s.size();
+	int l = (int)s.size();
 	int start = 0;
 	while (start < l) {
 		if (s[start] == ' ') {
@@ -236,7 +236,7 @@ void postfix(stack<string>& exp, stack<string>& OPND)
 }
 
 int bracketMatch(const string & s, char target, int pos){
-	int l = s.size();
+	int l = (int)s.size();
 	int count = 1;
 	for (int i = pos + 1; i < l; i++) {
 		if (s[i] == '(')
@@ -252,7 +252,7 @@ int bracketMatch(const string & s, char target, int pos){
 
 vector<string> commaCut(const string & s){
 	vector<string> res;
-	int l = s.size();
+	int l = (int)s.size();
 	int start = 0;
 	while (start < l) {
 		for (int i = start; i < l; i++) {

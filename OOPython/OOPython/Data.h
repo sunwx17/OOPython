@@ -74,6 +74,7 @@ public:
 	string getType() const;
 	pyObjectDataPtr operator-() const;
 	operator bool() const;
+	operator int() const;
 	void print() const;
 };
 
@@ -86,6 +87,7 @@ public:
 	string getType() const;
 	pyObjectDataPtr operator-() const;
 	operator bool() const;
+	operator int() const;
 	void print() const;
 };
 
@@ -126,14 +128,14 @@ public:
 	virtual ~pyObjectContainer() = 0;
 	virtual string getType() const = 0;
 	virtual void print() const = 0;
-	virtual pyObjectIteratorPtr begin() = 0;
-	virtual pyObjectIteratorPtr end() = 0;
+	virtual pyObjectIteratorPtr begin()= 0;
+	virtual pyObjectIteratorPtr end()= 0;
 	virtual void pushBack(pyObjectPtr data) = 0;
 	//virtual void insert(pyObjectPtr num, pyObjectPtr data) = 0;
 	//virtual pyObjectDataPtr pop() = 0;
 	//virtual pyObjectDataPtr pop(pyObjectPtr num) = 0;
-	virtual int size() = 0;
-	virtual pyObjectDataPtr operator[](pyObjectPtr pos) = 0;
+	virtual int size() const = 0;
+	virtual pyObjectDataPtr operator[](const pyObjectPtr pos) = 0;
 };
 
 class pyObjectList : public pyObjectContainer {
@@ -146,10 +148,10 @@ public:
 	pyObjectIteratorPtr end();
 	void pushBack(pyObjectPtr data);
 	//void insert(pyObjectPtr num, pyObjectPtr data);
-	//pyObjectDataPtr pop();
-	//pyObjectDataPtr pop(pyObjectPtr num);
-	int size();
-	pyObjectDataPtr operator[](pyObjectPtr pos);
+	//pyObjectPtr pop();
+	//pyObjectPtr pop(pyObjectPtr num);
+	int size() const;
+	pyObjectPtr operator[](const pyObjectPtr pos) const;
 };
 
 class pyObjectIterator : public pyObject {
