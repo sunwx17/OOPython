@@ -2,31 +2,42 @@
 #define EXPREESION_H
 #include "Data.h"
 #include "Function.h"
+#include "Varmap.h"
 
 class pyExpression {
 public:
 	virtual pyObjectPtr work(Varmap&) const = 0;
+	static pyExpression* factory(const string&);
 };
 //±‰¡ø
-class pyVariable : public pyExpression{
-//protected:
-	const string name;
+class pyVariable : public pyExpression {
+	//protected:
 public:
-	pyVariable(const string s) :name(s) {};
+	pyVariable() {};
 	virtual pyObjectPtr work(Varmap&) const = 0;
+	virtual const string& getName() const = 0;
+	static pyVariable* factory(const string&);
+};
+
+class pyDataVariable : public pyVariable {
+	const string name;
+	pyObjectPtr tmpOp;
+public:
+	pyDataVariable(const string s) : name(s) {};
+	pyDataVariable(pyObjectPtr op) : tmpOp(op) {};
+	pyDataVariable(pyDataVariable* op) : pyDataVariable(*op){
+		delete op;
+	};
+	pyObjectPtr work(Varmap&) const;
 	const string& getName() const;
 };
 
-class pyDataVariable : public pyVariable{
+class pyFuncVariable : public pyDataVariable {
+	vector<pyExpression*> elems;
 public:
-	pyDataVariable(const string s) :pyVariable(s) {};
-	pyObjectPtr work(Varmap&) const;
-};
-
-class pyFuncVariable : public pyVariable {
-	vector<pyVariable*> elems;
-public:
-	pyFuncVariable(const string s, vector<pyVariable*> v) :pyVariable(s), elems(v) {};
+	pyFuncVariable(const string s, vector<pyExpression*> v) :pyDataVariable(s), elems(v) {};
+	pyFuncVariable(pyObjectPtr op, vector<pyExpression*> v) :pyDataVariable(op), elems(v) {};
+	pyFuncVariable(pyDataVariable* op, vector<pyExpression*> v) :pyDataVariable(op), elems(v) {};
 	pyObjectPtr work(Varmap&) const;
 };
 
