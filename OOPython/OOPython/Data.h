@@ -131,7 +131,7 @@ public:
 class pyObjectContainer : public pyObject {
 public:
 	pyObjectContainer();
-	virtual ~pyObjectContainer() = 0;
+	virtual ~pyObjectContainer() {};
 	virtual string getType() const = 0;
 	virtual void print() const = 0;
 	virtual pyObjectIteratorPtr begin()= 0;
@@ -163,7 +163,7 @@ public:
 class pyObjectIterator : public pyObject {
 public:
 	pyObjectIterator();
-	virtual ~pyObjectIterator() = 0;
+	virtual ~pyObjectIterator() {};
 	virtual string getType() const = 0;
 	virtual void print() const = 0;
 	virtual pyObjectIteratorPtr operator+(int num) const = 0;

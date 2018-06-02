@@ -96,7 +96,7 @@ pyObjectPtr pyBinaryOperator::delegateWork(Varmap & varmap, const string & s) co
 	pyObjectDataPtr odpf = (pyObjectDataPtr)dynamic_cast<pyObjectData*>(elemFront->work(varmap)/*.get*/);
 	pyObjectDataPtr odpb = (pyObjectDataPtr)dynamic_cast<pyObjectData*>(elemBack->work(varmap)/*.get*/);
 	if(s.compare("+") == 0) return (pyObjectPtr)(pyObject*)((*odpf + *odpb)/*.get*/);
-	else if (s.compare("-") == 0) return (pyObjectPtr)(pyObject*)(*odpf + *odpb)/*.get*/;
+	else if (s.compare("-") == 0) return (pyObjectPtr)(pyObject*)(*odpf - *odpb)/*.get*/;
 	else if (s.compare("*") == 0) return (pyObjectPtr)(pyObject*)(*odpf * *odpb)/*.get*/;
 	else if (s.compare("/") == 0) return (pyObjectPtr)(pyObject*)(*odpf / *odpb)/*.get*/;
 	//other;

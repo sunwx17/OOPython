@@ -98,8 +98,8 @@ int pyForBlock::work(int workStatus, Varmap & varmap){
 
 
 int pyIfBlock::work(int workStatus, Varmap& varmap) {
-	pyObjectPtr cond = condition->work(varmap);
-	if ((bool)cond) {
+	pyObjectDataPtr cond = dynamic_cast<pyObjectData*>(condition->work(varmap));
+	if (cond->operator bool()) {
 		for (auto i : process) {
 			workStatus = i->work(workStatus, varmap);
 			if (workStatus >= 2 && workStatus <= 5)
@@ -124,8 +124,8 @@ int pyElseBlock::work(int workStatus, Varmap& varmap) {
 }
 
 int pyWhileBlock::work(int workStatus, Varmap& varmap) {
-	pyObjectPtr cond = condition->work(varmap);
-	while ((bool)cond) {
+	pyObjectDataPtr cond = dynamic_cast<pyObjectData*>(condition->work(varmap));
+	while (cond->operator bool()) {
 		for (auto i : process) {
 			workStatus = i->work(workStatus, varmap);
 			if (workStatus == 2)
@@ -167,6 +167,7 @@ pyObjectPtr pyDefBlock::call(vector<pyObjectPtr>& elems_in) {
 int pyPrintBlock::work(int workStatus, Varmap& varmap) {
 	pyObject* pod = ((bePrinted->work(varmap))/*.get*/);
 	pod->print();
+	cout << endl;
 	return 1;
 }
 

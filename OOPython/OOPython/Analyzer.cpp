@@ -79,8 +79,8 @@ int isOper(const string& s, int pos) {
 }
 
 int isOper(const string& s) {
-	int l = s.size();
-	for (int i = 0; i < operators.size(); i++) {
+	size_t l = operators.size();
+	for (size_t i = 0; i < l; i++) {
 		auto ii = operators[i];
 		for (auto j : ii) {
 			if (s.compare(j) == 0) {
@@ -121,7 +121,7 @@ string xiaochudanmufuhao(const string& ss) {
 			if (s[i] == ' ')
 				continue;
 			else if (!((s[i] >= 'a' && s[i] <= 'z') || (s[i] >= 'A' && s[i] <= 'Z') || (s[i] >= '0' && s[i] <= '9') || s[i] == '_' || s[i] == ')')) {
-				s.insert(i - 1, 1, '0');
+				s.insert(k, 1, '0');
 				k = s.find('-', k + 2);
 				break;
 			}
