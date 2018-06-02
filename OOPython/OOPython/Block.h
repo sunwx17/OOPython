@@ -59,13 +59,9 @@ class pyDefBlock : public pyBlock {
 	vector<string> elems;
 	Varmap funcVarmap;
 public:
-	pyDefBlock(const string s, vector<string> v) :name(s), elems(v), numOfElem((int)(v.size())) {
-		for (auto i : v) {
-			funcVarmap.assign(i, nullptr);
-		}
-	}
+	pyDefBlock(const string s, vector<string> v) :name(s), elems(v), numOfElem((int)(v.size())) {}
 	int work(int, Varmap&);
-	pyObjectPtr call(vector<pyObjectPtr>&);
+	pyObjectPtr call(Varmap&, vector<pyObjectPtr>&);
 };
 
 class pyPrintBlock : public pyBlock {

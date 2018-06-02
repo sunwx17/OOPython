@@ -6,7 +6,7 @@ const regex blockRegex[] = {
 	 (regex)"^if\\s+([^:]+?)\\s*:\\s*$",
 	 (regex)"^else\\s*:\\s*$",
 	 (regex)"^while\\s+([^:]+?)\\s*:\\s*$",
-	 (regex)"^def\\s+([a-zA-Z_][0-9a-zA-Z_]*?)\\s*(\\(.*\\))\\s*:\\s*$",
+	 (regex)"^def\\s+([a-zA-Z_][0-9a-zA-Z_]*?)\\s*\\((.*)\\)\\s*:\\s*$", 
 	 (regex)"^print\\s+(.+?)\\s*(?:%\\s*\\(?\\s*(.+?)\\s*\\)?\\s*)?$",
 	 (regex)"^return\\s+(.+?)\\s*$",
 	 (regex)"^continue\\s*$",
@@ -309,7 +309,7 @@ vector<string> commaCut(const string & s){
 				int left = bracketMatch(s, ')', i);
 				i = left;
 			}
-			else if (i = l - 1) {
+			if (i == l - 1) {
 				string ss = s.substr(start);
 				spaceHeadTail(ss);
 				res.push_back(ss);

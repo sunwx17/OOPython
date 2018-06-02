@@ -19,7 +19,7 @@ pyBlock* pyBlock::factory(int type, vector<string>& contain) {
 		pe = str2exp(contain[0]);
 		return new pyWhileBlock(pe);
 	case(4)://def
-
+		return new pyDefBlock(contain[0], commaCut(contain[1]));
 	case(5)://print
 		pe = str2exp(contain[0]);
 		return new pyPrintBlock(pe);
@@ -145,7 +145,8 @@ int pyDefBlock::work(int workStatus, Varmap& varmap) {
 	return 1;
 }
 
-pyObjectPtr pyDefBlock::call(vector<pyObjectPtr>& elems_in) {
+pyObjectPtr pyDefBlock::call(Varmap& varmap, vector<pyObjectPtr>& elems_in) {
+	funcVarmap = varmap;
 	for (int i = 0; i < numOfElem; i++) {
 		funcVarmap.assign(elems[i], elems_in[i]);
 	}
@@ -153,8 +154,9 @@ pyObjectPtr pyDefBlock::call(vector<pyObjectPtr>& elems_in) {
 	for (auto i : process) {
 		workStatus = i->work(workStatus, funcVarmap);
 		if (workStatus == 4) {
+			pyObjectPtr ret = funcVarmap.getValue("__return__");
 			funcVarmap.clear();
-			return funcVarmap.getValue("__return__");
+			return ret;
 		}
 		//else if (workStatus == 5)
 	}
@@ -174,7 +176,7 @@ int pyPrintBlock::work(int workStatus, Varmap& varmap) {
 int pyReturnBlock::work(int workStatus, Varmap& varmap) {
 	pyObjectPtr retop = beReturned->work(varmap);
 	varmap.assign("__return__", retop);
-	return 1;
+	return 4;
 }
 
 int pyContinueBlock::work(int workStatus, Varmap& varmap) {

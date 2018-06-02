@@ -5,8 +5,8 @@ string pyFuncObject::getType() const{
 	return "string";
 }
 
-pyObjectPtr pyFuncObject::call(vector<pyObjectPtr>& elems){
-	return define->call(elems);
+pyObjectPtr pyFuncObject::call(Varmap& varmap, vector<pyObjectPtr>& elems){
+	return define->call(varmap, elems);
 }
 
 void pyFuncObject::print() const{

@@ -84,7 +84,7 @@ pyObjectPtr pyFuncVariable::work(Varmap& varmap) const {
 	for (auto i : elems) {
 		elem_o.push_back(i->work(varmap));
 	}
-	return fop->call(elem_o);
+	return fop->call(varmap, elem_o);
 }
 
 inline pyObjectPtr pyUnaryOperator::work(Varmap& varmap) const {
