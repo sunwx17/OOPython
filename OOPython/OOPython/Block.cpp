@@ -69,7 +69,7 @@ int pyRootBlock::work(int workStatus, Varmap& varmap) {
 
 int pyForBlock::work(int workStatus, Varmap & varmap){
 	const string& cvn = (dynamic_cast<pyVariable*>(cycleVariable))->getName();
-	pyObjectContainerPtr ocp = (pyObjectContainerPtr)dynamic_cast<pyObjectContainer*>(&(*(cycleContain->work(varmap))));
+	pyObjectContainerPtr ocp = (pyObjectContainerPtr)dynamic_cast<pyObjectContainer*>(cycleContain->work(varmap).get());
 	pyObjectIteratorPtr i;
 	for (*i = *(ocp->begin()); *i != *(ocp->end()); (*i)++) {
 		varmap.assign(cvn, **i);

@@ -54,6 +54,7 @@ class pyBinaryOperator : public pyExpression {
 protected:
 	const pyVariable* const elemFront;
 	const pyVariable* const elemBack;
+	pyObjectPtr delegateWork(Varmap&, const string&) const;
 public:
 	pyBinaryOperator(const pyVariable* const front, const pyVariable* const back) : elemFront(front), elemBack(back) {}
 	virtual pyObjectPtr work(Varmap&) const = 0;
