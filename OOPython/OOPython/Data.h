@@ -80,6 +80,7 @@ public:
 	string getType() const;
 	pyObjectDataPtr operator-() const;
 	operator bool() const;
+	operator int() const;
 	void print() const;
 };
 
@@ -92,6 +93,7 @@ public:
 	string getType() const;
 	pyObjectDataPtr operator-() const;
 	operator bool() const;
+	operator int() const;
 	void print() const;
 };
 
@@ -132,29 +134,30 @@ public:
 	virtual ~pyObjectContainer() = 0;
 	virtual string getType() const = 0;
 	virtual void print() const = 0;
-	virtual pyObjectIteratorPtr begin() = 0;
-	virtual pyObjectIteratorPtr end() = 0;
+	virtual pyObjectIteratorPtr begin()= 0;
+	virtual pyObjectIteratorPtr end()= 0;
 	virtual void pushBack(pyObjectPtr data) = 0;
 	//virtual void insert(pyObjectPtr num, pyObjectPtr data) = 0;
 	//virtual pyObjectDataPtr pop() = 0;
 	//virtual pyObjectDataPtr pop(pyObjectPtr num) = 0;
-	virtual int size() = 0;
-	virtual pyObjectDataPtr operator[](pyObjectPtr pos) = 0;
+	virtual int size() const = 0;
+	virtual pyObjectDataPtr operator[](const pyObjectPtr pos) = 0;
 };
 
 class pyObjectList : public pyObjectContainer {
 	vector<pyObjectPtr> dataList;
 public:
-	virtual string getType() const;
-	virtual void print() const;
-	virtual pyObjectIteratorPtr begin();
-	virtual pyObjectIteratorPtr end();
-	virtual void pushBack(pyObjectPtr data);
-	//virtual void insert(pyObjectPtr num, pyObjectPtr data);
-	//virtual pyObjectDataPtr pop();
-	//virtual pyObjectDataPtr pop(pyObjectPtr num);
-	virtual int size();
-	virtual pyObjectDataPtr operator[](pyObjectPtr pos);
+	pyObjectList();
+	string getType() const;
+	void print() const;
+	pyObjectIteratorPtr begin();
+	pyObjectIteratorPtr end();
+	void pushBack(pyObjectPtr data);
+	//void insert(pyObjectPtr num, pyObjectPtr data);
+	//pyObjectPtr pop();
+	//pyObjectPtr pop(pyObjectPtr num);
+	int size() const;
+	pyObjectPtr operator[](const pyObjectPtr pos) const;
 };
 
 class pyObjectIterator : public pyObject {
@@ -162,15 +165,33 @@ public:
 	pyObjectIterator();
 	virtual ~pyObjectIterator() = 0;
 	virtual string getType() const = 0;
-	virtual void print() = 0;
+	virtual void print() const = 0;
 	virtual pyObjectIteratorPtr operator+(int num) const = 0;
 	virtual pyObjectIteratorPtr operator-(int num) const = 0;
 	virtual pyObjectIteratorPtr operator++(int) = 0;
 	virtual pyObjectIteratorPtr operator++() = 0;
 	virtual pyObjectIteratorPtr operator--(int) = 0;
 	virtual pyObjectIteratorPtr operator--() = 0;
-	virtual pyObjectIteratorPtr operator*() const= 0;
+	virtual pyObjectPtr operator*() const= 0;
 	virtual bool operator==(const pyObjectIterator &other) const = 0;
 	virtual bool operator!=(const pyObjectIterator &other) const = 0;
+};
+
+class pyIteratorList : public pyObjectIterator {
+	vector<pyObjectPtr>::iterator it;
+public:
+	pyIteratorList();
+	pyIteratorList(vector<pyObjectPtr>::iterator _it);
+	string getType() const;
+	void print() const;
+	pyObjectIteratorPtr operator+(int num) const;
+	pyObjectIteratorPtr operator-(int num) const;
+	pyObjectIteratorPtr operator++(int);
+	pyObjectIteratorPtr operator++();
+	pyObjectIteratorPtr operator--(int);
+	pyObjectIteratorPtr operator--();
+	pyObjectPtr operator*() const;
+	bool operator==(const pyObjectIterator &other) const;
+	bool operator!=(const pyObjectIterator &other) const;
 };
 #endif
