@@ -29,6 +29,12 @@ void Client::work()
 			break;
 		}
 		if (line == "") {
+			if (!outState) {
+				int workStatus = rootBlock->lastWork(1, varmap);
+				if (workStatus == 5) {
+					flagExit = true;
+				}
+			}
 			outState = true;
 			continue;
 		}

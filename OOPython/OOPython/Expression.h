@@ -95,4 +95,42 @@ public:
 	pyObjectPtr work(Varmap&) const;
 };
 
+class pyBiggerOperator : public pyBinaryOperator {
+public:
+	pyBiggerOperator(const pyExpression* const front, const pyExpression* const back) : pyBinaryOperator(front, back) {}
+	pyObjectPtr work(Varmap&) const;
+};
+
+class pyBiggerEqualOperator : public pyBinaryOperator {
+public:
+	pyBiggerEqualOperator(const pyExpression* const front, const pyExpression* const back) : pyBinaryOperator(front, back) {}
+	pyObjectPtr work(Varmap&) const;
+};
+
+class pySmallerOperator : public pyBinaryOperator {
+public:
+	pySmallerOperator(const pyExpression* const front, const pyExpression* const back) : pyBinaryOperator(front, back) {}
+	pyObjectPtr work(Varmap&) const;
+};
+
+class pySmallerEqualOperator : public pyBinaryOperator {
+public:
+	pySmallerEqualOperator(const pyExpression* const front, const pyExpression* const back) : pyBinaryOperator(front, back) {}
+	pyObjectPtr work(Varmap&) const;
+};
+
+class pyEqualOperator : public pyBinaryOperator {
+public:
+	pyEqualOperator(const pyExpression* const front, const pyExpression* const back) : pyBinaryOperator(front, back) {}
+	pyObjectPtr work(Varmap&) const;
+};
+
+class pyNotEqualOperator : public pyBinaryOperator {
+public:
+	pyNotEqualOperator(const pyExpression* const front, const pyExpression* const back) : pyBinaryOperator(front, back) {}
+	pyObjectPtr work(Varmap&) const;
+};
+
+
+
 #endif // !EXPREESION_H
