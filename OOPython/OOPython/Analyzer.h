@@ -19,4 +19,8 @@ void postfix(stack<string>&, stack<string>&);
 
 int bracketMatch(const string& s, char target, int pos);
 
+vector<string> commaCut(const string& s);
+
+
+
 #endif // !ANALYZER_H

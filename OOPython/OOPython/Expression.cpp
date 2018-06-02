@@ -2,8 +2,12 @@
 #include "Expression.h"
 #include "Analyzer.h"
 
-pyExpression * pyExpression::factory(const string &name){
-	int right = name.find('(');
+pyExpression * pyExpression::factory(const string& name) {
+	if (name == "+") return new pyPlusOperator();
+}
+
+pyVariable * pyVariable::factory(const string &name){
+	size_t right = name.find('(');
 	if (right == string::npos) {
 		if (name == "False") {
 			pyObjectPtr op((pyObject*)new pyObjectBool(false));
@@ -32,14 +36,26 @@ pyExpression * pyExpression::factory(const string &name){
 		}
 		return new pyDataVariable(name);
 	}
-	else {
-		int left = bracketMatch(name, ')', right);
+	else {//前端后端均支持了f()()这种形式，这里暂未支持
+		size_t left = bracketMatch(name, ')', right);
 		string funcName = name.substr(0, right);
-		string elems = name.substr(right + 1, left - right - 1);
+		pyDataVariable* pfv = new pyDataVariable(funcName);
+		do {
+			string elems = name.substr(right + 1, left - right - 1);
+			vector<string> elem_s = commaCut(elems);
+			vector<pyExpression*> elem_v;
+			for (auto i : elem_s) {
+				elem_v.push_back(pyExpression::factory(i));
+			}
+			pfv = new pyFuncVariable(pfv, elem_v);
+			right = name.find('(', left + 1);
+			left = name.find(')', left + 2);
+		} while (left != string::npos);
+		return pfv;
 	}
 }
 
-const string & pyVariable::getName() const {
+const string & pyDataVariable::getName() const {
 	return name;
 }
 
@@ -51,14 +67,13 @@ pyObjectPtr pyDataVariable::work(Varmap& varmap) const {
 }
 
 pyObjectPtr pyFuncVariable::work(Varmap& varmap) const {
-	const pyFuncObjectPtr fop = (pyFuncObjectPtr)dynamic_cast<pyFuncObject*> ((varmap.getValue(getName())).get());
+	const pyFuncObjectPtr fop = (pyFuncObjectPtr)dynamic_cast<pyFuncObject*> ((pyDataVariable::work(varmap)).get());
 	vector<pyObjectPtr> elem_o;
 	for (auto i : elems) {
 		elem_o.push_back(i->work(varmap));
 	}
 	return fop->call(elem_o);
 }
-
 
 inline pyObjectPtr pyUnaryOperator::work(Varmap& varmap) const {
 	return elem->work(varmap);

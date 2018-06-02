@@ -1,5 +1,5 @@
 #include "Analyzer.h"
-
+#include "Expression.h"
 
 const regex blockRegex[] = {
 	 (regex)"^for\\s+([a-zA-Z_][0-9a-zA-Z_]*?)\\s+in\\s+([^:]+?)\\s*:\\s*$",
@@ -248,5 +248,33 @@ int bracketMatch(const string & s, char target, int pos){
 		}
 	}
 	return -1;
+}
+
+vector<string> commaCut(const string & s){
+	vector<string> res;
+	int l = s.size();
+	int start = 0;
+	while (start < l) {
+		for (int i = start; i < l; i++) {
+			if (s[i] == ',') {
+				string ss = s.substr(start, i - start);
+				spaceHeadTail(ss);
+				res.push_back(ss);
+				start = i + 1;
+				break;
+			}
+			else if (s[i] == '(') {
+				int left = bracketMatch(s, ')', i);
+				i = left;
+			}
+			else if (i = l - 1) {
+				string ss = s.substr(start);
+				spaceHeadTail(ss);
+				res.push_back(ss);
+				start = i + 1;
+			}
+		}
+	}
+	return res;
 }
 
