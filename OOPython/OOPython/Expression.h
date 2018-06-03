@@ -95,6 +95,12 @@ public:
 	pyObjectPtr work(Varmap&) const;
 };
 
+class pyModOperator : public pyBinaryOperator {
+public:
+	pyModOperator(const pyExpression* const front, const pyExpression* const back) : pyBinaryOperator(front, back) {}
+	pyObjectPtr work(Varmap&) const;
+};
+
 class pyBiggerOperator : public pyBinaryOperator {
 public:
 	pyBiggerOperator(const pyExpression* const front, const pyExpression* const back) : pyBinaryOperator(front, back) {}
@@ -140,6 +146,30 @@ public:
 class pyOrOperator : public pyBinaryOperator {
 public:
 	pyOrOperator(const pyExpression* const front, const pyExpression* const back) : pyBinaryOperator(front, back) {}
+	pyObjectPtr work(Varmap&) const;
+};
+
+class pyBitandOperator : public pyBinaryOperator {
+public:
+	pyBitandOperator(const pyExpression* const front, const pyExpression* const back) : pyBinaryOperator(front, back) {}
+	pyObjectPtr work(Varmap&) const;
+};
+
+class pyBitorOperator : public pyBinaryOperator {
+public:
+	pyBitorOperator(const pyExpression* const front, const pyExpression* const back) : pyBinaryOperator(front, back) {}
+	pyObjectPtr work(Varmap&) const;
+};
+
+class pyLeftMoveOperator : public pyBinaryOperator {
+public:
+	pyLeftMoveOperator(const pyExpression* const front, const pyExpression* const back) : pyBinaryOperator(front, back) {}
+	pyObjectPtr work(Varmap&) const;
+};
+
+class pyRightMoveOperator : public pyBinaryOperator {
+public:
+	pyRightMoveOperator(const pyExpression* const front, const pyExpression* const back) : pyBinaryOperator(front, back) {}
 	pyObjectPtr work(Varmap&) const;
 };
 

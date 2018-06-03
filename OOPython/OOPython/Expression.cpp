@@ -7,6 +7,7 @@ pyExpression * pyExpression::factory(const string& name, vector<pyExpression*> p
 	else if (name == "-") return new pyMinusOperator(pe[1], pe[0]);
 	else if (name == "*") return new pyTimesOperator(pe[1], pe[0]);
 	else if (name == "/") return new pyDivideOperator(pe[1], pe[0]);
+	else if (name == "%") return new pyModOperator(pe[1], pe[0]);
 	else if (name == ">") return new pyBiggerOperator(pe[1], pe[0]);
 	else if (name == "<") return new pySmallerOperator(pe[1], pe[0]);
 	else if (name == ">=") return new pyBiggerEqualOperator(pe[1], pe[0]);
@@ -15,6 +16,10 @@ pyExpression * pyExpression::factory(const string& name, vector<pyExpression*> p
 	else if (name == "!=") return new pyNotEqualOperator(pe[1], pe[0]);
 	else if (name == "and") return new pyAndOperator(pe[1], pe[0]);
 	else if (name == "or") return new pyOrOperator(pe[1], pe[0]);
+	else if (name == "&") return new pyBitandOperator(pe[1], pe[0]);
+	else if (name == "|") return new pyBitorOperator(pe[1], pe[0]);
+	else if (name == "<<") return new pyLeftMoveOperator(pe[1], pe[0]);
+	else if (name == ">>") return new pyRightMoveOperator(pe[1], pe[0]);
 	//other
 	else return pyVariable::factory(name);
 }
@@ -117,6 +122,7 @@ pyObjectPtr pyBinaryOperator::delegateWork(Varmap & varmap, const string & s) co
 	else if (s.compare("-") == 0) return (pyObjectPtr)(pyObject*)(*odpf - *odpb)/*.get*/;
 	else if (s.compare("*") == 0) return (pyObjectPtr)(pyObject*)(*odpf * *odpb)/*.get*/;
 	else if (s.compare("/") == 0) return (pyObjectPtr)(pyObject*)(*odpf / *odpb)/*.get*/;
+	else if (s.compare("%") == 0) return (pyObjectPtr)(pyObject*)(*odpf % *odpb)/*.get*/;
 	else if (s.compare(">") == 0) return (pyObjectPtr)(pyObject*)(*odpf > *odpb)/*.get*/;
 	else if (s.compare("<") == 0) return (pyObjectPtr)(pyObject*)(*odpf < *odpb)/*.get*/;
 	else if (s.compare(">=") == 0) return (pyObjectPtr)(pyObject*)(*odpf >= *odpb)/*.get*/;
@@ -125,6 +131,10 @@ pyObjectPtr pyBinaryOperator::delegateWork(Varmap & varmap, const string & s) co
 	else if (s.compare("!=") == 0) return (pyObjectPtr)(pyObject*)(*odpf != *odpb)/*.get*/;
 	else if (s.compare("and") == 0) return (pyObjectPtr)(pyObject*)(*odpf && *odpb)/*.get*/;
 	else if (s.compare("or") == 0) return (pyObjectPtr)(pyObject*)(*odpf || *odpb)/*.get*/;
+	else if (s.compare("&") == 0) return (pyObjectPtr)(pyObject*)(*odpf & *odpb)/*.get*/;
+	else if (s.compare("|") == 0) return (pyObjectPtr)(pyObject*)(*odpf | *odpb)/*.get*/;
+	else if (s.compare("<<") == 0) return (pyObjectPtr)(pyObject*)(*odpf << *odpb)/*.get*/;
+	else if (s.compare(">>") == 0) return (pyObjectPtr)(pyObject*)(*odpf >> *odpb)/*.get*/;
 	//other;
 	else return nullptr;
 }
@@ -143,6 +153,10 @@ pyObjectPtr pyTimesOperator::work(Varmap & varmap) const {
 
 pyObjectPtr pyDivideOperator::work(Varmap & varmap) const {
 	return delegateWork(varmap, "/");
+}
+
+pyObjectPtr pyModOperator::work(Varmap & varmap) const{
+	return delegateWork(varmap, "%");
 }
 
 pyObjectPtr pyBiggerOperator::work(Varmap & varmap) const{
@@ -175,4 +189,20 @@ pyObjectPtr pyAndOperator::work(Varmap & varmap) const{
 
 pyObjectPtr pyOrOperator::work(Varmap & varmap) const{
 	return delegateWork(varmap, "or");
+}
+
+pyObjectPtr pyBitandOperator::work(Varmap & varmap) const {
+	return delegateWork(varmap, "&");
+}
+
+pyObjectPtr pyBitorOperator::work(Varmap & varmap) const {
+	return delegateWork(varmap, "|");
+}
+
+pyObjectPtr pyLeftMoveOperator::work(Varmap & varmap) const {
+	return delegateWork(varmap, "<<");
+}
+
+pyObjectPtr pyRightMoveOperator::work(Varmap & varmap) const {
+	return delegateWork(varmap, ">>");
 }
