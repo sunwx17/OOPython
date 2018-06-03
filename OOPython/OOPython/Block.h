@@ -15,6 +15,9 @@ public:
 	static pyBlock* factory(int, vector<string>&);
 	int appendProcess(const string&, int);
 	virtual int work(int, Varmap&) = 0;
+	~pyBlock(){
+		for (auto i : process) delete i;
+	}
 };
 
 class pyRootBlock : public pyBlock {
@@ -31,6 +34,10 @@ class pyForBlock : public pyBlock {
 public:
 	pyForBlock(pyExpression* cv, pyExpression* cc) : cycleVariable(cv), cycleContain(cc) {}
 	int work(int, Varmap&);
+	~pyForBlock(){
+		delete cycleVariable;
+		delete cycleContain;
+	}
 };
 
 class pyIfBlock : public pyBlock {
@@ -38,6 +45,9 @@ class pyIfBlock : public pyBlock {
 public:
 	pyIfBlock(pyExpression* con) : condition(con) {}
 	int work(int, Varmap&);
+	~pyIfBlock(){
+		delete condition;
+	}
 };
 
 class pyElseBlock : public pyBlock {
@@ -51,6 +61,9 @@ class pyWhileBlock : public pyBlock {
 public:
 	pyWhileBlock(pyExpression* con) : condition(con) {}
 	int work(int, Varmap&);
+	~pyWhileBlock(){
+		delete condition;
+	}
 };
 
 class pyDefBlock : public pyBlock {
@@ -72,6 +85,10 @@ public:
 	pyPrintBlock(pyExpression* tobePrinted) : bePrinted(tobePrinted) {}
 	pyPrintBlock(const string &s, vector<pyExpression*> fp) : formatString(s), formatPrinted(fp) {}
 	int work(int, Varmap&);
+	~pyPrintBlock(){
+		delete bePrinted;
+		for (auto i : formatPrinted) delete i;
+	}
 };
 
 class pyReturnBlock : public pyBlock {
@@ -79,6 +96,9 @@ class pyReturnBlock : public pyBlock {
 public:
 	pyReturnBlock(pyExpression* tobeReturned) : beReturned(tobeReturned) {}
 	int work(int, Varmap&);
+	~pyReturnBlock(){
+		delete beReturned;
+	}
 };
 
 class pyContinueBlock : public pyBlock {
@@ -99,6 +119,10 @@ class pyAssignBlock : public pyBlock {
 public:
 	pyAssignBlock(vector<pyExpression*> front, vector<pyExpression*> back) : beAssigned(front), assigner(back) {}
 	int work(int, Varmap&);
+	~pyAssignBlock(){
+		for (auto i : beAssigned)delete i;
+		for (auto i : assigner) delete i;
+	}
 };
 
 class pyExpBlock : public pyBlock {
@@ -106,6 +130,9 @@ class pyExpBlock : public pyBlock {
 public:
 	pyExpBlock(pyExpression * pe) : body(pe) {}
 	int work(int, Varmap&);
+	~pyExpBlock(){
+		delete body;
+	}
 };
 
 

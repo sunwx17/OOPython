@@ -94,7 +94,7 @@ pyObjectPtr pyVariable::work(Varmap& varmap) const {
 }
 
 pyObjectPtr pyFuncVariable::work(Varmap& varmap) const {
-	pyFuncObjectPtr fop = (pyFuncObjectPtr)dynamic_cast<pyFuncObject*> ((pyVariable::work(varmap))/*.get*/);
+	pyFuncObjectPtr fop = dynamic_pointer_cast<pyFuncObject> ((pyVariable::work(varmap)));
 	vector<pyObjectPtr> elem_o;
 	for (auto i : elems) {
 		elem_o.push_back(i->work(varmap));
@@ -108,33 +108,36 @@ inline pyObjectPtr pyUnaryOperator::work(Varmap& varmap) const {
 }
 
 pyObjectPtr pyNotOperator::work(Varmap& varmap) const {
-	return (pyObjectPtr)(pyObject*)(((dynamic_cast<pyObjectData*> (pyUnaryOperator::work(varmap)/*.get*/))->operator!())/*.get*/);
+	pyObjectDataPtr odp = dynamic_pointer_cast<pyObjectData> (pyUnaryOperator::work(varmap));
+	pyObjectDataPtr odp2 = odp->operator!();
+	pyObjectPtr op = dynamic_pointer_cast<pyObject>(odp2);
+	return op;
 }
 
 pyObjectPtr pyNegativeOperator::work(Varmap& varmap) const {
-	return (pyObjectPtr)(pyObject*)(((dynamic_cast<pyObjectData*> (pyUnaryOperator::work(varmap)/*.get*/))->operator-())/*.get*/);
+	return dynamic_pointer_cast<pyObject>((dynamic_pointer_cast<pyObjectData> (pyUnaryOperator::work(varmap)))->operator-());
 }
 
 pyObjectPtr pyBinaryOperator::delegateWork(Varmap & varmap, const string & s) const{
-	pyObjectDataPtr odpf = (pyObjectDataPtr)dynamic_cast<pyObjectData*>(elemFront->work(varmap)/*.get*/);
-	pyObjectDataPtr odpb = (pyObjectDataPtr)dynamic_cast<pyObjectData*>(elemBack->work(varmap)/*.get*/);
-	if(s.compare("+") == 0) return (pyObjectPtr)(pyObject*)((*odpf + *odpb)/*.get*/);
-	else if (s.compare("-") == 0) return (pyObjectPtr)(pyObject*)(*odpf - *odpb)/*.get*/;
-	else if (s.compare("*") == 0) return (pyObjectPtr)(pyObject*)(*odpf * *odpb)/*.get*/;
-	else if (s.compare("/") == 0) return (pyObjectPtr)(pyObject*)(*odpf / *odpb)/*.get*/;
-	else if (s.compare("%") == 0) return (pyObjectPtr)(pyObject*)(*odpf % *odpb)/*.get*/;
-	else if (s.compare(">") == 0) return (pyObjectPtr)(pyObject*)(*odpf > *odpb)/*.get*/;
-	else if (s.compare("<") == 0) return (pyObjectPtr)(pyObject*)(*odpf < *odpb)/*.get*/;
-	else if (s.compare(">=") == 0) return (pyObjectPtr)(pyObject*)(*odpf >= *odpb)/*.get*/;
-	else if (s.compare("<=") == 0) return (pyObjectPtr)(pyObject*)(*odpf <= *odpb)/*.get*/;
-	else if (s.compare("==") == 0) return (pyObjectPtr)(pyObject*)(*odpf == *odpb)/*.get*/;
-	else if (s.compare("!=") == 0) return (pyObjectPtr)(pyObject*)(*odpf != *odpb)/*.get*/;
-	else if (s.compare("and") == 0) return (pyObjectPtr)(pyObject*)(*odpf && *odpb)/*.get*/;
-	else if (s.compare("or") == 0) return (pyObjectPtr)(pyObject*)(*odpf || *odpb)/*.get*/;
-	else if (s.compare("&") == 0) return (pyObjectPtr)(pyObject*)(*odpf & *odpb)/*.get*/;
-	else if (s.compare("|") == 0) return (pyObjectPtr)(pyObject*)(*odpf | *odpb)/*.get*/;
-	else if (s.compare("<<") == 0) return (pyObjectPtr)(pyObject*)(*odpf << *odpb)/*.get*/;
-	else if (s.compare(">>") == 0) return (pyObjectPtr)(pyObject*)(*odpf >> *odpb)/*.get*/;
+	pyObjectDataPtr odpf = dynamic_pointer_cast<pyObjectData>(elemFront->work(varmap));
+	pyObjectDataPtr odpb = dynamic_pointer_cast<pyObjectData>(elemBack->work(varmap));
+	if(s.compare("+") == 0) return dynamic_pointer_cast<pyObject>((*odpf + *odpb));
+	else if (s.compare("-") == 0) return dynamic_pointer_cast<pyObject>(*odpf - *odpb);
+	else if (s.compare("*") == 0) return dynamic_pointer_cast<pyObject>(*odpf * *odpb);
+	else if (s.compare("/") == 0) return dynamic_pointer_cast<pyObject>(*odpf / *odpb);
+	else if (s.compare("%") == 0) return dynamic_pointer_cast<pyObject>(*odpf % *odpb);
+	else if (s.compare(">") == 0) return dynamic_pointer_cast<pyObject>(*odpf > *odpb);
+	else if (s.compare("<") == 0) return dynamic_pointer_cast<pyObject>(*odpf < *odpb);
+	else if (s.compare(">=") == 0) return dynamic_pointer_cast<pyObject>(*odpf >= *odpb);
+	else if (s.compare("<=") == 0) return dynamic_pointer_cast<pyObject>(*odpf <= *odpb);
+	else if (s.compare("==") == 0) return dynamic_pointer_cast<pyObject>(*odpf == *odpb);
+	else if (s.compare("!=") == 0) return dynamic_pointer_cast<pyObject>(*odpf != *odpb);
+	else if (s.compare("and") == 0) return dynamic_pointer_cast<pyObject>(*odpf && *odpb);
+	else if (s.compare("or") == 0) return dynamic_pointer_cast<pyObject>(*odpf || *odpb);
+	else if (s.compare("&") == 0) return dynamic_pointer_cast<pyObject>(*odpf & *odpb);
+	else if (s.compare("|") == 0) return dynamic_pointer_cast<pyObject>(*odpf | *odpb);
+	else if (s.compare("<<") == 0) return dynamic_pointer_cast<pyObject>(*odpf << *odpb);
+	else if (s.compare(">>") == 0) return dynamic_pointer_cast<pyObject>(*odpf >> *odpb);
 	//other;
 	else return nullptr;
 }

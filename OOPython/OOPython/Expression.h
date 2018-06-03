@@ -30,6 +30,9 @@ public:
 	pyObjectPtr work(Varmap&) const;
 	const string& getName() const;
 	static pyVariable* factory(const string&);
+	~pyVariable(){
+		if (tmpV != nullptr) delete tmpV;
+	}
 };
 
 class pyFuncVariable : public pyVariable {
@@ -39,6 +42,9 @@ public:
 	pyFuncVariable(pyObjectPtr op, vector<pyExpression*> v) :pyVariable(op), elems(v) {};
 	pyFuncVariable(pyVariable* pv, vector<pyExpression*> v) :pyVariable(pv), elems(v) {};
 	pyObjectPtr work(Varmap&) const;
+	~pyFuncVariable(){
+		for (auto i : elems) delete i;
+	}
 };
 
 //µ¥Ä¿²Ù×÷·û
@@ -47,6 +53,9 @@ class pyUnaryOperator : public pyExpression {
 public:
 	pyUnaryOperator(const pyExpression* const ele) : elem(ele) {}
 	virtual pyObjectPtr work(Varmap&) const = 0;
+	~pyUnaryOperator(){
+		delete elem;
+	}
 };
 
 class pyNotOperator : public pyUnaryOperator {
@@ -69,6 +78,10 @@ protected:
 public:
 	pyBinaryOperator(const pyExpression* const front, const pyExpression* const back) : elemFront(front), elemBack(back) {}
 	virtual pyObjectPtr work(Varmap&) const = 0;
+	~pyBinaryOperator(){
+		delete elemFront;
+		delete elemBack;
+	}
 };
 
 class pyPlusOperator : public pyBinaryOperator {

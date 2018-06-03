@@ -18,7 +18,7 @@ class pyObjectFloat;
 class pyObjectContainer;
 class pyObjectIterator;
 typedef shared_ptr<pyObject> pyObjectPtr;
-typedef shared_ptr<const pyObjectData> pyObjectDataPtr;
+typedef shared_ptr<pyObjectData> pyObjectDataPtr;
 typedef shared_ptr<pyObjectContainer> pyObjectContainerPtr;
 typedef shared_ptr<pyObjectIterator> pyObjectIteratorPtr;
 //以下基础函数：operateInt、operateBool、operateFloat 

@@ -77,8 +77,8 @@ int pyRootBlock::lastWork(int workStatus, Varmap& varmap) {
 
 int pyForBlock::work(int workStatus, Varmap & varmap){
 	const string& cvn = (dynamic_cast<pyVariable*>(cycleVariable))->getName();
-	pyObjectContainerPtr ocp = (pyObjectContainerPtr)dynamic_cast<pyObjectContainer*>(cycleContain->work(varmap)/*.get*/);
-	for (pyObjectIterator *i = ocp->begin(); *i != *ocp->end(); (*i)++) {
+	pyObjectContainerPtr ocp = dynamic_pointer_cast<pyObjectContainer>(cycleContain->work(varmap));
+	for (pyObjectIteratorPtr i = ocp->begin(); *i != *ocp->end(); (*i)++) {
 		varmap.assign(cvn, **i);
 		for (auto i : process) {
 			workStatus = i->work(workStatus, varmap);
@@ -95,7 +95,7 @@ int pyForBlock::work(int workStatus, Varmap & varmap){
 
 
 int pyIfBlock::work(int workStatus, Varmap& varmap) {
-	pyObjectDataPtr cond = dynamic_cast<pyObjectData*>(condition->work(varmap));
+	pyObjectDataPtr cond = dynamic_pointer_cast<pyObjectData>(condition->work(varmap));
 	if (cond->operator bool()) {
 		for (auto i : process) {
 			workStatus = i->work(workStatus, varmap);
@@ -121,7 +121,7 @@ int pyElseBlock::work(int workStatus, Varmap& varmap) {
 }
 
 int pyWhileBlock::work(int workStatus, Varmap& varmap) {
-	pyObjectDataPtr cond = dynamic_cast<pyObjectData*>(condition->work(varmap));
+	pyObjectDataPtr cond = dynamic_pointer_cast<pyObjectData>(condition->work(varmap));
 	while (cond->operator bool()) {
 		for (auto i : process) {
 			workStatus = i->work(workStatus, varmap);
@@ -132,7 +132,7 @@ int pyWhileBlock::work(int workStatus, Varmap& varmap) {
 			else if (workStatus == 4 || workStatus == 5)
 				return workStatus;
 		}
-		cond = dynamic_cast<pyObjectData*>(condition->work(varmap));
+		cond = dynamic_pointer_cast<pyObjectData>(condition->work(varmap));
 	}
 	return 1;
 }
@@ -167,7 +167,7 @@ pyObjectPtr pyDefBlock::call(Varmap& varmap, vector<pyObjectPtr>& elems_in) {
 
 int pyPrintBlock::work(int workStatus, Varmap& varmap) {
 	if (bePrinted != nullptr) {
-		((bePrinted->work(varmap))/*.get*/)->print();
+		((bePrinted->work(varmap)))->print();
 	}
 	else {
 		auto it = formatPrinted.begin();
