@@ -27,7 +27,7 @@ vector<string> commaCut(const string& s);
 
 pyExpression * str2exp(const string & s);
 
-pyExpression * str2exp_multi(const string & s);
+vector<pyExpression *> str2exp_multi(const string & s);
 
 
 

@@ -5,33 +5,28 @@ return varmap.getValue(s);
 }*/
 
 pyBlock* pyBlock::factory(int type, vector<string>& contain) {
-	pyExpression* pe;
 	switch (type)
 	{
 	case(0)://for
 
 	case(1)://if
-		pe = str2exp(contain[0]);
-		return new pyIfBlock(pe);
+		return new pyIfBlock(str2exp(contain[0]));
 	case(2)://else
 		return new pyElseBlock();
 	case(3)://while
-		pe = str2exp(contain[0]);
-		return new pyWhileBlock(pe);
+		return new pyWhileBlock(str2exp(contain[0]));
 	case(4)://def
 		return new pyDefBlock(contain[0], commaCut(contain[1]));
 	case(5)://print
-		pe = str2exp(contain[0]);
-		return new pyPrintBlock(pe);
+		return new pyPrintBlock(str2exp(contain[0]));
 	case(6)://return
-		pe = str2exp(contain[0]);
-		return new pyReturnBlock(pe);
+		return new pyReturnBlock(str2exp(contain[0]));
 	case(7)://continue
 		return new pyContinueBlock();
 	case(8)://break
 		return new pyBreakBlock();
 	case(9)://=
-
+		return new pyAssignBlock(str2exp_multi(contain[0]), str2exp_multi(contain[1]));
 	case(-1)://expression
 
 	default:
@@ -135,6 +130,7 @@ int pyWhileBlock::work(int workStatus, Varmap& varmap) {
 			else if (workStatus == 4 || workStatus == 5)
 				return workStatus;
 		}
+		cond = dynamic_cast<pyObjectData*>(condition->work(varmap));
 	}
 	return 1;
 }
@@ -142,11 +138,12 @@ int pyWhileBlock::work(int workStatus, Varmap& varmap) {
 int pyDefBlock::work(int workStatus, Varmap& varmap) {
 	pyFuncObjectPtr fop(new pyFuncObject(this));
 	varmap.assign(name, fop);
+	initVarmap.copy(varmap);
 	return 1;
 }
 
 pyObjectPtr pyDefBlock::call(Varmap& varmap, vector<pyObjectPtr>& elems_in) {
-	funcVarmap = varmap;
+	funcVarmap.copy(initVarmap);
 	for (int i = 0; i < numOfElem; i++) {
 		funcVarmap.assign(elems[i], elems_in[i]);
 	}
@@ -188,8 +185,11 @@ int pyBreakBlock::work(int workStatus, Varmap& varmap) {
 }
 
 int pyAssignBlock::work(int workStatus, Varmap& varmap) {
-	const string& s = (dynamic_cast<pyVariable*> (beAssigned))->getName();
-	pyObjectPtr back = assigner->work(varmap);
-	varmap.assign(s, back);
+	int l = beAssigned.size();
+	for (int i = 0; i < l; i++) {
+		const string& s = (dynamic_cast<pyVariable*> (beAssigned[i]))->getName();
+		pyObjectPtr back = assigner[i]->work(varmap);
+		varmap.assign(s, back);
+	}
 	return 1;
 }
