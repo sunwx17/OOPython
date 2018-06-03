@@ -28,7 +28,7 @@ pyBlock* pyBlock::factory(int type, vector<string>& contain) {
 	case(9)://=
 		return new pyAssignBlock(str2exp_multi(contain[0]), str2exp_multi(contain[1]));
 	case(-1)://expression
-
+		return new pyExpBlock(str2exp(contain[0]));
 	default:
 		break;
 	}
@@ -143,21 +143,21 @@ int pyDefBlock::work(int workStatus, Varmap& varmap) {
 }
 
 pyObjectPtr pyDefBlock::call(Varmap& varmap, vector<pyObjectPtr>& elems_in) {
-	funcVarmap.copy(initVarmap);
+	varmap.copy(initVarmap);
 	for (int i = 0; i < numOfElem; i++) {
-		funcVarmap.assign(elems[i], elems_in[i]);
+		varmap.assign(elems[i], elems_in[i]);
 	}
 	int workStatus = 1;
 	for (auto i : process) {
-		workStatus = i->work(workStatus, funcVarmap);
+		workStatus = i->work(workStatus, varmap);
 		if (workStatus == 4) {
-			pyObjectPtr ret = funcVarmap.getValue("__return__");
-			funcVarmap.clear();
+			pyObjectPtr ret = varmap.getValue("__return__");
+			varmap.clear();
 			return ret;
 		}
 		//else if (workStatus == 5)
 	}
-	funcVarmap.clear();
+	varmap.clear();
 	return nullptr;
 }
 
@@ -191,5 +191,10 @@ int pyAssignBlock::work(int workStatus, Varmap& varmap) {
 		pyObjectPtr back = assigner[i]->work(varmap);
 		varmap.assign(s, back);
 	}
+	return 1;
+}
+
+int pyExpBlock::work(int workStatus, Varmap &varmap){
+	body->work(varmap);
 	return 1;
 }

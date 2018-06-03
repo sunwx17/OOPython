@@ -15,15 +15,25 @@ void removeSpace(string&);
 
 int regexBreak(const string&, vector<string>&);
 
-void multiVary(const string&, vector<string>&);
+int isOper(const string& s, int pos);
+
+int isOper(const string& s);
+
+void spaceHeadTail(string & s);
+
+string xiaochudanmufuhao(const string& ss);
+
+int getNumOfElem(const string& s);
 
 void string2stack(const string&, stack<string>&);
 
-void postfix(stack<string>&, stack<string>&);
+void mid2back(stack<string>& exp, stack<string>& OPND);
 
 int bracketMatch(const string& s, char target, int pos);
 
 vector<string> commaCut(const string& s);
+
+pyExpression * back2exp(stack<string>& back);
 
 pyExpression * str2exp(const string & s);
 
