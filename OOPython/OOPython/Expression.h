@@ -10,34 +10,34 @@ public:
 	static pyExpression* factory(const string&, vector<pyExpression*>);
 };
 //±‰¡ø
-class pyVariable : public pyExpression {
+/*class pyVariable : public pyExpression {
 	//protected:
 public:
 	pyVariable() {};
 	virtual pyObjectPtr work(Varmap&) const = 0;
 	virtual const string& getName() const = 0;
+
+};*/
+
+class pyVariable : public pyExpression {
+	const string name;
+	pyObjectPtr tmpOp;
+	pyVariable* tmpV;
+public:
+	pyVariable(const string s) : name(s) {};
+	pyVariable(pyObjectPtr op) : tmpOp(op) {};
+	pyVariable(pyVariable* op) : tmpV(op) {};
+	pyObjectPtr work(Varmap&) const;
+	const string& getName() const;
 	static pyVariable* factory(const string&);
 };
 
-class pyDataVariable : public pyVariable {
-	const string name;
-	pyObjectPtr tmpOp;
-public:
-	pyDataVariable(const string s) : name(s) {};
-	pyDataVariable(pyObjectPtr op) : tmpOp(op) {};
-	pyDataVariable(pyDataVariable* op) : pyDataVariable(*op){
-		delete op;
-	};
-	pyObjectPtr work(Varmap&) const;
-	const string& getName() const;
-};
-
-class pyFuncVariable : public pyDataVariable {
+class pyFuncVariable : public pyVariable {
 	vector<pyExpression*> elems;
 public:
-	pyFuncVariable(const string s, vector<pyExpression*> v) :pyDataVariable(s), elems(v) {};
-	pyFuncVariable(pyObjectPtr op, vector<pyExpression*> v) :pyDataVariable(op), elems(v) {};
-	pyFuncVariable(pyDataVariable* op, vector<pyExpression*> v) :pyDataVariable(op), elems(v) {};
+	pyFuncVariable(const string s, vector<pyExpression*> v) :pyVariable(s), elems(v) {};
+	pyFuncVariable(pyObjectPtr op, vector<pyExpression*> v) :pyVariable(op), elems(v) {};
+	pyFuncVariable(pyVariable* pv, vector<pyExpression*> v) :pyVariable(pv), elems(v) {};
 	pyObjectPtr work(Varmap&) const;
 };
 

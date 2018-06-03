@@ -23,11 +23,11 @@ pyVariable * pyVariable::factory(const string &name){
 	if (right == string::npos) {
 		if (name == "False") {
 			pyObjectPtr op((pyObject*)new pyObjectBool(false));
-			return new pyDataVariable(op);
+			return new pyVariable(op);
 		}
 		else if (name == "True") {
 			pyObjectPtr op((pyObject*)new pyObjectBool(true));
-			return new pyDataVariable(op);
+			return new pyVariable(op);
 		}
 		bool isInt = true;
 		bool isFloat = true;
@@ -40,18 +40,18 @@ pyVariable * pyVariable::factory(const string &name){
 		}
 		if (isInt) {
 			pyObjectPtr op((pyObject*)new pyObjectInt(stoi(name.c_str())));
-			return new pyDataVariable(op);
+			return new pyVariable(op);
 		}
 		else if (isFloat) {
 			pyObjectPtr op((pyObject*)new pyObjectFloat(stof(name)));
-			return new pyDataVariable(op);
+			return new pyVariable(op);
 		}
-		return new pyDataVariable(name);
+		return new pyVariable(name);
 	}
 	else {//前端后端均支持了f()()这种形式，这里暂未支持
 		size_t left = bracketMatch(name, ')', right);
 		string funcName = name.substr(0, right);
-		pyDataVariable* pfv = new pyDataVariable(funcName);
+		pyVariable* pfv = new pyVariable(funcName);
 		do {
 			string elems = name.substr(right + 1, left - right - 1);
 			vector<string> elem_s = commaCut(elems);
@@ -67,19 +67,21 @@ pyVariable * pyVariable::factory(const string &name){
 	}
 }
 
-const string & pyDataVariable::getName() const {
+const string & pyVariable::getName() const {
 	return name;
 }
 
-pyObjectPtr pyDataVariable::work(Varmap& varmap) const {
-	if (tmpOp == nullptr)
-		return varmap.getValue(getName());
-	else
+pyObjectPtr pyVariable::work(Varmap& varmap) const {
+	if (tmpOp != nullptr)
 		return tmpOp;
+	else if (tmpV != nullptr)
+		return tmpV->work(varmap);
+	else
+		return varmap.getValue(getName());
 }
 
 pyObjectPtr pyFuncVariable::work(Varmap& varmap) const {
-	pyFuncObjectPtr fop = (pyFuncObjectPtr)dynamic_cast<pyFuncObject*> ((pyDataVariable::work(varmap))/*.get*/);
+	pyFuncObjectPtr fop = (pyFuncObjectPtr)dynamic_cast<pyFuncObject*> ((pyVariable::work(varmap))/*.get*/);
 	vector<pyObjectPtr> elem_o;
 	for (auto i : elems) {
 		elem_o.push_back(i->work(varmap));
