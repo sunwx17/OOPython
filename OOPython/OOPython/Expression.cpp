@@ -46,6 +46,11 @@ pyVariable * pyVariable::factory(const string &name){
 			pyObjectPtr op((pyObject*)new pyObjectFloat(stof(name)));
 			return new pyVariable(op);
 		}
+		if ((name[0] == '\'' && name.back() == '\'') || (name[0] == '"' && name.back() == '"')) {
+			string ss = name.substr(1, name.size() - 2);
+			pyObjectPtr op((pyObject*)new pyObjectString(ss));
+			return new pyVariable(op);
+		}
 		return new pyVariable(name);
 	}
 	else {
