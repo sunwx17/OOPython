@@ -23,6 +23,10 @@ bool operateBool(const float& one, const float& other, const char* ope, bool& an
 			answer = (one == other);
 			return true;
 		}
+		if (ope == "!=") {
+			answer = (one != other);
+			return true;
+		}
 		if (ope == ">=") {
 			answer = (one >= other);
 			return true;
@@ -243,6 +247,9 @@ pyObjectDataPtr pyObjectData::operator/(const pyObjectData &other) const {
 pyObjectDataPtr pyObjectData::operator==(const pyObjectData &other) const {
 	return operatorFatherBool(other, "==");
 }
+pyObjectDataPtr pyObjectData::operator!=(const pyObjectData &other) const {
+	return operatorFatherBool(other, "!=");
+}
 pyObjectDataPtr pyObjectData::operator<(const pyObjectData &other) const {
 	return operatorFatherBool(other, "<");
 }
@@ -357,7 +364,7 @@ int pyObjectFloat::getDataInt() const {
 	return (int)this->data;
 }
 string pyObjectFloat::getType() const {
-	return "int";
+	return "float";
 }
 pyObjectDataPtr pyObjectFloat::operator-() const {
 	pyObjectDataPtr returnPtr = (pyObjectDataPtr)new pyObjectFloat(-(this->data));
@@ -381,8 +388,7 @@ int pyObjectString::getDataInt() const {
 }
 pyObjectDataPtr pyObjectString::operatorFatherString(const pyObjectData &other, const char* ope) const {
 	pyObjectDataPtr returnPtr = nullptr;
-	const pyObjectData *tmpBase = &other;
-	const pyObjectString* tmp = dynamic_cast<const pyObjectString*>(tmpBase);
+	const pyObjectString* tmp = dynamic_cast<const pyObjectString*>(&other);
 	if (tmp == nullptr) {
 		return nullptr;
 	}
@@ -409,6 +415,9 @@ pyObjectDataPtr pyObjectString::operatorFatherString(const pyObjectData &other, 
 		if (ope == "==") {
 			return (pyObjectDataPtr)new pyObjectBool(this->data == tmp->data);
 		}
+		if (ope == "!=") {
+			return (pyObjectDataPtr)new pyObjectBool(this->data != tmp->data);
+		}
 		else if (ope == ">=") {
 			return (pyObjectDataPtr)new pyObjectBool(this->data >= tmp->data);
 		}
@@ -431,6 +440,9 @@ pyObjectDataPtr pyObjectString::operator-() const {
 }
 pyObjectDataPtr pyObjectString::operator==(const pyObjectData &other) const {
 	return operatorFatherString(other, "==");
+}
+pyObjectDataPtr pyObjectString::operator!=(const pyObjectData &other) const {
+	return operatorFatherString(other, "!=");
 }
 pyObjectDataPtr pyObjectString::operator<(const pyObjectData &other) const {
 	return operatorFatherString(other, "<");
@@ -487,10 +499,10 @@ int pyObjectList::size() const {
 }
 pyObjectPtr pyObjectList::operator[](const pyObjectPtr pos) const {
 	const pyObjectInt* tmp1 = dynamic_cast<const pyObjectInt*>(&(*pos));
-	const pyObjectBool* tmp2 = dynamic_cast<const pyObjectBool*>(&(*pos));
 	if (tmp1 != nullptr) {
 		return dataList[tmp1->operator int()];
 	}
+	const pyObjectBool* tmp2 = dynamic_cast<const pyObjectBool*>(&(*pos));
 	if (tmp2 != nullptr) {
 		return dataList[tmp2->operator int()];
 	}
