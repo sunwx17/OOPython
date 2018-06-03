@@ -141,7 +141,7 @@ public:
 	//virtual pyObjectDataPtr pop() = 0;
 	//virtual pyObjectDataPtr pop(pyObjectPtr num) = 0;
 	virtual int size() const = 0;
-	virtual pyObjectDataPtr operator[](const pyObjectPtr pos) = 0;
+	virtual pyObjectPtr operator[](const pyObjectPtr pos) const = 0;
 };
 
 class pyObjectList : public pyObjectContainer {
