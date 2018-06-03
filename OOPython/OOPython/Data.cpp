@@ -80,8 +80,10 @@ bool operateInt(const int& one, const int& other, const char* ope, int& answer) 
 			break;
 		case '&':
 			num = num & other;
+			break;
 		case '|':
 			num = num | other;
+			break;
 		default:
 			return false;
 			break;

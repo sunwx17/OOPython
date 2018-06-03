@@ -50,7 +50,7 @@ const vector<vector<string>> operators = {
 	{ "&" },
 	{ "<<", ">>" },
 	{ "+", "-" },
-	{ "*", "/" }
+	{ "*", "/" , "%"}
 };
 
 int isOper(const string& s, int pos) {
@@ -128,7 +128,7 @@ string xiaochudanmufuhao(const string& ss) {
 }
 
 int getNumOfElem(const string& s) {
-	const string bin[] = { "+", "-", "*", "/", "and", "or", "&", "|", "^", ">", "<", ">=", "<=", "==", "!=", "<<", ">>" };
+	const string bin[] = { "+", "-", "*", "/", "%", "and", "or", "&", "|", "^", ">", "<", ">=", "<=", "==", "!=", "<<", ">>" };
 	const string una[] = { "not" };
 	for (auto i : bin) {
 		if (i == s) {
