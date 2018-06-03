@@ -49,7 +49,7 @@ pyVariable * pyVariable::factory(const string &name){
 		return new pyVariable(name);
 	}
 	else {//前端后端均支持了f()()这种形式，这里暂未支持
-		size_t left = bracketMatch(name, ')', right);
+		size_t left = bracketMatch(name, ')', (int)right);
 		string funcName = name.substr(0, right);
 		pyVariable* pfv = new pyVariable(funcName);
 		do {

@@ -295,7 +295,12 @@ pyObjectBool::operator int() const {
 	}
 }
 void pyObjectBool::print() const {
-	cout << data;
+	if (this->data) {
+		cout << "True";
+	}
+	else {
+		cout << "False";
+	}
 }
 
 //以下pyObjectFloat类的函数

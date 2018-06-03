@@ -84,7 +84,7 @@ int isOper(const string& s) {
 		auto ii = operators[i];
 		for (auto j : ii) {
 			if (s.compare(j) == 0) {
-				return i;
+				return (int)i;
 			}
 		}
 	}
