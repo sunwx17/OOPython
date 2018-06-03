@@ -58,6 +58,7 @@ class pyDefBlock : public pyBlock {
 	int numOfElem;
 	vector<string> elems;
 	Varmap funcVarmap;
+	Varmap initVarmap;
 public:
 	pyDefBlock(const string s, vector<string> v) :name(s), elems(v), numOfElem((int)(v.size())) {}
 	int work(int, Varmap&);
@@ -91,10 +92,10 @@ public:
 };
 
 class pyAssignBlock : public pyBlock {
-	pyExpression* beAssigned;
-	pyExpression* assigner;
+	vector<pyExpression*> beAssigned;
+	vector<pyExpression*> assigner;
 public:
-	pyAssignBlock(pyExpression* front, pyExpression* back) : beAssigned(front), assigner(back) {}
+	pyAssignBlock(vector<pyExpression*> front, vector<pyExpression*> back) : beAssigned(front), assigner(back) {}
 	int work(int, Varmap&);
 };
 

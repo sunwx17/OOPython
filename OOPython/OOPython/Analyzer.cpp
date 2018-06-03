@@ -339,3 +339,12 @@ pyExpression * str2exp(const string & s){
 	mid2back(middle, back);
 	return back2exp(back);
 }
+
+vector<pyExpression*> str2exp_multi(const string & s){
+	vector<pyExpression*> res;
+	vector<string> cut = commaCut(s);
+	for (auto i : cut) {
+		res.push_back(str2exp(i));
+	}
+	return res;
+}

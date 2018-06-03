@@ -9,6 +9,7 @@ public:
 	void assign(const string&, pyObjectPtr);
 	pyObjectPtr getValue(const string&);
 	void clear();
+	void copy(const Varmap&);
 	~Varmap() {}
 };
 

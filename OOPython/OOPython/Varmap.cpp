@@ -13,3 +13,7 @@ pyObjectPtr Varmap::getValue(const string& s) {
 void Varmap::clear(){
 	table.clear();
 }
+
+void Varmap::copy(const Varmap& varmap){
+	table = varmap.table;
+}
