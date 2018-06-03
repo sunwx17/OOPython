@@ -12,7 +12,7 @@ int main(int argc, char** argv)
 		freopen(argv[1], "r", stdin);
 		isCMD = false;
 	}
-	Client client(cin, isCMD);
+	Client client(isCMD);
 	client.work();
 	return 0;
 }

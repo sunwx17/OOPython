@@ -355,7 +355,7 @@ int pyObjectFloat::getDataInt() const {
 	return (int)this->data;
 }
 string pyObjectFloat::getType() const {
-	return "int";
+	return "float";
 }
 pyObjectDataPtr pyObjectFloat::operator-() const {
 	pyObjectDataPtr returnPtr = (pyObjectDataPtr)new pyObjectFloat(-(this->data));
@@ -379,8 +379,7 @@ int pyObjectString::getDataInt() const {
 }
 pyObjectDataPtr pyObjectString::operatorFatherString(const pyObjectData &other, const char* ope) const {
 	pyObjectDataPtr returnPtr = nullptr;
-	const pyObjectData *tmpBase = &other;
-	const pyObjectString* tmp = dynamic_cast<const pyObjectString*>(tmpBase);
+	const pyObjectString* tmp = dynamic_cast<const pyObjectString*>(&other);
 	if (tmp == nullptr) {
 		return nullptr;
 	}
@@ -485,10 +484,10 @@ int pyObjectList::size() const {
 }
 pyObjectPtr pyObjectList::operator[](const pyObjectPtr pos) const {
 	const pyObjectInt* tmp1 = dynamic_cast<const pyObjectInt*>(&(*pos));
-	const pyObjectBool* tmp2 = dynamic_cast<const pyObjectBool*>(&(*pos));
 	if (tmp1 != nullptr) {
 		return dataList[tmp1->operator int()];
 	}
+	const pyObjectBool* tmp2 = dynamic_cast<const pyObjectBool*>(&(*pos));
 	if (tmp2 != nullptr) {
 		return dataList[tmp2->operator int()];
 	}

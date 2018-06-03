@@ -1,11 +1,11 @@
 //Client.cpp
 #include "Client.h"
 
-Client::Client(istream& _in, bool _isCMD) : in(_in), isCMD(_isCMD) {}
+Client::Client(bool _isCMD) : isCMD(_isCMD) {}
 
 bool Client::getLine(string &s)
 {
-	bool notEOF = !(getline(in, s).eof());
+	bool notEOF = !(getline(cin, s).eof());
     return notEOF;
 }
 

@@ -1,12 +1,6 @@
 #ifndef DATA_H
 #define DATA_H
 
-#define pyObjectPtr pyObject*
-#define pyObjectDataPtr pyObjectData*
-#define pyFuncObjectPtr pyFuncObject*
-#define pyObjectContainerPtr pyObjectContainer*
-#define pyObjectIteratorPtr pyObjectIterator*
-
 #include <vector>
 #include <string>
 #include <string.h>
@@ -23,10 +17,10 @@ class pyObjectInt;
 class pyObjectFloat;
 class pyObjectContainer;
 class pyObjectIterator;
-//typedef shared_ptr<pyObject> pyObjectPtr;
-//typedef shared_ptr<const pyObjectData> pyObjectDataPtr;
-//typedef shared_ptr<pyObjectContainer> pyObjectContainerPtr;
-//typedef shared_ptr<pyObjectIterator> pyObjectIteratorPtr;
+typedef shared_ptr<pyObject> pyObjectPtr;
+typedef shared_ptr<const pyObjectData> pyObjectDataPtr;
+typedef shared_ptr<pyObjectContainer> pyObjectContainerPtr;
+typedef shared_ptr<pyObjectIterator> pyObjectIteratorPtr;
 //以下基础函数：operateInt、operateBool、operateFloat 
 bool operateBool(const float& one, const float& other, const char* ope, bool& answer);
 bool operateInt(const int& one, const int& other, const char* ope, int& answer);
