@@ -402,10 +402,10 @@ pyObjectString::operator bool() const {
 	return (this->data == "");
 }
 void pyObjectString::print() const {
-	cout << this->data;
+	cout << "\'" << this->data << "\'";
 }
 
-
+//以下pyObjectList的函数
 string pyObjectList::getType() const {
 	return "list";
 }
