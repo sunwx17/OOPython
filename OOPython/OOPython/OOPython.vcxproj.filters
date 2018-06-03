@@ -39,6 +39,9 @@
     <ClCompile Include="Block.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Buildin.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -60,6 +63,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Block.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Buildin.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

@@ -29,7 +29,7 @@ class pyForBlock : public pyBlock {
 	pyExpression* cycleVariable;
 	pyExpression* cycleContain;
 public:
-	pyForBlock(pyExpression* cv, pyExpression* cc) : cycleVariable(cv), cycleContain(cv) {}
+	pyForBlock(pyExpression* cv, pyExpression* cc) : cycleVariable(cv), cycleContain(cc) {}
 	int work(int, Varmap&);
 };
 

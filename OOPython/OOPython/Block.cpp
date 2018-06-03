@@ -8,7 +8,7 @@ pyBlock* pyBlock::factory(int type, vector<string>& contain) {
 	switch (type)
 	{
 	case(0)://for
-
+		return new pyForBlock(str2exp(contain[0]), str2exp(contain[1]));
 	case(1)://if
 		return new pyIfBlock(str2exp(contain[0]));
 	case(2)://else
@@ -75,8 +75,7 @@ int pyRootBlock::lastWork(int workStatus, Varmap& varmap) {
 int pyForBlock::work(int workStatus, Varmap & varmap){
 	const string& cvn = (dynamic_cast<pyVariable*>(cycleVariable))->getName();
 	pyObjectContainerPtr ocp = (pyObjectContainerPtr)dynamic_cast<pyObjectContainer*>(cycleContain->work(varmap)/*.get*/);
-	/*pyObjectIteratorPtr i;
-	for (*i = *(ocp->begin()); *i != *(ocp->end()); (*i)++) {
+	for (pyObjectIterator *i = ocp->begin(); *i != *ocp->end(); (*i)++) {
 		varmap.assign(cvn, **i);
 		for (auto i : process) {
 			workStatus = i->work(workStatus, varmap);
@@ -87,7 +86,7 @@ int pyForBlock::work(int workStatus, Varmap & varmap){
 			else if (workStatus == 4 || workStatus == 5)
 				return workStatus;
 		}
-	}*/
+	}
 	return 1;
 }
 

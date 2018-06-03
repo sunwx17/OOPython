@@ -149,6 +149,7 @@
   <ItemGroup>
     <ClCompile Include="Analyzer.cpp" />
     <ClCompile Include="Block.cpp" />
+    <ClCompile Include="Buildin.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="Data.cpp" />
     <ClCompile Include="Function.cpp" />
@@ -158,6 +159,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Block.h" />
+    <ClInclude Include="Buildin.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Analyzer.h" />
     <ClInclude Include="Data.h" />

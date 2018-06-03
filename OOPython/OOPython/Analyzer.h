@@ -1,8 +1,6 @@
 #ifndef ANALYZER_H
 #define ANALYZER_H
 
-#define Ptr *
-
 #include <vector>
 #include <regex>
 #include <stack>
