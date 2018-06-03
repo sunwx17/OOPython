@@ -526,7 +526,7 @@ pyObjectIteratorPtr pyIteratorList::operator++(int) {
 }
 pyObjectIteratorPtr pyIteratorList::operator++() {
 	it++;
-	return (pyObjectIteratorPtr)this;
+	return shared_from_this();
 }
 pyObjectIteratorPtr pyIteratorList::operator--(int) {
 	pyObjectIteratorPtr tmp = (pyObjectIteratorPtr)new pyIteratorList(it);
@@ -535,7 +535,7 @@ pyObjectIteratorPtr pyIteratorList::operator--(int) {
 }
 pyObjectIteratorPtr pyIteratorList::operator--() {
 	it--;
-	return (pyObjectIteratorPtr)this;
+	return shared_from_this();
 }
 pyObjectPtr pyIteratorList::operator*() const {
 	return *it;

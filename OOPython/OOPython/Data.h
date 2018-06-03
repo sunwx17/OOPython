@@ -159,7 +159,7 @@ public:
 	pyObjectPtr operator[](const pyObjectPtr pos) const;
 };
 
-class pyObjectIterator : public pyObject {
+class pyObjectIterator : public pyObject, public enable_shared_from_this<pyObjectIterator> {
 public:
 	pyObjectIterator();
 	virtual ~pyObjectIterator() {};
