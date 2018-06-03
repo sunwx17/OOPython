@@ -66,10 +66,11 @@ public:
 
 class pyPrintBlock : public pyBlock {
 	pyExpression* bePrinted;
+	string formatString;
 	vector<pyExpression*> formatPrinted;
 public:
 	pyPrintBlock(pyExpression* tobePrinted) : bePrinted(tobePrinted) {}
-	//pyPrintBlock(pyExpression* tobePrinted) : bePrinted(tobePrinted) {}
+	pyPrintBlock(const string &s, vector<pyExpression*> fp) : formatString(s), formatPrinted(fp) {}
 	int work(int, Varmap&);
 };
 

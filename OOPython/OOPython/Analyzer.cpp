@@ -7,7 +7,7 @@ const regex blockRegex[] = {
 	 (regex)"^else\\s*:\\s*$",
 	 (regex)"^while\\s+([^:]+?)\\s*:\\s*$",
 	 (regex)"^def\\s+([a-zA-Z_][0-9a-zA-Z_]*?)\\s*\\((.*)\\)\\s*:\\s*$", 
-	 (regex)"^print\\s+(.+?)\\s*(?:%\\s*\\(?\\s*(.+?)\\s*\\)?\\s*)?$",
+	 (regex)"^print\\s+(.+?)\\s*(?:%\\s+\\(?\\s*(.+?)\\s*\\)?\\s*)?$",//%后面要有一个空格
 	 (regex)"^return\\s+(.+?)\\s*$",
 	 (regex)"^continue\\s*$",
 	 (regex)"^break\\s*$",

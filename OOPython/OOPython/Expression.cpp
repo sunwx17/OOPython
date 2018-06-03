@@ -34,8 +34,10 @@ pyVariable * pyVariable::factory(const string &name){
 		for (auto i : name) {
 			if (!(i >= '0' && i <= '9')) {
 				isInt = false;
-				if (i != '.')
+				if (i != '.') {
 					isFloat = false;
+					break;
+				}
 			}
 		}
 		if (isInt) {

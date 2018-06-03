@@ -18,7 +18,10 @@ pyBlock* pyBlock::factory(int type, vector<string>& contain) {
 	case(4)://def
 		return new pyDefBlock(contain[0], commaCut(contain[1]));
 	case(5)://print
-		return new pyPrintBlock(str2exp(contain[0]));
+		if (contain[1] == "")
+			return new pyPrintBlock(str2exp(contain[0]));
+		else
+			return new pyPrintBlock(contain[0].substr(1, contain[0].size() - 2), str2exp_multi(contain[1]));
 	case(6)://return
 		return new pyReturnBlock(str2exp(contain[0]));
 	case(7)://continue
@@ -163,8 +166,23 @@ pyObjectPtr pyDefBlock::call(Varmap& varmap, vector<pyObjectPtr>& elems_in) {
 
 
 int pyPrintBlock::work(int workStatus, Varmap& varmap) {
-	pyObject* pod = ((bePrinted->work(varmap))/*.get*/);
-	pod->print();
+	if (bePrinted != nullptr) {
+		((bePrinted->work(varmap))/*.get*/)->print();
+	}
+	else {
+		auto it = formatPrinted.begin();
+		size_t l = formatString.size();
+		for (size_t i = 0; i < l; i++){
+			if (formatString[i] == '%') {
+				(*it)->work(varmap)->print();
+				i++;
+				it++;
+			}
+			else {
+				cout << formatString[i];
+			}
+		}
+	}
 	cout << endl;
 	return 1;
 }
