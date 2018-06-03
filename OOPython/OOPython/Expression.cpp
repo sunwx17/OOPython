@@ -13,7 +13,8 @@ pyExpression * pyExpression::factory(const string& name, vector<pyExpression*> p
 	else if (name == "<=") return new pySmallerEqualOperator(pe[1], pe[0]);
 	else if (name == "==") return new pyEqualOperator(pe[1], pe[0]);
 	else if (name == "!=") return new pyNotEqualOperator(pe[1], pe[0]);
-
+	else if (name == "and") return new pyAndOperator(pe[1], pe[0]);
+	else if (name == "or") return new pyOrOperator(pe[1], pe[0]);
 	//other
 	else return pyVariable::factory(name);
 }
@@ -122,6 +123,8 @@ pyObjectPtr pyBinaryOperator::delegateWork(Varmap & varmap, const string & s) co
 	else if (s.compare("<=") == 0) return (pyObjectPtr)(pyObject*)(*odpf <= *odpb)/*.get*/;
 	else if (s.compare("==") == 0) return (pyObjectPtr)(pyObject*)(*odpf == *odpb)/*.get*/;
 	else if (s.compare("!=") == 0) return (pyObjectPtr)(pyObject*)(*odpf != *odpb)/*.get*/;
+	else if (s.compare("and") == 0) return (pyObjectPtr)(pyObject*)(*odpf && *odpb)/*.get*/;
+	else if (s.compare("or") == 0) return (pyObjectPtr)(pyObject*)(*odpf || *odpb)/*.get*/;
 	//other;
 	else return nullptr;
 }
@@ -164,4 +167,12 @@ pyObjectPtr pyEqualOperator::work(Varmap & varmap) const{
 
 pyObjectPtr pyNotEqualOperator::work(Varmap & varmap) const{
 	return delegateWork(varmap, "!=");
+}
+
+pyObjectPtr pyAndOperator::work(Varmap & varmap) const{
+	return delegateWork(varmap, "and");
+}
+
+pyObjectPtr pyOrOperator::work(Varmap & varmap) const{
+	return delegateWork(varmap, "or");
 }

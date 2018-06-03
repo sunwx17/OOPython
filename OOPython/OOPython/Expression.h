@@ -131,6 +131,16 @@ public:
 	pyObjectPtr work(Varmap&) const;
 };
 
+class pyAndOperator : public pyBinaryOperator {
+public:
+	pyAndOperator(const pyExpression* const front, const pyExpression* const back) : pyBinaryOperator(front, back) {}
+	pyObjectPtr work(Varmap&) const;
+};
 
+class pyOrOperator : public pyBinaryOperator {
+public:
+	pyOrOperator(const pyExpression* const front, const pyExpression* const back) : pyBinaryOperator(front, back) {}
+	pyObjectPtr work(Varmap&) const;
+};
 
 #endif // !EXPREESION_H
