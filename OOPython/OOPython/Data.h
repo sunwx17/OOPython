@@ -150,6 +150,7 @@ class pyObjectList : public pyObjectContainer {
 	vector<pyObjectPtr> dataList;
 public:
 	pyObjectList();
+	pyObjectList(vector<pyObjectPtr> _dataList);
 	string getType() const;
 	void print() const;
 	pyObjectIteratorPtr begin();
