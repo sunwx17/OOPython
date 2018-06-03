@@ -31,7 +31,8 @@ class pyObjectIterator;
 bool operateBool(const float& one, const float& other, const char* ope, bool& answer);
 bool operateInt(const int& one, const int& other, const char* ope, int& answer);
 bool operateFloat(const float& one, const float& other, const char* ope, float& answer);
-
+bool pyMod(const int& left, const int& right, int& answer);
+bool pyMod(const float& left, const float& right, float& answer);
 //以下pyObject类及其子类
 class pyObject{
 public:
@@ -60,6 +61,7 @@ public:
 	virtual pyObjectDataPtr operator>(const pyObjectData &other) const;
 	virtual pyObjectDataPtr operator<=(const pyObjectData &other) const;
 	virtual pyObjectDataPtr operator>=(const pyObjectData &other) const;
+	virtual pyObjectDataPtr operator%(const pyObjectData &other) const;
 	virtual pyObjectDataPtr operator<<(const pyObjectData &other) const;
 	virtual pyObjectDataPtr operator>>(const pyObjectData &other) const;
 	pyObjectDataPtr operator&&(const pyObjectData &other) const;

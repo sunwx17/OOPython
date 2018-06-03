@@ -40,6 +40,9 @@ void Client::work()
 		}
 		unsigned int numOfTab = 0;
 		bool isEmpty = deleteNote(line);
+		if (isEmpty) {
+			continue;
+		}
 		bool tabCorrect = scan(numOfTab, line);//œ»ƒ¨»œcorrect
 		if (!tabCorrect) {
 			cout << "ÀıΩ¯¥ÌŒÛ!" << endl;

@@ -62,7 +62,15 @@ bool operateInt(const int& one, const int& other, const char* ope, int& answer) 
 			if (other != 0) {
 				num /= other;
 			}
-			else{
+			else {
+				return false;
+			}
+			break;
+		case '%':
+			if (other != 0) {
+				pyMod(one, other, num);
+			}
+			else {
 				return false;
 			}
 			break;
@@ -110,7 +118,15 @@ bool operateFloat(const float& one, const float& other, const char* ope, float& 
 			if (other != 0) {
 				num /= other;
 			}
-			else{
+			else {
+				return false;
+			}
+			break;
+		case '%':
+			if (other != 0) {
+				pyMod(one, other, num);
+			}
+			else {
 				return false;
 			}
 			break;
@@ -137,6 +153,25 @@ bool operateFloat(const float& one, const float& other, const char* ope, float& 
 	}
 	answer = num;
 	return true;
+}
+
+bool pyMod(const int& left, const int& right, int& answer) {
+	if (right != 0) {
+		answer = left - (right * (int)floor(left / (right + 0.0)));
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+bool pyMod(const float& left, const float& right, float& answer) {
+	if (right != 0) {
+		answer = left - (right * (int)floor(left / right));
+		return true;
+	}
+	else {
+		return false;
+	}
 }
 
 //以下类的构造
@@ -216,6 +251,14 @@ pyObjectDataPtr pyObjectData::operator<=(const pyObjectData &other) const {
 }
 pyObjectDataPtr pyObjectData::operator>=(const pyObjectData &other) const {
 	return operatorFatherBool(other, ">=");
+}
+pyObjectDataPtr pyObjectData::operator%(const pyObjectData &other) const {
+	if (!(bool)other) {
+		return nullptr;
+	}
+	else {
+		return operatorFather(other, "%");
+	}
 }
 pyObjectDataPtr pyObjectData::operator<<(const pyObjectData &other) const {
 	return operatorFather(other, "<<");
