@@ -23,6 +23,10 @@ bool operateBool(const float& one, const float& other, const char* ope, bool& an
 			answer = (one == other);
 			return true;
 		}
+		if (ope == "!=") {
+			answer = (one != other);
+			return true;
+		}
 		if (ope == ">=") {
 			answer = (one >= other);
 			return true;
@@ -241,6 +245,9 @@ pyObjectDataPtr pyObjectData::operator/(const pyObjectData &other) const {
 pyObjectDataPtr pyObjectData::operator==(const pyObjectData &other) const {
 	return operatorFatherBool(other, "==");
 }
+pyObjectDataPtr pyObjectData::operator!=(const pyObjectData &other) const {
+	return operatorFatherBool(other, "!=");
+}
 pyObjectDataPtr pyObjectData::operator<(const pyObjectData &other) const {
 	return operatorFatherBool(other, "<");
 }
@@ -406,6 +413,9 @@ pyObjectDataPtr pyObjectString::operatorFatherString(const pyObjectData &other, 
 		if (ope == "==") {
 			return (pyObjectDataPtr)new pyObjectBool(this->data == tmp->data);
 		}
+		if (ope == "!=") {
+			return (pyObjectDataPtr)new pyObjectBool(this->data != tmp->data);
+		}
 		else if (ope == ">=") {
 			return (pyObjectDataPtr)new pyObjectBool(this->data >= tmp->data);
 		}
@@ -428,6 +438,9 @@ pyObjectDataPtr pyObjectString::operator-() const {
 }
 pyObjectDataPtr pyObjectString::operator==(const pyObjectData &other) const {
 	return operatorFatherString(other, "==");
+}
+pyObjectDataPtr pyObjectString::operator!=(const pyObjectData &other) const {
+	return operatorFatherString(other, "!=");
 }
 pyObjectDataPtr pyObjectString::operator<(const pyObjectData &other) const {
 	return operatorFatherString(other, "<");

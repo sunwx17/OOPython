@@ -51,6 +51,7 @@ public:
 	virtual pyObjectDataPtr operator*(const pyObjectData &other) const;
 	virtual pyObjectDataPtr operator/(const pyObjectData &other) const;
 	virtual pyObjectDataPtr operator==(const pyObjectData &other) const;
+	virtual pyObjectDataPtr operator!=(const pyObjectData &other) const;
 	virtual pyObjectDataPtr operator<(const pyObjectData &other) const;
 	virtual pyObjectDataPtr operator>(const pyObjectData &other) const;
 	virtual pyObjectDataPtr operator<=(const pyObjectData &other) const;
@@ -116,6 +117,7 @@ public:
 	pyObjectDataPtr operator+(const pyObjectData &other) const;
 	pyObjectDataPtr operator-() const;
 	pyObjectDataPtr operator==(const pyObjectData &other) const;
+	pyObjectDataPtr operator!=(const pyObjectData &other) const;
 	pyObjectDataPtr operator<(const pyObjectData &other) const;
 	pyObjectDataPtr operator>(const pyObjectData &other) const;
 	pyObjectDataPtr operator<=(const pyObjectData &other) const;
