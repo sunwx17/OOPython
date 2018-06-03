@@ -48,7 +48,7 @@ pyVariable * pyVariable::factory(const string &name){
 		}
 		return new pyVariable(name);
 	}
-	else {//前端后端均支持了f()()这种形式，这里暂未支持
+	else {
 		size_t left = bracketMatch(name, ')', (int)right);
 		string funcName = name.substr(0, right);
 		pyVariable* pfv = new pyVariable(funcName);
@@ -57,7 +57,7 @@ pyVariable * pyVariable::factory(const string &name){
 			vector<string> elem_s = commaCut(elems);
 			vector<pyExpression*> elem_v;
 			for (auto i : elem_s) {
-				elem_v.push_back(pyVariable::factory(i));
+				elem_v.push_back(str2exp(i));
 			}
 			pfv = new pyFuncVariable(pfv, elem_v);
 			right = name.find('(', left + 1);
@@ -86,7 +86,8 @@ pyObjectPtr pyFuncVariable::work(Varmap& varmap) const {
 	for (auto i : elems) {
 		elem_o.push_back(i->work(varmap));
 	}
-	return fop->call(varmap, elem_o);
+	Varmap funcVarmap;
+	return fop->call(funcVarmap, elem_o);
 }
 
 inline pyObjectPtr pyUnaryOperator::work(Varmap& varmap) const {

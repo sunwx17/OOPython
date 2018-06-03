@@ -29,7 +29,7 @@ class pyForBlock : public pyBlock {
 	pyExpression* cycleVariable;
 	pyExpression* cycleContain;
 public:
-	pyForBlock(pyExpression* cv, pyExpression* cc) : cycleVariable(cv), cycleContain(cv) {}
+	pyForBlock(pyExpression* cv, pyExpression* cc) : cycleVariable(cv), cycleContain(cc) {}
 	int work(int, Varmap&);
 };
 
@@ -57,7 +57,6 @@ class pyDefBlock : public pyBlock {
 	string name;
 	int numOfElem;
 	vector<string> elems;
-	Varmap funcVarmap;
 	Varmap initVarmap;
 public:
 	pyDefBlock(const string s, vector<string> v) :name(s), elems(v), numOfElem((int)(v.size())) {}
@@ -96,6 +95,13 @@ class pyAssignBlock : public pyBlock {
 	vector<pyExpression*> assigner;
 public:
 	pyAssignBlock(vector<pyExpression*> front, vector<pyExpression*> back) : beAssigned(front), assigner(back) {}
+	int work(int, Varmap&);
+};
+
+class pyExpBlock : public pyBlock {
+	pyExpression * body;
+public:
+	pyExpBlock(pyExpression * pe) : body(pe) {}
 	int work(int, Varmap&);
 };
 

@@ -17,3 +17,7 @@ void Varmap::clear(){
 void Varmap::copy(const Varmap& varmap){
 	table = varmap.table;
 }
+
+void Varmap::buildIn(){
+	table = getBuildInMap();
+}

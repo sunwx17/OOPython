@@ -8,7 +8,7 @@ pyBlock* pyBlock::factory(int type, vector<string>& contain) {
 	switch (type)
 	{
 	case(0)://for
-
+		return new pyForBlock(str2exp(contain[0]), str2exp(contain[1]));
 	case(1)://if
 		return new pyIfBlock(str2exp(contain[0]));
 	case(2)://else
@@ -28,7 +28,7 @@ pyBlock* pyBlock::factory(int type, vector<string>& contain) {
 	case(9)://=
 		return new pyAssignBlock(str2exp_multi(contain[0]), str2exp_multi(contain[1]));
 	case(-1)://expression
-
+		return new pyExpBlock(str2exp(contain[0]));
 	default:
 		break;
 	}
@@ -75,8 +75,7 @@ int pyRootBlock::lastWork(int workStatus, Varmap& varmap) {
 int pyForBlock::work(int workStatus, Varmap & varmap){
 	const string& cvn = (dynamic_cast<pyVariable*>(cycleVariable))->getName();
 	pyObjectContainerPtr ocp = (pyObjectContainerPtr)dynamic_cast<pyObjectContainer*>(cycleContain->work(varmap)/*.get*/);
-	/*pyObjectIteratorPtr i;
-	for (*i = *(ocp->begin()); *i != *(ocp->end()); (*i)++) {
+	for (pyObjectIterator *i = ocp->begin(); *i != *ocp->end(); (*i)++) {
 		varmap.assign(cvn, **i);
 		for (auto i : process) {
 			workStatus = i->work(workStatus, varmap);
@@ -87,7 +86,7 @@ int pyForBlock::work(int workStatus, Varmap & varmap){
 			else if (workStatus == 4 || workStatus == 5)
 				return workStatus;
 		}
-	}*/
+	}
 	return 1;
 }
 
@@ -143,21 +142,21 @@ int pyDefBlock::work(int workStatus, Varmap& varmap) {
 }
 
 pyObjectPtr pyDefBlock::call(Varmap& varmap, vector<pyObjectPtr>& elems_in) {
-	funcVarmap.copy(initVarmap);
+	varmap.copy(initVarmap);
 	for (int i = 0; i < numOfElem; i++) {
-		funcVarmap.assign(elems[i], elems_in[i]);
+		varmap.assign(elems[i], elems_in[i]);
 	}
 	int workStatus = 1;
 	for (auto i : process) {
-		workStatus = i->work(workStatus, funcVarmap);
+		workStatus = i->work(workStatus, varmap);
 		if (workStatus == 4) {
-			pyObjectPtr ret = funcVarmap.getValue("__return__");
-			funcVarmap.clear();
+			pyObjectPtr ret = varmap.getValue("__return__");
+			varmap.clear();
 			return ret;
 		}
 		//else if (workStatus == 5)
 	}
-	funcVarmap.clear();
+	varmap.clear();
 	return nullptr;
 }
 
@@ -191,5 +190,10 @@ int pyAssignBlock::work(int workStatus, Varmap& varmap) {
 		pyObjectPtr back = assigner[i]->work(varmap);
 		varmap.assign(s, back);
 	}
+	return 1;
+}
+
+int pyExpBlock::work(int workStatus, Varmap &varmap){
+	body->work(varmap);
 	return 1;
 }

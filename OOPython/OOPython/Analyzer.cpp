@@ -31,20 +31,13 @@ int regexBreak(const string& s, vector<string>& contain) {
 			return i;
 		}
 	}
+	string ss = s;
+	spaceHeadTail(ss);
+	contain.push_back(ss);
 	return -1;
 }
 
-void multiVary(const string& s, vector<string>& contain) {
-	string ss = s;
-	removeSpace(ss);
-	ss.push_back(',');
-	regex e("[,]*(.+?)[,]+");
-	smatch sm;
-	while (regex_search(ss, sm, e)) {
-		contain.push_back(sm.str(1));
-		ss = sm.suffix().str();
-	}
-}
+
 
 //aandb
 const vector<vector<string>> operators = {

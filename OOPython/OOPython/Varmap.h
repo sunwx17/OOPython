@@ -1,6 +1,7 @@
 #ifndef VARMAP_H
 #define VARMAP_H
 #include "Data.h"
+#include "Buildin.h"
 #include <map>
 
 class Varmap {
@@ -10,6 +11,7 @@ public:
 	pyObjectPtr getValue(const string&);
 	void clear();
 	void copy(const Varmap&);
+	void buildIn();
 	~Varmap() {}
 };
 

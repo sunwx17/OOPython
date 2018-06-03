@@ -13,6 +13,7 @@ void Client::work()
 {
 	pyRootBlock* rootBlock = new pyRootBlock;
 	Varmap varmap;
+	varmap.buildIn();
 	bool flagExit = false;
 	bool outState = true;//Êä³ö×´Ì¬£¬1Êä³ö">>> "£¬0Êä³ö"... "
     while (!flagExit)
