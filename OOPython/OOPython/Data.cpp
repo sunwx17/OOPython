@@ -183,6 +183,7 @@ pyObjectFloat::pyObjectFloat(float _data) : data(_data) {}
 pyObjectString::pyObjectString(string _data) : data(_data) {}
 pyObjectContainer::pyObjectContainer() {}
 pyObjectList::pyObjectList() {}
+pyObjectList::pyObjectList(vector<pyObjectPtr> _dataList) : dataList(_dataList) {}
 pyObjectIterator::pyObjectIterator() {}
 pyIteratorList::pyIteratorList() {}
 pyIteratorList::pyIteratorList(vector<pyObjectPtr>::iterator _it) : it(_it) {}
