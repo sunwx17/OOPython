@@ -412,9 +412,9 @@ string pyObjectList::getType() const {
 void pyObjectList::print() const {
 	int num = size();
 	cout << "[";
-	for (int i = 1; i <= num; i++) {
-		dataList[i]->print();//Mark:To Do
-		if (i == num) {
+	for (int i = 0; i < num; i++) {
+		dataList[i]->print();
+		if (i == num - 1) {
 			cout << "]";
 		}
 		else {
