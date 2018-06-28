@@ -21,8 +21,14 @@ pyObjectPtr range(vector<pyObjectPtr> elems) {
 	return ocp;
 }
 
+pyObjectPtr type(vector<pyObjectPtr> elems) {
+	pyObjectPtr op = (pyObjectPtr)(pyObject*)new pyObjectString(elems[0]->getType());
+	return op;
+}
+
 map<string, pyObjectPtr> getBuildInMap(){
 	map<string, pyObjectPtr> bim;
 	bim["range"] = (pyObjectPtr)(pyObject*)new pyFuncObject(range);
+	bim["type"] = (pyObjectPtr)(pyObject*)new pyFuncObject(type);
 	return bim;
 }

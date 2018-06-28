@@ -5,6 +5,7 @@
 #include <map>
 
 pyObjectPtr range(vector<pyObjectPtr>);
+pyObjectPtr type(vector<pyObjectPtr>);
 map<string, pyObjectPtr> getBuildInMap();
 
 #endif // !BUILDIN_H
