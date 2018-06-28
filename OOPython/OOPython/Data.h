@@ -39,15 +39,17 @@ public:
 class pyObjectData :public pyObject {
 	pyObjectDataPtr operatorFather(const pyObjectData &other, const char* ope) const;//stringµ•∂¿¥¶¿Ì
 	pyObjectDataPtr operatorFatherBool(const pyObjectData &other, const char* ope) const;
-	virtual float getDataFloat() const = 0;
-	virtual int getDataInt() const = 0;
+	virtual float getDataFloat() const;
+	virtual int getDataInt() const;
 public: 
 	pyObjectData();
 	virtual ~pyObjectData() {};
 	virtual string getType() const = 0;
+	virtual operator bool() const = 0;
+	virtual pyObjectDataPtr opePT(const pyObjectData &other) const;
 	virtual pyObjectDataPtr operator+(const pyObjectData &other) const;
 	virtual pyObjectDataPtr operator-(const pyObjectData &other) const;
-	virtual pyObjectDataPtr operator-() const = 0;
+	virtual pyObjectDataPtr operator-() const;
 	virtual pyObjectDataPtr operator*(const pyObjectData &other) const;
 	virtual pyObjectDataPtr operator/(const pyObjectData &other) const;
 	virtual pyObjectDataPtr operator==(const pyObjectData &other) const;
@@ -64,7 +66,6 @@ public:
 	pyObjectDataPtr operator!() const;
 	virtual pyObjectDataPtr operator&(const pyObjectData &other) const;
 	virtual pyObjectDataPtr operator|(const pyObjectData &other) const;
-	virtual operator bool() const = 0;
 	virtual void print() const = 0;
 };
 
@@ -126,7 +127,7 @@ public:
 	void print() const;
 };
 
-class pyObjectContainer : public pyObject {
+class pyObjectContainer : public pyObjectData {
 public:
 	pyObjectContainer();
 	virtual ~pyObjectContainer() {};
@@ -140,6 +141,7 @@ public:
 	//virtual pyObjectDataPtr pop(pyObjectPtr num) = 0;
 	virtual int size() const = 0;
 	virtual pyObjectPtr operator[](const pyObjectPtr pos) const = 0;
+	virtual operator bool() const = 0;
 };
 
 class pyObjectList : public pyObjectContainer {
@@ -157,14 +159,16 @@ public:
 	//pyObjectPtr pop(pyObjectPtr num);
 	int size() const;
 	pyObjectPtr operator[](const pyObjectPtr pos) const;
+	virtual operator bool() const;
 };
 
-class pyObjectIterator : public pyObject, public enable_shared_from_this<pyObjectIterator> {
+class pyObjectIterator : public pyObjectData, public enable_shared_from_this<pyObjectIterator> {
 public:
 	pyObjectIterator();
 	virtual ~pyObjectIterator() {};
 	virtual string getType() const = 0;
 	virtual void print() const = 0;
+	virtual operator bool() const = 0;
 	virtual pyObjectIteratorPtr operator+(int num) const = 0;
 	virtual pyObjectIteratorPtr operator-(int num) const = 0;
 	virtual pyObjectIteratorPtr operator++(int) = 0;
@@ -192,5 +196,6 @@ public:
 	pyObjectPtr operator*() const;
 	bool operator==(const pyObjectIterator &other) const;
 	bool operator!=(const pyObjectIterator &other) const;
+	virtual operator bool() const;
 };
 #endif

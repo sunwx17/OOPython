@@ -193,6 +193,7 @@ pyObjectList::pyObjectList(vector<pyObjectPtr> _dataList) : dataList(_dataList) 
 pyObjectIterator::pyObjectIterator() {}
 pyIteratorList::pyIteratorList() {}
 pyIteratorList::pyIteratorList(vector<pyObjectPtr>::iterator _it) : it(_it) {}
+
 //以下pyObjectData类的函数
 pyObjectDataPtr pyObjectData::operatorFather(const pyObjectData &other, const char* ope) const{
 	pyObjectDataPtr returnPtr = nullptr;
@@ -226,6 +227,22 @@ pyObjectDataPtr pyObjectData::operatorFatherBool(const pyObjectData &other, cons
 		}
 	}
 	return returnPtr;
+}
+float pyObjectData::getDataFloat() const {
+	assert(false);
+	return 0;
+}
+int pyObjectData::getDataInt() const {
+	assert(false);
+	return 0;
+}
+pyObjectDataPtr pyObjectData::operator-() const {
+	assert(false);
+	return nullptr;
+}
+pyObjectDataPtr pyObjectData::opePT(const pyObjectData &other) const {
+	assert(false);
+	return nullptr;
 }
 pyObjectDataPtr pyObjectData::operator+(const pyObjectData &other) const {
 	return operatorFather(other, "+");
@@ -508,6 +525,9 @@ pyObjectPtr pyObjectList::operator[](const pyObjectPtr pos) const {
 	}
 	return nullptr;
 }
+pyObjectList::operator bool() const {
+	return !(dataList.empty());
+}
 //以下pyIteratorList类的函数
 string pyIteratorList::getType() const {
 	return "iteratorList";
@@ -555,4 +575,14 @@ bool pyIteratorList::operator!=(const pyObjectIterator &other) const {
 		return (tmp->it != this->it);
 	}
 	return false;
+}
+pyIteratorList::operator bool() const {
+	pyObject * tmp1 = &(*(*it));
+	pyObjectData * tmp2 = dynamic_cast<pyObjectData*>(tmp1);
+	if (tmp2 == nullptr) {
+		return true;
+	}
+	else {
+		return tmp2->operator bool();
+	}
 }
