@@ -182,6 +182,12 @@ pyObjectPtr pySqrVariable::work(Varmap &varmap) const{
 	return fop->operator[](op);
 }
 
+pyObjectPtr& pySqrVariable::assign(Varmap &varmap) const {
+	pyObjectContainerPtr fop = dynamic_pointer_cast<pyObjectContainer> ((pyVariable::work(varmap)));
+	pyObjectPtr op = posi->work(varmap);
+	return fop->operator[](op);
+}
+
 pyObjectPtr pyPtVariable::work(Varmap & varmap) const{
 	pyObjectDataPtr fop = dynamic_pointer_cast<pyObjectData> ((pyVariable::work(varmap)));
 	return fop->opePT(member);

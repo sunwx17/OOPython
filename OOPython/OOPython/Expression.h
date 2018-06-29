@@ -57,6 +57,7 @@ public:
 	pySqrVariable(pyObjectPtr op, pyExpression* v) :pyVariable(op), posi(v) {};
 	pySqrVariable(pyVariable* pv, pyExpression* v) :pyVariable(pv), posi(v) {};
 	pyObjectPtr work(Varmap&) const;
+	pyObjectPtr& assign(Varmap&) const;
 	~pySqrVariable(){
 		delete posi;
 	}

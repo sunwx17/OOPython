@@ -205,8 +205,13 @@ int pyAssignBlock::work(int workStatus, Varmap& varmap) {
 	int l = (int)beAssigned.size();
 	for (int i = 0; i < l; i++) {
 		const string& s = (dynamic_cast<pyVariable*> (beAssigned[i]))->getName();
-		pyObjectPtr back = assigner[i]->work(varmap);
-		varmap.assign(s, back);
+		if (!s.empty()) {
+			pyObjectPtr back = assigner[i]->work(varmap);
+			varmap.assign(s, back);
+		}
+		else {
+			dynamic_cast<pySqrVariable *>(beAssigned[i])->assign(varmap) = assigner[i]->work(varmap);
+		}
 	}
 	return 1;
 }
