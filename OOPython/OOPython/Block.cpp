@@ -1,5 +1,5 @@
 #include "Block.h"
-
+#include "Container.h"
 /*const pyObjectPtr pyBlock::findVar(const string &s){
 return varmap.getValue(s);
 }*/

@@ -151,6 +151,7 @@
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="Buildin.cpp" />
     <ClCompile Include="Client.cpp" />
+    <ClCompile Include="Container.cpp" />
     <ClCompile Include="Data.cpp" />
     <ClCompile Include="Function.cpp" />
     <ClCompile Include="main.cpp" />
@@ -162,6 +163,7 @@
     <ClInclude Include="Buildin.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Analyzer.h" />
+    <ClInclude Include="Container.h" />
     <ClInclude Include="Data.h" />
     <ClInclude Include="Expression.h" />
     <ClInclude Include="Function.h" />

@@ -1,5 +1,6 @@
 //Data.cpp
 #include "Data.h"
+#include "Function.h"
 //以下基础函数：operateInt、operateBool、operateFloat
 bool operateBool(const float& one, const float& other, const char* ope, bool& answer) {
 	int length = (int)strlen(ope);
@@ -187,12 +188,6 @@ pyObjectInt::pyObjectInt(int _data) : data(_data) {}
 pyObjectBool::pyObjectBool(bool _data) : data(_data) {}
 pyObjectFloat::pyObjectFloat(float _data) : data(_data) {}
 pyObjectString::pyObjectString(string _data) : data(_data) {}
-pyObjectContainer::pyObjectContainer() {}
-pyObjectList::pyObjectList() {}
-pyObjectList::pyObjectList(vector<pyObjectPtr> _dataList) : dataList(_dataList) {}
-pyObjectIterator::pyObjectIterator() {}
-pyIteratorList::pyIteratorList() {}
-pyIteratorList::pyIteratorList(vector<pyObjectPtr>::iterator _it) : it(_it) {}
 
 //以下pyObjectData类的函数
 pyObjectDataPtr pyObjectData::operatorFather(const pyObjectData &other, const char* ope) const{
@@ -240,7 +235,7 @@ pyObjectDataPtr pyObjectData::operator-() const {
 	assert(false);
 	return nullptr;
 }
-pyObjectDataPtr pyObjectData::opePT(const pyObjectData &other) const {
+pyObjectPtr pyObjectData::opePT(string memName) const {
 	assert(false);
 	return nullptr;
 }
@@ -478,111 +473,4 @@ pyObjectString::operator bool() const {
 }
 void pyObjectString::print() const {
 	cout << this->data;
-}
-
-//以下pyObjectList的函数
-string pyObjectList::getType() const {
-	return "list";
-}
-void pyObjectList::print() const {
-	int num = size();
-	cout << "[";
-	for (int i = 0; i < num; i++) {
-		dataList[i]->print();
-		if (i == num - 1) {
-			cout << "]";
-		}
-		else {
-			cout << ", ";
-		}
-	}
-}
-pyObjectIteratorPtr pyObjectList::begin() {
-	vector<pyObjectPtr>::iterator tmpIt = dataList.begin();
-	return (pyObjectIteratorPtr)new pyIteratorList(tmpIt);
-}
-pyObjectIteratorPtr pyObjectList::end() {
-	vector<pyObjectPtr>::iterator tmpIt = dataList.end();
-	return (pyObjectIteratorPtr)new pyIteratorList(tmpIt);
-}
-void pyObjectList::pushBack(pyObjectPtr data) {
-	dataList.push_back(data);
-}
-//void pyObjectList::insert(pyObjectPtr num, pyObjectPtr data);
-//pyObjectDataPtr pyObjectList::pop();
-//pyObjectDataPtr pyObjectList::pop(pyObjectPtr num);
-int pyObjectList::size() const {
-	return (int)dataList.size();
-}
-pyObjectPtr pyObjectList::operator[](const pyObjectPtr pos) const {
-	const pyObjectInt* tmp1 = dynamic_cast<const pyObjectInt*>(&(*pos));
-	if (tmp1 != nullptr) {
-		return dataList[tmp1->operator int()];
-	}
-	const pyObjectBool* tmp2 = dynamic_cast<const pyObjectBool*>(&(*pos));
-	if (tmp2 != nullptr) {
-		return dataList[tmp2->operator int()];
-	}
-	return nullptr;
-}
-pyObjectList::operator bool() const {
-	return !(dataList.empty());
-}
-//以下pyIteratorList类的函数
-string pyIteratorList::getType() const {
-	return "iteratorList";
-}
-void pyIteratorList::print() const {
-	(*it)->print();
-}
-pyObjectIteratorPtr pyIteratorList::operator+(int num) const {
-	return (pyObjectIteratorPtr)new pyIteratorList(it + num);
-}
-pyObjectIteratorPtr pyIteratorList::operator-(int num) const {
-	return (pyObjectIteratorPtr)new pyIteratorList(it - num);
-}
-pyObjectIteratorPtr pyIteratorList::operator++(int) {
-	pyObjectIteratorPtr tmp = (pyObjectIteratorPtr)new pyIteratorList(it);
-	it++;
-	return tmp;
-}
-pyObjectIteratorPtr pyIteratorList::operator++() {
-	it++;
-	return shared_from_this();
-}
-pyObjectIteratorPtr pyIteratorList::operator--(int) {
-	pyObjectIteratorPtr tmp = (pyObjectIteratorPtr)new pyIteratorList(it);
-	it--;
-	return tmp;
-}
-pyObjectIteratorPtr pyIteratorList::operator--() {
-	it--;
-	return shared_from_this();
-}
-pyObjectPtr pyIteratorList::operator*() const {
-	return *it;
-}
-bool pyIteratorList::operator==(const pyObjectIterator &other) const {
-	const pyIteratorList* tmp = dynamic_cast<const pyIteratorList*>(&(other));
-	if (tmp != nullptr) {
-		return (tmp->it == this->it);
-	}
-	return false;
-}
-bool pyIteratorList::operator!=(const pyObjectIterator &other) const {
-	const pyIteratorList* tmp = dynamic_cast<const pyIteratorList*>(&(other));
-	if (tmp != nullptr) {
-		return (tmp->it != this->it);
-	}
-	return false;
-}
-pyIteratorList::operator bool() const {
-	pyObject * tmp1 = &(*(*it));
-	pyObjectData * tmp2 = dynamic_cast<pyObjectData*>(tmp1);
-	if (tmp2 == nullptr) {
-		return true;
-	}
-	else {
-		return tmp2->operator bool();
-	}
 }
