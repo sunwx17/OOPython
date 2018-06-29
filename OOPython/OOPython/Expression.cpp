@@ -14,8 +14,8 @@ pyExpression * pyExpression::factory(const string& name, vector<pyExpression*> p
 	else if (name == "<=") return new pySmallerEqualOperator(pe[1], pe[0]);
 	else if (name == "==") return new pyEqualOperator(pe[1], pe[0]);
 	else if (name == "!=") return new pyNotEqualOperator(pe[1], pe[0]);
-	else if (name == "and") return new pyAndOperator(pe[1], pe[0]);
-	else if (name == "or") return new pyOrOperator(pe[1], pe[0]);
+	else if (name == " and ") return new pyAndOperator(pe[1], pe[0]);
+	else if (name == " or ") return new pyOrOperator(pe[1], pe[0]);
 	else if (name == "&") return new pyBitandOperator(pe[1], pe[0]);
 	else if (name == "|") return new pyBitorOperator(pe[1], pe[0]);
 	else if (name == "<<") return new pyLeftMoveOperator(pe[1], pe[0]);
@@ -61,6 +61,14 @@ pyVariable * pyVariable::factory(const string &name){
 			pyObjectPtr op((pyObject*)new pyObjectString(ss));
 			return new pyVariable(op);
 		}
+		size_t pt = name.rfind('.');
+		if (pt != string::npos) {
+			string cla_n = name.substr(0, pt);
+			string fun_n = name.substr(pt + 1);
+			pyVariable* cla = pyVariable::factory(cla_n);
+			
+			return new pyPtVariable(cla, fun_n);
+		}
 		return new pyVariable(name);
 	}
 	else {
@@ -70,7 +78,10 @@ pyVariable * pyVariable::factory(const string &name){
 			pyVariable* pfv = pyVariable::factory(funcName);
 			string elems = name.substr(right + 1, left - right - 1);
 			vector<string> elem_s = commaCut(elems);
+			size_t pt = name.rfind('.', right);
+			string cla = name.substr(0, pt);
 			vector<pyExpression*> elem_v;
+			elem_v.push_back(str2exp(cla));
 			for (auto i : elem_s) {
 				elem_v.push_back(str2exp(i));
 			}
@@ -133,6 +144,7 @@ pyVariable * pyVariable::factory(const string &name){
 			}
 		} while (left != string::npos);
 		return pfv;*/
+		return nullptr;
 	}
 }
 
@@ -152,6 +164,11 @@ pyObjectPtr pyVariable::work(Varmap& varmap) const {
 pyObjectPtr pyFuncVariable::work(Varmap& varmap) const {
 	pyFuncObjectPtr fop = dynamic_pointer_cast<pyFuncObject> ((pyVariable::work(varmap)));
 	vector<pyObjectPtr> elem_o;
+	
+	//tmpV->tmpV->work(varmap);
+	//pyObjectPtr fopp = dynamic_pointer_cast<pyObject> ((pyVariable::work(varmap)));
+	//elem_o.push_back(fopp);
+
 	for (auto i : elems) {
 		elem_o.push_back(i->work(varmap));
 	}
@@ -163,6 +180,11 @@ pyObjectPtr pySqrVariable::work(Varmap &varmap) const{
 	pyObjectContainerPtr fop = dynamic_pointer_cast<pyObjectContainer> ((pyVariable::work(varmap)));
 	pyObjectPtr op = posi->work(varmap);
 	return fop->operator[](op);
+}
+
+pyObjectPtr pyPtVariable::work(Varmap & varmap) const{
+	pyObjectDataPtr fop = dynamic_pointer_cast<pyObjectData> ((pyVariable::work(varmap)));
+	return fop->opePT(member);
 }
 
 pyObjectPtr pyListVariable::work(Varmap & varmap) const{

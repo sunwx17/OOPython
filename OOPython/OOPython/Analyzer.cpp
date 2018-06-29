@@ -11,7 +11,7 @@ const regex blockRegex[] = {
 	 (regex)"^return\\s+(.+?)\\s*$",
 	 (regex)"^continue\\s*$",
 	 (regex)"^break\\s*$",
-	 (regex)"^([a-zA-Z_][0-9a-zA-Z_\\s,]*?)\\s*=\\s*([^=].*)? *$"
+	 (regex)"^([^!=><]+?)\\s*=\\s*([^=].*)? *$"
 };
 
 void removeSpace(string& s) {
@@ -41,9 +41,9 @@ int regexBreak(const string& s, vector<string>& contain) {
 
 //aandb
 const vector<vector<string>> operators = {
-	{ "or" },
-	{ "and" },
-	{ "not" },
+	{ " or " },
+	{ " and " },
+	{ "not " },
 	{ "==", "!=", ">=", "<=", ">", "<" },
 	{ "|" },
 	{ "^" },
@@ -128,8 +128,8 @@ string xiaochudanmufuhao(const string& ss) {
 }
 
 int getNumOfElem(const string& s) {
-	const string bin[] = { "+", "-", "*", "/", "%", "and", "or", "&", "|", "^", ">", "<", ">=", "<=", "==", "!=", "<<", ">>" };
-	const string una[] = { "not" };
+	const string bin[] = { "+", "-", "*", "/", "%", " and ", " or ", "&", "|", "^", ">", "<", ">=", "<=", "==", "!=", "<<", ">>" };
+	const string una[] = { "not " };
 	for (auto i : bin) {
 		if (i == s) {
 			return 2;
@@ -194,7 +194,7 @@ void string2stack(const string& s, stack<string>& res) {
 						container.push(var);
 					}
 					string op = s.substr(i, opLen);
-					spaceHeadTail(op);
+					//spaceHeadTail(op);
 					container.push(op);
 					start = i + opLen;
 					break;

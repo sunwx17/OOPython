@@ -21,6 +21,7 @@ public:
 };*/
 
 class pyVariable : public pyExpression {
+protected:
 	const string name;
 	pyObjectPtr tmpOp;
 	pyVariable* tmpV;
@@ -59,6 +60,17 @@ public:
 	~pySqrVariable(){
 		delete posi;
 	}
+};
+
+class pyPtVariable : public pyVariable {
+	string member;
+public:
+	pyPtVariable(const string s, string v) :pyVariable(s), member(v) {};
+	pyPtVariable(pyObjectPtr op, string v) :pyVariable(op), member(v) {};
+	pyPtVariable(pyVariable* pv, string v) :pyVariable(pv), member(v) {};
+	pyObjectPtr work(Varmap&) const;
+	pyVariable* getPv() const;
+	~pyPtVariable() {};
 };
 
 class pyContainerVariable : public pyVariable {
