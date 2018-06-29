@@ -151,6 +151,22 @@ void string2stack(const string& s, stack<string>& res) {
 		if (s[start] == ' ') {
 			start++;
 		}
+		else if (s[start] == '[') {
+			int count = 1;
+			int end;
+			for (int j = start + 1; j < l; j++) {
+				if (s[j] == '[')
+					count++;
+				else if (s[j] == ']')
+					count--;
+				if (count == 0) {
+					end = j;
+					break;
+				}
+			}
+			container.push(s.substr(start, end - start + 1));
+			start = end + 1;
+		}
 		else if (s[start] == '(' || s[start] == ')') {
 			container.push(s.substr(start, 1));
 			start++;
