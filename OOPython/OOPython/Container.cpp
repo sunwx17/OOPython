@@ -28,7 +28,14 @@ void pyObjectList::print() const {
 	int num = size();
 	cout << "[";
 	for (int i = 0; i < num; i++) {
+		bool isStr = (dataList[i]->getType() == "string");
+		if (isStr) {
+			cout << "\'";
+		}
 		dataList[i]->print();
+		if (isStr) {
+			cout << "\'";
+		}
 		if (i == num - 1) {
 			cout << "]";
 		}

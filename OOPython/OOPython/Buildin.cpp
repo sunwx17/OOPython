@@ -93,7 +93,7 @@ pyObjectPtr pyListCount(vector<pyObjectPtr> elems) {
 	vector<pyObjectPtr>& _list = dynamic_pointer_cast<pyObjectList>(elems[0])->dataList;
 	int num = 0;
 	for (auto i = _list.begin(); i != _list.end(); i++) {
-		if (*i == elems[1]) {
+		if (isSame(*i,elems[1])) {
 			num++;
 		}
 	}
@@ -105,7 +105,7 @@ pyObjectPtr pyListIndex(vector<pyObjectPtr> elems) {
 	vector<pyObjectPtr>& _list = dynamic_pointer_cast<pyObjectList>(elems[0])->dataList;
 	int num = 0;
 	for (auto i = _list.begin(); i != _list.end(); i++) {
-		if (*i == elems[1]) {
+		if (isSame(*i, elems[1])) {
 			break;
 		}
 		num++;
@@ -125,7 +125,7 @@ pyObjectPtr pyListSort(vector<pyObjectPtr> elems) {
 	assert(elems.size() == 1);
 	assert((elems[0])->getType() == "list");
 	vector<pyObjectPtr>& _list = dynamic_pointer_cast<pyObjectList>(elems[0])->dataList;
-	sort(_list.begin(), _list.end());
+	sort(_list.begin(), _list.end(), smallerThan);
 	return nullptr;
 }
 pyObjectPtr pyListReverse(vector<pyObjectPtr> elems) {

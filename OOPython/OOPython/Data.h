@@ -18,6 +18,8 @@ class pyObjectFloat;
 typedef shared_ptr<pyObject> pyObjectPtr;
 typedef shared_ptr<pyObjectData> pyObjectDataPtr;
 //以下基础函数：operateInt、operateBool、operateFloat 
+bool smallerThan(pyObjectPtr it, pyObjectPtr other);
+bool isSame(pyObjectPtr it, pyObjectPtr other);
 bool operateBool(const float& one, const float& other, const char* ope, bool& answer);
 bool operateInt(const int& one, const int& other, const char* ope, int& answer);
 bool operateFloat(const float& one, const float& other, const char* ope, float& answer);

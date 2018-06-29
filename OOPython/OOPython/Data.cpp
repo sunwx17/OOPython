@@ -2,6 +2,18 @@
 #include "Data.h"
 #include "Function.h"
 //以下基础函数：operateInt、operateBool、operateFloat
+bool smallerThan(pyObjectPtr it, pyObjectPtr other) {
+	pyObjectDataPtr tmpIt = dynamic_pointer_cast<pyObjectData>(it);
+	pyObjectDataPtr tmpOther = dynamic_pointer_cast<pyObjectData>(other);
+	assert((tmpIt != nullptr) && (tmpOther != nullptr));
+	return ((*tmpIt) < (*tmpOther))->operator bool();
+}
+bool isSame(pyObjectPtr it, pyObjectPtr other) {
+	pyObjectDataPtr tmpIt = dynamic_pointer_cast<pyObjectData>(it);
+	pyObjectDataPtr tmpOther = dynamic_pointer_cast<pyObjectData>(other);
+	assert((tmpIt != nullptr) && (tmpOther != nullptr));
+	return ((*tmpIt) == (*tmpOther))->operator bool();
+}
 bool operateBool(const float& one, const float& other, const char* ope, bool& answer) {
 	int length = (int)strlen(ope);
 	switch (length)
