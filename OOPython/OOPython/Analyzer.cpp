@@ -285,6 +285,21 @@ int bracketMatch(const string & s, char right, char left, int pos){
 	return -1;
 }
 
+int rbracketMatch(const string & s, char right, char left, int pos) {
+	int l = (int)s.size();
+	int count = 1;
+	for (int i = pos - 1; i >= 0; i--) {
+		if (s[i] == right)
+			count++;
+		else if (s[i] == left)
+			count--;
+		if (count == 0) {
+			return i;
+		}
+	}
+	return -1;
+}
+
 vector<string> commaCut(const string & s){
 	vector<string> res;
 	int l = (int)s.size();

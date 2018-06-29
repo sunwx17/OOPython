@@ -49,6 +49,18 @@ public:
 	}
 };
 
+class pySqrVariable : public pyVariable {
+	pyExpression* posi;
+public:
+	pySqrVariable(const string s, pyExpression* v) :pyVariable(s), posi(v) {};
+	pySqrVariable(pyObjectPtr op, pyExpression* v) :pyVariable(op), posi(v) {};
+	pySqrVariable(pyVariable* pv, pyExpression* v) :pyVariable(pv), posi(v) {};
+	pyObjectPtr work(Varmap&) const;
+	~pySqrVariable(){
+		delete posi;
+	}
+};
+
 class pyContainerVariable : public pyVariable {
 protected:
 	vector<pyExpression*> contain;
@@ -205,5 +217,7 @@ public:
 	pyRightMoveOperator(const pyExpression* const front, const pyExpression* const back) : pyBinaryOperator(front, back) {}
 	pyObjectPtr work(Varmap&) const;
 };
+
+
 
 #endif // !EXPREESION_H

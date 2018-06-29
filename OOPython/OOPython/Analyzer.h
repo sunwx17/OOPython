@@ -29,6 +29,8 @@ void mid2back(stack<string>& exp, stack<string>& OPND);
 
 int bracketMatch(const string& s, char right, char left, int pos);
 
+int rbracketMatch(const string& s, char right, char left, int pos);
+
 vector<string> commaCut(const string& s);
 
 pyExpression * back2exp(stack<string>& back);
