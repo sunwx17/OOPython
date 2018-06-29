@@ -31,6 +31,7 @@ map<string, pyObjectPtr> getBuildInMap(){
 	map<string, pyObjectPtr> bim;
 	bim["range"] = (pyObjectPtr)(pyObject*)new pyFuncObject(range);
 	bim["type"] = (pyObjectPtr)(pyObject*)new pyFuncObject(type);
+	initListMember();
 	return bim;
 }
 
