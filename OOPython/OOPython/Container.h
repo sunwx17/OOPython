@@ -23,13 +23,12 @@ public:
 	//virtual pyObjectDataPtr pop() = 0;
 	//virtual pyObjectDataPtr pop(pyObjectPtr num) = 0;
 	virtual int size() const = 0;
-	virtual pyObjectPtr operator[](const pyObjectPtr pos) const = 0;
+	virtual pyObjectPtr& operator[](const pyObjectPtr pos) = 0;
 	virtual operator bool() const = 0;
 };
 class pyObjectList : public pyObjectContainer {
 	vector<pyObjectPtr> dataList;
 	static map<string, pyObjectPtr> member;
-	static bool notInit;
 	void friend initListMember();
 	pyObjectPtr friend pyListAppend(vector<pyObjectPtr>);//L.append(var)  #追加元素，返回空
 	pyObjectPtr friend pyListInsert(vector<pyObjectPtr>);//L.insert(index, var)  #在位置index前插入新元素var，返回空
@@ -53,7 +52,7 @@ public:
 	//pyObjectPtr pop();
 	//pyObjectPtr pop(pyObjectPtr num);
 	int size() const;
-	pyObjectPtr operator[](const pyObjectPtr pos) const;
+	pyObjectPtr& operator[](const pyObjectPtr pos);
 	virtual operator bool() const;
 };
 

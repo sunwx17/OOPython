@@ -78,7 +78,7 @@ pyObjectPtr pyListPop(vector<pyObjectPtr> elems) {
 pyObjectPtr pyListRemove(vector<pyObjectPtr> elems) {
 	assert(elems.size() == 2);
 	assert((elems[0])->getType() == "list");
-	vector<pyObjectPtr> _list = dynamic_pointer_cast<pyObjectList>(elems[0])->dataList;
+	vector<pyObjectPtr>& _list = dynamic_pointer_cast<pyObjectList>(elems[0])->dataList;
 	for (auto i = _list.begin(); i != _list.end(); i++) {
 		if (*i == elems[1]) {
 			_list.erase(i);
@@ -90,7 +90,7 @@ pyObjectPtr pyListRemove(vector<pyObjectPtr> elems) {
 pyObjectPtr pyListCount(vector<pyObjectPtr> elems) {
 	assert(elems.size() == 2);
 	assert((elems[0])->getType() == "list");
-	vector<pyObjectPtr> _list = dynamic_pointer_cast<pyObjectList>(elems[0])->dataList;
+	vector<pyObjectPtr>& _list = dynamic_pointer_cast<pyObjectList>(elems[0])->dataList;
 	int num = 0;
 	for (auto i = _list.begin(); i != _list.end(); i++) {
 		if (*i == elems[1]) {
@@ -102,7 +102,7 @@ pyObjectPtr pyListCount(vector<pyObjectPtr> elems) {
 pyObjectPtr pyListIndex(vector<pyObjectPtr> elems) {
 	assert(elems.size() == 2);
 	assert((elems[0])->getType() == "list");
-	vector<pyObjectPtr> _list = dynamic_pointer_cast<pyObjectList>(elems[0])->dataList;
+	vector<pyObjectPtr>& _list = dynamic_pointer_cast<pyObjectList>(elems[0])->dataList;
 	int num = 0;
 	for (auto i = _list.begin(); i != _list.end(); i++) {
 		if (*i == elems[1]) {
@@ -116,22 +116,22 @@ pyObjectPtr pyListExtend(vector<pyObjectPtr> elems) {
 	assert(elems.size() == 2);
 	assert((elems[0])->getType() == "list");
 	assert((elems[1])->getType() == "list");
-	vector<pyObjectPtr> _list = dynamic_pointer_cast<pyObjectList>(elems[0])->dataList;
-	vector<pyObjectPtr> _other = dynamic_pointer_cast<pyObjectList>(elems[1])->dataList;
+	vector<pyObjectPtr>& _list = dynamic_pointer_cast<pyObjectList>(elems[0])->dataList;
+	vector<pyObjectPtr>& _other = dynamic_pointer_cast<pyObjectList>(elems[1])->dataList;
 	_list.insert(_list.end(), _other.begin(), _other.end());
 	return nullptr;
 }
 pyObjectPtr pyListSort(vector<pyObjectPtr> elems) {
 	assert(elems.size() == 1);
 	assert((elems[0])->getType() == "list");
-	vector<pyObjectPtr> _list = dynamic_pointer_cast<pyObjectList>(elems[0])->dataList;
+	vector<pyObjectPtr>& _list = dynamic_pointer_cast<pyObjectList>(elems[0])->dataList;
 	sort(_list.begin(), _list.end());
 	return nullptr;
 }
 pyObjectPtr pyListReverse(vector<pyObjectPtr> elems) {
 	assert(elems.size() == 1);
 	assert((elems[0])->getType() == "list");
-	vector<pyObjectPtr> _list = dynamic_pointer_cast<pyObjectList>(elems[0])->dataList;
+	vector<pyObjectPtr>& _list = dynamic_pointer_cast<pyObjectList>(elems[0])->dataList;
 	reverse(_list.begin(), _list.end());
 	return nullptr;
 }

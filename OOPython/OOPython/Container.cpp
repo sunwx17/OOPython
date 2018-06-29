@@ -3,7 +3,6 @@
 #include "Function.h"
 //初始化函数及静态成员
 map<string, pyObjectPtr> pyObjectList::member = {};
-bool pyObjectList::notInit = true;
 void initListMember() {
 	pyObjectList::member["append"] = (pyObjectPtr)(pyObject*)new pyFuncObject(pyListAppend);
 	pyObjectList::member["insert"] = (pyObjectPtr)(pyObject*)new pyFuncObject(pyListInsert);
@@ -16,18 +15,8 @@ void initListMember() {
 }
 //构造析构函数
 pyObjectContainer::pyObjectContainer() {}
-pyObjectList::pyObjectList() {
-	if (notInit) {
-		initListMember();
-		notInit = false;
-	}
-}
-pyObjectList::pyObjectList(vector<pyObjectPtr> _dataList) : dataList(_dataList) {
-	if (notInit) {
-		initListMember();
-		notInit = false;
-	}
-}
+pyObjectList::pyObjectList() {}
+pyObjectList::pyObjectList(vector<pyObjectPtr> _dataList) : dataList(_dataList) {}
 pyObjectIterator::pyObjectIterator() {}
 pyIteratorList::pyIteratorList() {}
 pyIteratorList::pyIteratorList(vector<pyObjectPtr>::iterator _it) : it(_it) {}
@@ -73,16 +62,10 @@ void pyObjectList::pushBack(pyObjectPtr data) {
 int pyObjectList::size() const {
 	return (int)dataList.size();
 }
-pyObjectPtr pyObjectList::operator[](const pyObjectPtr pos) const {
-	const pyObjectInt* tmp1 = dynamic_cast<const pyObjectInt*>(&(*pos));
-	if (tmp1 != nullptr) {
-		return dataList[tmp1->operator int()];
-	}
-	const pyObjectBool* tmp2 = dynamic_cast<const pyObjectBool*>(&(*pos));
-	if (tmp2 != nullptr) {
-		return dataList[tmp2->operator int()];
-	}
-	return nullptr;
+pyObjectPtr& pyObjectList::operator[](const pyObjectPtr pos) {
+	assert((pos->getType() == "int") || (pos->getType() == "bool"));
+	int index = dynamic_cast<const pyObjectInt*>(&(*pos))->getDataInt();
+	return dataList[index];
 }
 pyObjectList::operator bool() const {
 	return !(dataList.empty());
