@@ -4,8 +4,10 @@
 #include "Data.h"
 
 class pyObjectContainer;
+class pyObjectList;
 class pyObjectIterator;
 typedef shared_ptr<pyObjectContainer> pyObjectContainerPtr;
+typedef shared_ptr<pyObjectList> pyObjectListPtr;
 typedef shared_ptr<pyObjectIterator> pyObjectIteratorPtr;
 void initListMember();
 class pyObjectContainer : public pyObjectData {
@@ -29,6 +31,15 @@ class pyObjectList : public pyObjectContainer {
 	static map<string, pyObjectPtr> member;
 	static bool notInit;
 	void friend initListMember();
+	pyObjectPtr friend pyListAppend(vector<pyObjectPtr>);//L.append(var)  #追加元素，返回空
+	pyObjectPtr friend pyListInsert(vector<pyObjectPtr>);//L.insert(index, var)  #在位置index前插入新元素var，返回空
+	pyObjectPtr friend pyListPop(vector<pyObjectPtr>);//L.pop(var)   #返回位置var的元素（默认最后一个元素），并从list中删除之
+	pyObjectPtr friend pyListRemove(vector<pyObjectPtr>);//L.remove(var)  #删除第一次出现的该元素，返回空
+	pyObjectPtr friend pyListCount(vector<pyObjectPtr>);//L.count(var)  #该元素在列表中出现的个数
+	pyObjectPtr friend pyListIndex(vector<pyObjectPtr>);//L.index(var)  #该元素的位置（int对象）, 无则抛异常
+	pyObjectPtr friend pyListExtend(vector<pyObjectPtr>);//L.extend(list) #合并list到L上，返回空
+	pyObjectPtr friend pyListSort(vector<pyObjectPtr>);//L.sort()    #排序，返回空
+	pyObjectPtr friend pyListReverse(vector<pyObjectPtr>);//L.reverse()   #倒序，返回空
 public:
 	pyObjectList();
 	pyObjectList(vector<pyObjectPtr> _dataList);

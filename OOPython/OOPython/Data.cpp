@@ -399,7 +399,6 @@ int pyObjectString::getDataInt() const {
 	return 0;
 }
 pyObjectDataPtr pyObjectString::operatorFatherString(const pyObjectData &other, const char* ope) const {
-	pyObjectDataPtr returnPtr = nullptr;
 	const pyObjectString* tmp = dynamic_cast<const pyObjectString*>(&other);
 	if (tmp == nullptr) {
 		return nullptr;
