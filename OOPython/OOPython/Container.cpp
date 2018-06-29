@@ -5,7 +5,14 @@
 map<string, pyObjectPtr> pyObjectList::member = {};
 bool pyObjectList::notInit = true;
 void initListMember() {
-	pyObjectList::member["range"] = (pyObjectPtr)(pyObject*)new pyFuncObject(range);
+	pyObjectList::member["append"] = (pyObjectPtr)(pyObject*)new pyFuncObject(pyListAppend);
+	pyObjectList::member["insert"] = (pyObjectPtr)(pyObject*)new pyFuncObject(pyListInsert);
+	pyObjectList::member["pop"] = (pyObjectPtr)(pyObject*)new pyFuncObject(pyListPop);
+	pyObjectList::member["count"] = (pyObjectPtr)(pyObject*)new pyFuncObject(pyListCount);
+	pyObjectList::member["index"] = (pyObjectPtr)(pyObject*)new pyFuncObject(pyListIndex);
+	pyObjectList::member["extend"] = (pyObjectPtr)(pyObject*)new pyFuncObject(pyListExtend);
+	pyObjectList::member["sort"] = (pyObjectPtr)(pyObject*)new pyFuncObject(pyListSort);
+	pyObjectList::member["reverse"] = (pyObjectPtr)(pyObject*)new pyFuncObject(pyListReverse);
 }
 //构造析构函数
 pyObjectContainer::pyObjectContainer() {}
@@ -42,7 +49,7 @@ void pyObjectList::print() const {
 	}
 }
 pyObjectPtr pyObjectList::opePT(string memName) const {
-	if (member.find(memName) == member.end()) {
+	if (member.count(memName) == 0) {
 		return nullptr;
 	}
 	else {

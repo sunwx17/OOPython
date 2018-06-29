@@ -35,9 +35,9 @@ public:
 class pyObjectData :public pyObject {
 	pyObjectDataPtr operatorFather(const pyObjectData &other, const char* ope) const;//stringµ•∂¿¥¶¿Ì
 	pyObjectDataPtr operatorFatherBool(const pyObjectData &other, const char* ope) const;
+public:
 	virtual float getDataFloat() const;
 	virtual int getDataInt() const;
-public: 
 	pyObjectData();
 	virtual ~pyObjectData() {};
 	virtual string getType() const = 0;
@@ -67,9 +67,9 @@ public:
 
 class pyObjectInt : public pyObjectData {
 	const int data;
-	float getDataFloat() const;
-	int getDataInt() const;
 public:
+	virtual float getDataFloat() const;
+	virtual int getDataInt() const;
 	pyObjectInt(int _data);
 	string getType() const;
 	pyObjectDataPtr operator-() const;
@@ -80,9 +80,9 @@ public:
 
 class pyObjectBool : public pyObjectData {
 	const bool data;
-	float getDataFloat() const;
-	int getDataInt() const;
 public:
+	virtual float getDataFloat() const;
+	virtual int getDataInt() const;
 	pyObjectBool(bool _data);
 	string getType() const;
 	pyObjectDataPtr operator-() const;
@@ -93,9 +93,9 @@ public:
 
 class pyObjectFloat : public pyObjectData {
 	const float data;
-	float getDataFloat() const;
-	int getDataInt() const;
 public:
+	virtual float getDataFloat() const;
+	virtual int getDataInt() const;
 	pyObjectFloat(float _data);
 	string getType() const;
 	pyObjectDataPtr operator-() const;
