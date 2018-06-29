@@ -27,7 +27,7 @@ void string2stack(const string&, stack<string>&);
 
 void mid2back(stack<string>& exp, stack<string>& OPND);
 
-int bracketMatch(const string& s, char target, int pos);
+int bracketMatch(const string& s, char right, char left, int pos);
 
 vector<string> commaCut(const string& s);
 

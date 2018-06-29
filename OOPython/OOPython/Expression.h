@@ -3,6 +3,7 @@
 #include "Data.h"
 #include "Function.h"
 #include "Varmap.h"
+#include "Container.h"
 
 class pyExpression {
 public:
@@ -24,6 +25,7 @@ class pyVariable : public pyExpression {
 	pyObjectPtr tmpOp;
 	pyVariable* tmpV;
 public:
+	pyVariable() {};
 	pyVariable(const string s) : name(s) {};
 	pyVariable(pyObjectPtr op) : tmpOp(op) {};
 	pyVariable(pyVariable* op) : tmpV(op) {};
@@ -45,6 +47,24 @@ public:
 	~pyFuncVariable(){
 		for (auto i : elems) delete i;
 	}
+};
+
+class pyContainerVariable : public pyVariable {
+protected:
+	vector<pyExpression*> contain;
+public:
+	pyContainerVariable(vector<pyExpression*> v) :contain(v) {};
+	pyObjectPtr work(Varmap&) const = 0;
+	~pyContainerVariable(){
+		for (auto i : contain) delete i;
+	}
+};
+
+class pyListVariable : public pyContainerVariable {
+public:
+	pyListVariable(vector<pyExpression*> v) :pyContainerVariable(v) {};
+	pyObjectPtr work(Varmap&) const;
+	~pyListVariable() {};
 };
 
 //µ¥Ä¿²Ù×÷·û

@@ -11,7 +11,7 @@ const regex blockRegex[] = {
 	 (regex)"^return\\s+(.+?)\\s*$",
 	 (regex)"^continue\\s*$",
 	 (regex)"^break\\s*$",
-	 (regex)"^([a-zA-Z_][0-9a-zA-Z_\\s,]*?)\\s*=\\s*(.*)? *$"
+	 (regex)"^([a-zA-Z_][0-9a-zA-Z_\\s,]*?)\\s*=\\s*([^=].*)? *$"
 };
 
 void removeSpace(string& s) {
@@ -270,13 +270,13 @@ void mid2back(stack<string>& exp, stack<string>& OPND)
 	}*/
 }
 
-int bracketMatch(const string & s, char target, int pos){
+int bracketMatch(const string & s, char right, char left, int pos){
 	int l = (int)s.size();
 	int count = 1;
 	for (int i = pos + 1; i < l; i++) {
-		if (s[i] == '(')
+		if (s[i] == right)
 			count++;
-		else if (s[i] == ')')
+		else if (s[i] == left)
 			count--;
 		if (count == 0) {
 			return i;
@@ -299,7 +299,11 @@ vector<string> commaCut(const string & s){
 				break;
 			}
 			else if (s[i] == '(') {
-				int left = bracketMatch(s, ')', i);
+				int left = bracketMatch(s, '(', ')', i);
+				i = left;
+			}
+			else if (s[i] == '[') {
+				int left = bracketMatch(s, '[', ']', i);
 				i = left;
 			}
 			if (i == l - 1) {

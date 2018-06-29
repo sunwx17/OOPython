@@ -26,7 +26,18 @@ pyExpression * pyExpression::factory(const string& name, vector<pyExpression*> p
 
 pyVariable * pyVariable::factory(const string &name){
 	size_t right = name.find('(');
-	if (right == string::npos) {
+	size_t sqright = name.find('[');
+	if (right == string::npos || sqright < right) {
+		if (sqright != string::npos) {
+			size_t sqleft = bracketMatch(name, '[', ']', (int)sqright);
+			string sqelems = name.substr(sqright + 1, sqleft - sqright - 1);
+			vector<string> sqelem_s = commaCut(sqelems);
+			vector<pyExpression*> sqelem_v;
+			for (auto i : sqelem_s) {
+				sqelem_v.push_back(str2exp(i));
+			}
+			return (pyVariable*)(new pyListVariable(sqelem_v));
+		}
 		if (name == "False") {
 			pyObjectPtr op((pyObject*)new pyObjectBool(false));
 			return new pyVariable(op);
@@ -62,7 +73,7 @@ pyVariable * pyVariable::factory(const string &name){
 		return new pyVariable(name);
 	}
 	else {
-		size_t left = bracketMatch(name, ')', (int)right);
+		size_t left = bracketMatch(name, '(', ')', (int)right);
 		string funcName = name.substr(0, right);
 		pyVariable* pfv = new pyVariable(funcName);
 		do {
@@ -101,6 +112,14 @@ pyObjectPtr pyFuncVariable::work(Varmap& varmap) const {
 	}
 	Varmap funcVarmap;
 	return fop->call(funcVarmap, elem_o);
+}
+
+pyObjectPtr pyListVariable::work(Varmap & varmap) const{
+	vector<pyObjectPtr> con;
+	for (auto i : contain) {
+		con.push_back(i->work(varmap));
+	}
+	return (pyObjectPtr)(pyObject*)(new pyObjectList(con));
 }
 
 inline pyObjectPtr pyUnaryOperator::work(Varmap& varmap) const {
