@@ -35,6 +35,19 @@ map<string, pyObjectPtr> getBuildInMap(){
 	return bim;
 }
 
+//初始化函数及静态成员
+map<string, pyObjectPtr> pyObjectList::member = {};
+void initListMember() {
+	pyObjectList::member["append"] = (pyObjectPtr)(pyObject*)new pyFuncObject(pyListAppend);
+	pyObjectList::member["insert"] = (pyObjectPtr)(pyObject*)new pyFuncObject(pyListInsert);
+	pyObjectList::member["pop"] = (pyObjectPtr)(pyObject*)new pyFuncObject(pyListPop);
+	pyObjectList::member["count"] = (pyObjectPtr)(pyObject*)new pyFuncObject(pyListCount);
+	pyObjectList::member["index"] = (pyObjectPtr)(pyObject*)new pyFuncObject(pyListIndex);
+	pyObjectList::member["extend"] = (pyObjectPtr)(pyObject*)new pyFuncObject(pyListExtend);
+	pyObjectList::member["sort"] = (pyObjectPtr)(pyObject*)new pyFuncObject(pyListSort);
+	pyObjectList::member["reverse"] = (pyObjectPtr)(pyObject*)new pyFuncObject(pyListReverse);
+}
+
 pyObjectPtr pyListAppend(vector<pyObjectPtr> elems) {
 	assert(elems.size() == 2);
 	assert((elems[0])->getType() == "list");

@@ -14,8 +14,8 @@ pyExpression * pyExpression::factory(const string& name, vector<pyExpression*> p
 	else if (name == "<=") return new pySmallerEqualOperator(pe[1], pe[0]);
 	else if (name == "==") return new pyEqualOperator(pe[1], pe[0]);
 	else if (name == "!=") return new pyNotEqualOperator(pe[1], pe[0]);
-	else if (name == " and ") return new pyAndOperator(pe[1], pe[0]);
-	else if (name == " or ") return new pyOrOperator(pe[1], pe[0]);
+	else if (name == "and ") return new pyAndOperator(pe[1], pe[0]);
+	else if (name == "or ") return new pyOrOperator(pe[1], pe[0]);
 	else if (name == "&") return new pyBitandOperator(pe[1], pe[0]);
 	else if (name == "|") return new pyBitorOperator(pe[1], pe[0]);
 	else if (name == "<<") return new pyLeftMoveOperator(pe[1], pe[0]);
@@ -78,10 +78,12 @@ pyVariable * pyVariable::factory(const string &name){
 			pyVariable* pfv = pyVariable::factory(funcName);
 			string elems = name.substr(right + 1, left - right - 1);
 			vector<string> elem_s = commaCut(elems);
-			size_t pt = name.rfind('.', right);
-			string cla = name.substr(0, pt);
 			vector<pyExpression*> elem_v;
-			elem_v.push_back(str2exp(cla));
+			size_t pt = name.rfind('.', right);
+			if (pt != string::npos) {
+				string cla = name.substr(0, pt);
+				elem_v.push_back(str2exp(cla));
+			}
 			for (auto i : elem_s) {
 				elem_v.push_back(str2exp(i));
 			}
@@ -103,49 +105,18 @@ pyVariable * pyVariable::factory(const string &name){
 			}
 			return (pyVariable*)(new pyListVariable(sqelem_v));
 		}
-		/*size_t left, sqleft;
-		string funcName, contName;
-		pyVariable* pfv;
-		if (right != string::npos) {
-			left = bracketMatch(name, '(', ')', (int)right);
-			funcName = name.substr(0, right);
-			pfv = new pyVariable(funcName);
-		}
-		else if (sqright != string::npos) {
-			sqleft = bracketMatch(name, '[', ']', (int)sqright);
-			contName = name.substr(0, sqright);
-		}
-		do {
-
-			if (sqright < right) {
-				string sqelems = name.substr(sqright + 1, sqleft - sqright - 1);
-				if (sqright != 0) {
-					pyVariable* cont = pyVariable::factory(contName);
-					pyVariable* posi = pyVariable::factory(sqelems);
-					return new pySqrVariable(cont, posi);
-				}
-				vector<string> sqelem_s = commaCut(sqelems);
-				vector<pyExpression*> sqelem_v;
-				for (auto i : sqelem_s) {
-					sqelem_v.push_back(str2exp(i));
-				}
-				return (pyVariable*)(new pyListVariable(sqelem_v));
-			}
-			else if (sqleft < left) {
-				string elems = name.substr(right + 1, left - right - 1);
-				vector<string> elem_s = commaCut(elems);
-				vector<pyExpression*> elem_v;
-				for (auto i : elem_s) {
-					elem_v.push_back(str2exp(i));
-				}
-				pfv = new pyFuncVariable(pfv, elem_v);
-				right = name.find('(', left + 1);
-				left = name.find(')', left + 2);
-			}
-		} while (left != string::npos);
-		return pfv;*/
 		return nullptr;
 	}
+}
+
+pyVariable::pyVariable(const string s) : name(s) {};
+
+pyVariable::pyVariable(pyObjectPtr op) : tmpOp(op) {};
+
+pyVariable::pyVariable(pyVariable* op) : tmpV(op) {};
+
+pyVariable::~pyVariable() {
+	if (tmpV != nullptr) delete tmpV;
 }
 
 const string & pyVariable::getName() const {
@@ -161,19 +132,34 @@ pyObjectPtr pyVariable::work(Varmap& varmap) const {
 		return varmap.getValue(getName());
 }
 
+pyFuncVariable::pyFuncVariable(const string s, vector<pyExpression*> v) :pyVariable(s), elems(v) {};
+
+pyFuncVariable::pyFuncVariable(pyObjectPtr op, vector<pyExpression*> v) :pyVariable(op), elems(v) {};
+
+pyFuncVariable::pyFuncVariable(pyVariable* pv, vector<pyExpression*> v) :pyVariable(pv), elems(v) {};
+
+pyFuncVariable::~pyFuncVariable() {
+	for (auto i : elems) delete i;
+}
+
 pyObjectPtr pyFuncVariable::work(Varmap& varmap) const {
 	pyFuncObjectPtr fop = dynamic_pointer_cast<pyFuncObject> ((pyVariable::work(varmap)));
 	vector<pyObjectPtr> elem_o;
-	
-	//tmpV->tmpV->work(varmap);
-	//pyObjectPtr fopp = dynamic_pointer_cast<pyObject> ((pyVariable::work(varmap)));
-	//elem_o.push_back(fopp);
-
 	for (auto i : elems) {
 		elem_o.push_back(i->work(varmap));
 	}
 	Varmap funcVarmap;
 	return fop->call(funcVarmap, elem_o);
+}
+
+pySqrVariable::pySqrVariable(const string s, pyExpression* v) :pyVariable(s), posi(v) {};
+
+pySqrVariable::pySqrVariable(pyObjectPtr op, pyExpression* v) :pyVariable(op), posi(v) {};
+
+pySqrVariable::pySqrVariable(pyVariable* pv, pyExpression* v) :pyVariable(pv), posi(v) {};
+
+pySqrVariable::~pySqrVariable() {
+	delete posi;
 }
 
 pyObjectPtr pySqrVariable::work(Varmap &varmap) const{
@@ -188,10 +174,24 @@ pyObjectPtr& pySqrVariable::assign(Varmap &varmap) const {
 	return fop->operator[](op);
 }
 
+pyPtVariable::pyPtVariable(const string s, string v) :pyVariable(s), member(v) {};
+
+pyPtVariable::pyPtVariable(pyObjectPtr op, string v) :pyVariable(op), member(v) {};
+
+pyPtVariable::pyPtVariable(pyVariable* pv, string v) :pyVariable(pv), member(v) {};
+
 pyObjectPtr pyPtVariable::work(Varmap & varmap) const{
 	pyObjectDataPtr fop = dynamic_pointer_cast<pyObjectData> ((pyVariable::work(varmap)));
 	return fop->opePT(member);
 }
+
+pyContainerVariable::pyContainerVariable(vector<pyExpression*> v) :contain(v) {};
+
+pyContainerVariable::~pyContainerVariable() {
+	for (auto i : contain) delete i;
+}
+
+pyListVariable::pyListVariable(vector<pyExpression*> v) :pyContainerVariable(v) {};
 
 pyObjectPtr pyListVariable::work(Varmap & varmap) const{
 	vector<pyObjectPtr> con;
@@ -201,9 +201,17 @@ pyObjectPtr pyListVariable::work(Varmap & varmap) const{
 	return (pyObjectPtr)(pyObject*)(new pyObjectList(con));
 }
 
+pyUnaryOperator::pyUnaryOperator(const pyExpression* const ele) : elem(ele) {}
+
+pyUnaryOperator::~pyUnaryOperator() {
+	delete elem;
+}
+
 inline pyObjectPtr pyUnaryOperator::work(Varmap& varmap) const {
 	return elem->work(varmap);
 }
+
+pyNotOperator::pyNotOperator(const pyExpression* const ele) : pyUnaryOperator(ele) {}
 
 pyObjectPtr pyNotOperator::work(Varmap& varmap) const {
 	pyObjectDataPtr odp = dynamic_pointer_cast<pyObjectData> (pyUnaryOperator::work(varmap));
@@ -212,8 +220,17 @@ pyObjectPtr pyNotOperator::work(Varmap& varmap) const {
 	return op;
 }
 
+pyNegativeOperator::pyNegativeOperator(const pyExpression* const ele) : pyUnaryOperator(ele) {}
+
 pyObjectPtr pyNegativeOperator::work(Varmap& varmap) const {
 	return dynamic_pointer_cast<pyObject>((dynamic_pointer_cast<pyObjectData> (pyUnaryOperator::work(varmap)))->operator-());
+}
+
+pyBinaryOperator::pyBinaryOperator(const pyExpression* const front, const pyExpression* const back) : elemFront(front), elemBack(back) {}
+
+pyBinaryOperator::~pyBinaryOperator() {
+	delete elemFront;
+	delete elemBack;
 }
 
 pyObjectPtr pyBinaryOperator::delegateWork(Varmap & varmap, const string & s) const{
@@ -240,69 +257,103 @@ pyObjectPtr pyBinaryOperator::delegateWork(Varmap & varmap, const string & s) co
 	else return nullptr;
 }
 
+pyPlusOperator::pyPlusOperator(const pyExpression* const front, const pyExpression* const back) : pyBinaryOperator(front, back) {}
+
 pyObjectPtr pyPlusOperator::work(Varmap & varmap) const{
 	return delegateWork(varmap, "+");
 }
+
+pyMinusOperator::pyMinusOperator(const pyExpression* const front, const pyExpression* const back) : pyBinaryOperator(front, back) {}
 
 pyObjectPtr pyMinusOperator::work(Varmap & varmap) const {
 	return delegateWork(varmap, "-");
 }
 
+pyTimesOperator::pyTimesOperator(const pyExpression* const front, const pyExpression* const back) : pyBinaryOperator(front, back) {}
+
 pyObjectPtr pyTimesOperator::work(Varmap & varmap) const {
 	return delegateWork(varmap, "*");
 }
+
+pyDivideOperator::pyDivideOperator(const pyExpression* const front, const pyExpression* const back) : pyBinaryOperator(front, back) {}
 
 pyObjectPtr pyDivideOperator::work(Varmap & varmap) const {
 	return delegateWork(varmap, "/");
 }
 
+pyModOperator::pyModOperator(const pyExpression* const front, const pyExpression* const back) : pyBinaryOperator(front, back) {}
+
 pyObjectPtr pyModOperator::work(Varmap & varmap) const{
 	return delegateWork(varmap, "%");
 }
+
+pyBiggerOperator::pyBiggerOperator(const pyExpression* const front, const pyExpression* const back) : pyBinaryOperator(front, back) {}
 
 pyObjectPtr pyBiggerOperator::work(Varmap & varmap) const{
 	return delegateWork(varmap, ">");
 }
 
+pyBiggerEqualOperator::pyBiggerEqualOperator(const pyExpression* const front, const pyExpression* const back) : pyBinaryOperator(front, back) {}
+
 pyObjectPtr pyBiggerEqualOperator::work(Varmap & varmap) const{
 	return delegateWork(varmap, ">=");
 }
+
+pySmallerOperator::pySmallerOperator(const pyExpression* const front, const pyExpression* const back) : pyBinaryOperator(front, back) {}
 
 pyObjectPtr pySmallerOperator::work(Varmap & varmap) const{
 	return delegateWork(varmap, "<");
 }
 
+pySmallerEqualOperator::pySmallerEqualOperator(const pyExpression* const front, const pyExpression* const back) : pyBinaryOperator(front, back) {}
+
 pyObjectPtr pySmallerEqualOperator::work(Varmap & varmap) const{
 	return delegateWork(varmap, "<=");
 }
+
+pyEqualOperator::pyEqualOperator(const pyExpression* const front, const pyExpression* const back) : pyBinaryOperator(front, back) {}
 
 pyObjectPtr pyEqualOperator::work(Varmap & varmap) const{
 	return delegateWork(varmap, "==");
 }
 
+pyNotEqualOperator::pyNotEqualOperator(const pyExpression* const front, const pyExpression* const back) : pyBinaryOperator(front, back) {}
+
 pyObjectPtr pyNotEqualOperator::work(Varmap & varmap) const{
 	return delegateWork(varmap, "!=");
 }
+
+pyAndOperator::pyAndOperator(const pyExpression* const front, const pyExpression* const back) : pyBinaryOperator(front, back) {}
 
 pyObjectPtr pyAndOperator::work(Varmap & varmap) const{
 	return delegateWork(varmap, "and");
 }
 
+pyOrOperator::pyOrOperator(const pyExpression* const front, const pyExpression* const back) : pyBinaryOperator(front, back) {}
+
 pyObjectPtr pyOrOperator::work(Varmap & varmap) const{
 	return delegateWork(varmap, "or");
 }
+
+pyBitandOperator::pyBitandOperator(const pyExpression* const front, const pyExpression* const back) : pyBinaryOperator(front, back) {}
 
 pyObjectPtr pyBitandOperator::work(Varmap & varmap) const {
 	return delegateWork(varmap, "&");
 }
 
+pyBitorOperator::pyBitorOperator(const pyExpression* const front, const pyExpression* const back) : pyBinaryOperator(front, back) {}
+
 pyObjectPtr pyBitorOperator::work(Varmap & varmap) const {
 	return delegateWork(varmap, "|");
 }
 
+pyLeftMoveOperator::pyLeftMoveOperator(const pyExpression* const front, const pyExpression* const back) : pyBinaryOperator(front, back) {}
+
 pyObjectPtr pyLeftMoveOperator::work(Varmap & varmap) const {
 	return delegateWork(varmap, "<<");
 }
+
+pyRightMoveOperator::pyRightMoveOperator(const pyExpression* const front, const pyExpression* const back) : pyBinaryOperator(front, back) {}
 
 pyObjectPtr pyRightMoveOperator::work(Varmap & varmap) const {
 	return delegateWork(varmap, ">>");

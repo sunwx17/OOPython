@@ -12,7 +12,6 @@ public:
 	void clear();
 	void copy(const Varmap&);
 	void buildIn();
-	~Varmap() {}
 };
 
 #endif // !VARMAP_H

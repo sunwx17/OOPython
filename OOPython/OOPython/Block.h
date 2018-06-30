@@ -11,11 +11,11 @@ class pyBlock {
 protected:
 	vector<pyBlock*> process;
 public:
-	pyBlock() {};
+	pyBlock() = default;
 	static pyBlock* factory(int, vector<string>&);
 	int appendProcess(const string&, int);
 	virtual int work(int, Varmap&) = 0;
-	~pyBlock(){
+	virtual ~pyBlock(){
 		for (auto i : process) delete i;
 	}
 };
@@ -23,7 +23,7 @@ public:
 class pyRootBlock : public pyBlock {
 public:
 	//static const pyObjectPtr findVar(const string&);
-	pyRootBlock() {};
+	pyRootBlock() = default;
 	int work(int, Varmap&);
 	int lastWork(int, Varmap&);
 };
@@ -32,38 +32,31 @@ class pyForBlock : public pyBlock {
 	pyExpression* cycleVariable;
 	pyExpression* cycleContain;
 public:
-	pyForBlock(pyExpression* cv, pyExpression* cc) : cycleVariable(cv), cycleContain(cc) {}
+	pyForBlock(pyExpression* cv, pyExpression* cc);
 	int work(int, Varmap&);
-	~pyForBlock(){
-		delete cycleVariable;
-		delete cycleContain;
-	}
+	~pyForBlock();
 };
 
 class pyIfBlock : public pyBlock {
 	pyExpression* condition;
 public:
-	pyIfBlock(pyExpression* con) : condition(con) {}
+	pyIfBlock(pyExpression* con);
 	int work(int, Varmap&);
-	~pyIfBlock(){
-		delete condition;
-	}
+	~pyIfBlock();
 };
 
 class pyElseBlock : public pyBlock {
 public:
-	pyElseBlock() {};
+	pyElseBlock() = default;
 	int work(int, Varmap&);
 };
 
 class pyWhileBlock : public pyBlock {
 	pyExpression* condition;
 public:
-	pyWhileBlock(pyExpression* con) : condition(con) {}
+	pyWhileBlock(pyExpression* con);
 	int work(int, Varmap&);
-	~pyWhileBlock(){
-		delete condition;
-	}
+	~pyWhileBlock();
 };
 
 class pyDefBlock : public pyBlock {
@@ -72,7 +65,7 @@ class pyDefBlock : public pyBlock {
 	vector<string> elems;
 	Varmap initVarmap;
 public:
-	pyDefBlock(const string s, vector<string> v) :name(s), elems(v), numOfElem((int)(v.size())) {}
+	pyDefBlock(const string s, vector<string> v);
 	int work(int, Varmap&);
 	pyObjectPtr call(Varmap&, vector<pyObjectPtr>&);
 };
@@ -82,34 +75,29 @@ class pyPrintBlock : public pyBlock {
 	string formatString;
 	vector<pyExpression*> formatPrinted;
 public:
-	pyPrintBlock(pyExpression* tobePrinted) : bePrinted(tobePrinted) {}
-	pyPrintBlock(const string &s, vector<pyExpression*> fp) : formatString(s), formatPrinted(fp) {}
+	pyPrintBlock(pyExpression* tobePrinted);
+	pyPrintBlock(const string &s, vector<pyExpression*> fp);
 	int work(int, Varmap&);
-	~pyPrintBlock(){
-		delete bePrinted;
-		for (auto i : formatPrinted) delete i;
-	}
+	~pyPrintBlock();
 };
 
 class pyReturnBlock : public pyBlock {
 	pyExpression* beReturned;
 public:
-	pyReturnBlock(pyExpression* tobeReturned) : beReturned(tobeReturned) {}
+	pyReturnBlock(pyExpression* tobeReturned);
 	int work(int, Varmap&);
-	~pyReturnBlock(){
-		delete beReturned;
-	}
+	~pyReturnBlock();
 };
 
 class pyContinueBlock : public pyBlock {
 public:
-	pyContinueBlock() {}
+	pyContinueBlock() = default;
 	int work(int, Varmap&);
 };
 
 class pyBreakBlock : public pyBlock {
 public:
-	pyBreakBlock() {}
+	pyBreakBlock() = default;
 	int work(int, Varmap&);
 };
 
@@ -117,22 +105,17 @@ class pyAssignBlock : public pyBlock {
 	vector<pyExpression*> beAssigned;
 	vector<pyExpression*> assigner;
 public:
-	pyAssignBlock(vector<pyExpression*> front, vector<pyExpression*> back) : beAssigned(front), assigner(back) {}
+	pyAssignBlock(vector<pyExpression*> front, vector<pyExpression*> back);
 	int work(int, Varmap&);
-	~pyAssignBlock(){
-		for (auto i : beAssigned)delete i;
-		for (auto i : assigner) delete i;
-	}
+	~pyAssignBlock();
 };
 
 class pyExpBlock : public pyBlock {
 	pyExpression * body;
 public:
-	pyExpBlock(pyExpression * pe) : body(pe) {}
+	pyExpBlock(pyExpression * pe);
 	int work(int, Varmap&);
-	~pyExpBlock(){
-		delete body;
-	}
+	~pyExpBlock();
 };
 
 

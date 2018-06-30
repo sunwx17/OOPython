@@ -9,8 +9,8 @@ class pyFuncObject : public pyObject {
 	pyDefBlock* define;
 	pyObjectPtr(*buildInFunc)(vector <pyObjectPtr>);
 public:
-	pyFuncObject(pyDefBlock* def) : define(def) {}
-	pyFuncObject(pyObjectPtr(*bif)(vector <pyObjectPtr>)) : buildInFunc(bif) {}
+	pyFuncObject(pyDefBlock* def);
+	pyFuncObject(pyObjectPtr(*bif)(vector <pyObjectPtr>));
 	string getType() const;
 	pyObjectPtr call(Varmap&, vector<pyObjectPtr>&);
 	void print() const;

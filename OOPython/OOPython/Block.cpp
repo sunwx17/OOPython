@@ -75,6 +75,13 @@ int pyRootBlock::lastWork(int workStatus, Varmap& varmap) {
 	return process.back()->work(workStatus, varmap);
 }
 
+pyForBlock::pyForBlock(pyExpression* cv, pyExpression* cc) : cycleVariable(cv), cycleContain(cc) {}
+
+pyForBlock::~pyForBlock() {
+	delete cycleVariable;
+	delete cycleContain;
+}
+
 int pyForBlock::work(int workStatus, Varmap & varmap){
 	const string& cvn = (dynamic_cast<pyVariable*>(cycleVariable))->getName();
 	pyObjectContainerPtr ocp = dynamic_pointer_cast<pyObjectContainer>(cycleContain->work(varmap));
@@ -93,6 +100,11 @@ int pyForBlock::work(int workStatus, Varmap & varmap){
 	return 1;
 }
 
+pyIfBlock::pyIfBlock(pyExpression* con) : condition(con) {}
+
+pyIfBlock::~pyIfBlock() {
+	delete condition;
+}
 
 int pyIfBlock::work(int workStatus, Varmap& varmap) {
 	pyObjectDataPtr cond = dynamic_pointer_cast<pyObjectData>(condition->work(varmap));
@@ -120,6 +132,12 @@ int pyElseBlock::work(int workStatus, Varmap& varmap) {
 	}
 }
 
+pyWhileBlock::pyWhileBlock(pyExpression* con) : condition(con) {}
+
+pyWhileBlock::~pyWhileBlock() {
+	delete condition;
+}
+
 int pyWhileBlock::work(int workStatus, Varmap& varmap) {
 	pyObjectDataPtr cond = dynamic_pointer_cast<pyObjectData>(condition->work(varmap));
 	while (cond->operator bool()) {
@@ -136,6 +154,8 @@ int pyWhileBlock::work(int workStatus, Varmap& varmap) {
 	}
 	return 1;
 }
+
+pyDefBlock::pyDefBlock(const string s, vector<string> v) :name(s), elems(v), numOfElem((int)(v.size())) {}
 
 int pyDefBlock::work(int workStatus, Varmap& varmap) {
 	pyFuncObjectPtr fop(new pyFuncObject(this));
@@ -163,7 +183,14 @@ pyObjectPtr pyDefBlock::call(Varmap& varmap, vector<pyObjectPtr>& elems_in) {
 	return nullptr;
 }
 
+pyPrintBlock::pyPrintBlock(pyExpression* tobePrinted) : bePrinted(tobePrinted) {}
 
+pyPrintBlock::pyPrintBlock(const string &s, vector<pyExpression*> fp) : formatString(s), formatPrinted(fp) {}
+
+pyPrintBlock::~pyPrintBlock() {
+	delete bePrinted;
+	for (auto i : formatPrinted) delete i;
+}
 
 int pyPrintBlock::work(int workStatus, Varmap& varmap) {
 	if (bePrinted != nullptr) {
@@ -187,6 +214,12 @@ int pyPrintBlock::work(int workStatus, Varmap& varmap) {
 	return 1;
 }
 
+pyReturnBlock::pyReturnBlock(pyExpression* tobeReturned) : beReturned(tobeReturned) {}
+
+pyReturnBlock::~pyReturnBlock() {
+	delete beReturned;
+}
+
 int pyReturnBlock::work(int workStatus, Varmap& varmap) {
 	pyObjectPtr retop = beReturned->work(varmap);
 	varmap.assign("__return__", retop);
@@ -199,6 +232,13 @@ int pyContinueBlock::work(int workStatus, Varmap& varmap) {
 
 int pyBreakBlock::work(int workStatus, Varmap& varmap) {
 	return 3;
+}
+
+pyAssignBlock::pyAssignBlock(vector<pyExpression*> front, vector<pyExpression*> back) : beAssigned(front), assigner(back) {}
+
+pyAssignBlock::~pyAssignBlock() {
+	for (auto i : beAssigned)delete i;
+	for (auto i : assigner) delete i;
 }
 
 int pyAssignBlock::work(int workStatus, Varmap& varmap) {
@@ -214,6 +254,12 @@ int pyAssignBlock::work(int workStatus, Varmap& varmap) {
 		}
 	}
 	return 1;
+}
+
+pyExpBlock::pyExpBlock(pyExpression * pe) : body(pe) {}
+
+pyExpBlock::~pyExpBlock() {
+	delete body;
 }
 
 int pyExpBlock::work(int workStatus, Varmap &varmap){

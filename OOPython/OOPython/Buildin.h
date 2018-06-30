@@ -4,6 +4,7 @@
 #include "Data.h"
 #include <algorithm>
 #include <map>
+void initListMember();
 pyObjectPtr pyListAppend(vector<pyObjectPtr>);//L.append(var)  #追加元素，返回空
 pyObjectPtr pyListInsert(vector<pyObjectPtr>);//L.insert(index, var)  #在位置index前插入新元素var，返回空
 pyObjectPtr pyListPop(vector<pyObjectPtr>);//L.pop(var)   #返回位置var的元素（默认最后一个元素），并从list中删除之

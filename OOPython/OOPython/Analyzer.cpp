@@ -41,8 +41,8 @@ int regexBreak(const string& s, vector<string>& contain) {
 
 //aandb
 const vector<vector<string>> operators = {
-	{ " or " },
-	{ " and " },
+	{ "or " },
+	{ "and " },
 	{ "not " },
 	{ "==", "!=", ">=", "<=", ">", "<" },
 	{ "|" },
@@ -63,7 +63,10 @@ int isOper(const string& s, int pos) {
 		for (auto i : operators) {
 			for (auto j : i) {
 				if (ss.compare(j) == 0) {
-					return k;
+					if ((k < 3) || (k >= 3 && pos > 0 && s[pos - 1] == ' '))
+						return k;
+					else
+						return -1;
 				}
 			}
 		}
@@ -128,7 +131,7 @@ string xiaochudanmufuhao(const string& ss) {
 }
 
 int getNumOfElem(const string& s) {
-	const string bin[] = { "+", "-", "*", "/", "%", " and ", " or ", "&", "|", "^", ">", "<", ">=", "<=", "==", "!=", "<<", ">>" };
+	const string bin[] = { "+", "-", "*", "/", "%", "and ", "or ", "&", "|", "^", ">", "<", ">=", "<=", "==", "!=", "<<", ">>" };
 	const string una[] = { "not " };
 	for (auto i : bin) {
 		if (i == s) {

@@ -1,6 +1,10 @@
 #include "Function.h"
 #include "Block.h"
 
+pyFuncObject::pyFuncObject(pyDefBlock* def) : define(def) {}
+
+pyFuncObject::pyFuncObject(pyObjectPtr(*bif)(vector <pyObjectPtr>)) : buildInFunc(bif) {}
+
 string pyFuncObject::getType() const{
 	return "funcion";
 }
