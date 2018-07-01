@@ -6,7 +6,7 @@
 class pyDefBlock;
 
 class pyFuncObject : public pyObject {
-	pyDefBlock* define;
+	pyDefBlock* define = nullptr;
 	pyObjectPtr(*buildInFunc)(vector <pyObjectPtr>);
 public:
 	pyFuncObject(pyDefBlock* def);

@@ -4,7 +4,7 @@
 #include "Container.h"
 pyObjectPtr range(vector<pyObjectPtr> elems) {
 	pyObjectContainerPtr ocp = (pyObjectContainerPtr)(pyObjectContainer*)new pyObjectList;
-	int start = 0, end, len = 1;
+	int start = 0, end = 0, len = 1;
 	if (elems.size() >= 2) {
 		start = dynamic_cast<pyObjectInt*>(elems[0].get())->operator int();
 		end = dynamic_cast<pyObjectInt*>(elems[1].get())->operator int();
