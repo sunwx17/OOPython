@@ -188,7 +188,8 @@ pyPrintBlock::pyPrintBlock(pyExpression* tobePrinted) : bePrinted(tobePrinted) {
 pyPrintBlock::pyPrintBlock(const string &s, vector<pyExpression*> fp) : formatString(s), formatPrinted(fp) {}
 
 pyPrintBlock::~pyPrintBlock() {
-	delete bePrinted;
+	if (bePrinted)	
+		delete bePrinted;
 	for (auto i : formatPrinted) delete i;
 }
 

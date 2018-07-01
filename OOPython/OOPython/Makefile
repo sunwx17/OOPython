@@ -1,16 +1,16 @@
 SRCS = Analyzer.cpp Block.cpp Buildin.cpp Client.cpp Container.cpp Data.cpp Expression.cpp Function.cpp Varmap.cpp main.cpp
 OBJS = ${SRCS:.cpp=.o}
-CFLAGS = -O2 -Wall -std=c++11
+CFLAGS = -O2 -std=c++11
 CC = g++
 
-all: main
+all: python
 
-main : ${OBJS}
-	$(CC) ${CFLAGS} ${OBJS} -o main
+python : ${OBJS}
+	$(CC) ${CFLAGS} ${OBJS} -o python
 
 .PHONY : clean
 clean :
-	-rm ${OBJS} *.d main
+	-rm ${OBJS} *.d python
 
 %.d : %.cpp
 	${CC} -MM ${CFLAGS} $< > $@

@@ -244,3 +244,4 @@ ModelManifest.xml
 # FAKE - F# Make
 .fake/
 /OOPython/Debug0
+/OOPython/Release0

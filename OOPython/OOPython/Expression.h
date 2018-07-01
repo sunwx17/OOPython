@@ -15,8 +15,8 @@ public:
 class pyVariable : public pyExpression {
 protected:
 	const string name;
-	pyObjectPtr tmpOp;
-	pyVariable* tmpV;
+	pyObjectPtr tmpOp = nullptr;
+	pyVariable* tmpV = nullptr;
 public:
 	pyVariable() {};
 	pyVariable(const string s);

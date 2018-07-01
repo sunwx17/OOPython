@@ -71,7 +71,7 @@ public:
 };
 
 class pyPrintBlock : public pyBlock {
-	pyExpression* bePrinted;
+	pyExpression* bePrinted = nullptr;
 	string formatString;
 	vector<pyExpression*> formatPrinted;
 public:
